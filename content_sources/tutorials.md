@@ -7,6 +7,7 @@
 - Swift
 - Android
 - Android（设备端）
+
 您还可以使用 curl 命令试用 Gemini API：
 - [REST API](rest_quickstart.ipynb)
 
