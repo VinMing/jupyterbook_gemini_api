@@ -123,6 +123,7 @@ under a few sentences long.
 以下示例展示了此提示的输入和输出值：
 
 | 产品：|  	产品文案：|
+| --- | ---|
 | Old-school sneaker | Let's lace up! These kicks bring an iconic look and a one of a kind color palette, while supporting you in style and function like no other shoe before. |
 | Supersoft hoodie | Stay cozy and stylish in our new unisex hoodie! Made from 100% cotton, this hoodie is soft and comfortable to wear all day long. The semi-brushed inside will keep you warm on even the coldest days.|
 
