@@ -1,0 +1,721 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>模型微调指南 &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/model_tuning_guidance';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PaLM API：使用 Python 微调快速入门" href="tuning_quickstart_python_palm.html" />
+    <link rel="prev" title="Discord" href="discord.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_quickstart.html">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_quickstart.html">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_quickstart.html">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gemini_api_overview.html">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">LLM 概念指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_intro.html">提示设计简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_best_practices.html">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semantic_retriever.html">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">模型微调指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_quickstart_python_palm.html">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="available_regions.html">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/model_tuning_guidance.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/model_tuning_guidance.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>模型微调指南</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">模型微调的工作原理</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">支持的模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">模型微调的工作流</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">准备数据集</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">形式</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">推荐尺寸</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">上传调整数据集</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">创建模型调整作业</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">建议的配置</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">检查调整作业状态</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">排查错误</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">身份验证</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">已取消的模型</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">后续步骤</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>模型微调指南<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>提示设计策略（例如，少样本提示）不一定总能产生您需要的结果。如果指令不足，并且您有一组演示您所需输出的示例，则可使用模型调整来提高模型在特定任务上的性能，或帮助模型遵循特定的输出要求。</p>
+<p>本页面提供了有关如何调整 PaLM API 文本服务背后的文本模型的指导。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意 ：目前，调整仅适用于 text-bison-001 模型。</p>
+</div>
+<section id="id2">
+<h2>模型微调的工作原理<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>模型调整的目标是进一步提高模型针对特定任务的效果。模型调整的工作原理是为模型提供包含许多任务样本的训练数据集。对于特定领域任务，您可以使用适量样本调整模型，以此来显著提高模型的效果。</p>
+<p>您的训练数据应采用输入和输出样本对的结构。您还可以直接在 Google AI Studio 中使用 CSV 或电子表格文件调整模型。目标是训练模型模仿预期行为或任务，方法是提供多个示例来说明该行为或任务。</p>
+<p>当您运行调整作业时，模型会学习其他参数，帮助其对执行所需任务或学习预期行为所需的必要信息进行编码。这些参数随后可在推断时使用。调整模型的输出是一个新模型，实际上是新学习的参数和原始模型的组合。</p>
+</section>
+<section id="id3">
+<h2>支持的模型<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<p>以下基础模型支持模型微调：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">text-bison-001</span></code></p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>模型微调的工作流<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<p>模型微调工作流如下所示：</p>
+<ol class="arabic simple">
+<li><p>准备数据集</p></li>
+<li><p>如果你使用的是MarkrSuiter，请导入数据集</p></li>
+<li><p>启动微调作业</p></li>
+</ol>
+<p>模型微调完成后，将显示调整后的模型的名称。您也可以在 Google AI Studio 中将其选为创建新提示时要使用的模型。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意 ：如需在 Google AI Studio 中启用模型调整，请在设置中启用显示旧版模型选项。然后，您可以依次选择新建 &gt; 经调整的模型，创建经调整的模型。</p>
+</div>
+<p><img alt="image" src="../_images/legacy_on.png" /></p>
+</section>
+<section id="id5">
+<h2>准备数据集<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
+<p>在开始调整之前，您需要一个用于调整模型的数据集。为获得最佳性能，数据集中的样本应为高质量、多样化且能够代表真实输入和输出的样本。</p>
+<section id="id6">
+<h3>形式<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
+<p>数据集中包含的样本应与您的预期生产流量相匹配。如果您的数据集包含特定的格式、关键字、说明或信息，则生产数据应以相同方式设置格式并包含相同的说明。</p>
+<p>例如，如果数据集中的样本包含 “question:” 和 “context:”，则生产流量的格式也应设置为包含 “question:” 和 “context:”，其顺序与在数据集样本中的显示顺序相同。如果排除上下文，模型将无法识别模式，即使确切问题存在于数据集中的样本中也是如此。</p>
+<p>为数据集中的每个样本添加提示或前导码也有助于提升经调整的模型的性能。请注意，如果您的数据集内包含提示或前言，则在推断时，它也应包含在调整后的模型的提示中。</p>
+</section>
+<section id="id7">
+<h3>推荐尺寸<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h3>
+<p>您可以使用相对较小的数据集调整模型。您应该借助 100 多个示例来获得更好的结果。下表显示了针对各种常见任务调整文本模型的建议数据集大小：</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>任务</p></th>
+<th class="head"><p>数据集中的样本数</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>分类</p></td>
+<td><p>超过 100 个</p></td>
+</tr>
+<tr class="row-odd"><td><p>摘要</p></td>
+<td><p>100-500+</p></td>
+</tr>
+<tr class="row-even"><td><p>文档搜索</p></td>
+<td><p>超过 100 个</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="id8">
+<h2>上传调整数据集<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+<p>数据可以通过 API 以内嵌方式传递，也可以通过在 Google AI Studio 中上传的文件进行传递。调整完成后，系统会删除上传到 Google AI Studio 的文件。</p>
+<p>使用<strong>导入</strong>按钮从文件导入数据，或选择包含示例的结构化提示将导入为调整数据集。</p>
+<p><strong>客户端</strong></p>
+<p>要使用该客户端库，请在 createTunedModel 调用中提供数据文件。文件大小上限为 4MB。如需开始使用，请参阅<a class="reference internal" href="tuning_quickstart_python_palm.html"><span class="doc std std-doc">快速入门：使用 Python 进行调优</span></a>。</p>
+<p><strong>Curl</strong>
+如需使用 Curl 调用 REST API，请向 training_data 参数提供 JSON 格式的训练示例。如需开始使用，请参阅<span class="xref myst">快速入门：使用 Curl 进行调优</span>【编写中】。</p>
+</section>
+<section id="id9">
+<h2>创建模型调整作业<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h2>
+<p>创建调整作业时，您可以指定以下超参数：</p>
+<ul class="simple">
+<li><p>周期 - 整个训练集的完整训练遍历，以便每个样本只处理一次。</p></li>
+<li><p>批次大小 - 一次训练<a class="reference external" href="https://developers.google.com/machine-learning/glossary?hl=zh-cn#iteration">迭代</a>中使用的一组样本。批次大小决定了一个批次中的样本数量。</p></li>
+<li><p>学习速率 - 一个浮点数，告知算法在每次迭代时调整模型参数的强度。例如，0.3 的学习速率调整权重和偏差的威力是 0.1 的 3 倍。高学习速率和低学习速率具有各自的独特权衡，应根据您的用例进行调整。</p></li>
+</ul>
+<section id="id10">
+<h3>建议的配置<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h3>
+<p>下表显示了调整基础模型的建议配置：
+|超参数 |	默认价值 |	建议的调整|
+|—|—|
+|纪元 |	10 	|如果损失在 10 个周期之前开始稳定，请使用较小的值。<br>如果损失趋于收敛，并且似乎未趋于稳定，请使用较高的值。|
+|批次大小 |	16 	||
+|学习速率 	|2 亿 - 2 	|对于较小的数据集，请使用较小的值。|</p>
+<p>损失曲线显示每个周期之后，模型的预测与训练样本中的理想预测的偏差程度。理想情况下，您希望在曲线进入平稳状态之前，在曲线的最低点停止训练。例如，下图显示了损失曲线在周期 4 到 6 左右趋于稳定，这意味着您可以将周期参数设置为 4，并且仍然可以获得相同的性能。</p>
+</section>
+</section>
+<section id="id11">
+<h2>检查调整作业状态<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h2>
+<p>您可以在 Google AI Studio 界面的<strong>我的库</strong>标签页下查看调整作业的状态，也可以使用 PaLM API 中调整后模型的 metadata 属性来查看调整作业的状态。</p>
+</section>
+<section id="id12">
+<h2>排查错误<a class="headerlink" href="#id12" title="Permalink to this headline">#</a></h2>
+<p>本部分提供了有关如何解决在创建经调整的模型时可能会遇到的错误的提示。</p>
+<section id="id13">
+<h3>身份验证<a class="headerlink" href="#id13" title="Permalink to this headline">#</a></h3>
+<p>使用 API 和客户端库进行调整需要用户身份验证。仅有 API 密钥是不够的。如果看到 <code class="docutils literal notranslate"><span class="pre">'PermissionDenied:</span> <span class="pre">403</span> <span class="pre">Request</span> <span class="pre">had</span> <span class="pre">insufficient</span> <span class="pre">authentication</span> <span class="pre">scopes'</span> </code>错误，您需要设置用户身份验证。</p>
+<p>如需为 Python 配置测试 OAuth 凭据，请参阅<a class="reference internal" href="oauth_quickstart.html"><span class="doc std std-doc">OAuth 设置教程</span></a>。</p>
+</section>
+<section id="id14">
+<h3>已取消的模型<a class="headerlink" href="#id14" title="Permalink to this headline">#</a></h3>
+<p>在模型调整作业完成之前，您可以随时取消该作业。但是，取消模型的推断性能是不可预测的，尤其是在训练早期取消调优作业的情况下。如果您因为想在较早的周期停止训练而取消操作，则应创建新的调整作业并将周期设置为较低的值。</p>
+</section>
+</section>
+<section id="id15">
+<h2>后续步骤<a class="headerlink" href="#id15" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>了解<a class="reference internal" href="safety_guidance.html"><span class="doc std std-doc">Responsible AI 最佳实践</span></a>。</p></li>
+<li><p>如需开始使用，请参阅<a class="reference internal" href="tuning_quickstart_python_palm.html"><span class="doc std std-doc">快速入门：使用 Python 进行调优</span></a>或<span class="xref myst">快速入门：使用 Curl 进行调优</span>【编写中】。</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="discord.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Discord</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tuning_quickstart_python_palm.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">PaLM API：使用 Python 微调快速入门</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">模型微调的工作原理</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">支持的模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">模型微调的工作流</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">准备数据集</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">形式</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">推荐尺寸</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">上传调整数据集</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">创建模型调整作业</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">建议的配置</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">检查调整作业状态</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">排查错误</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">身份验证</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">已取消的模型</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">后续步骤</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

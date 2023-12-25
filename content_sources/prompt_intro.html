@@ -1,0 +1,837 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>提示设计简介 &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/prompt_intro';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="提示设计策略" href="prompt_best_practices.html" />
+    <link rel="prev" title="LLM 概念指南" href="concepts.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_quickstart.html">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_quickstart.html">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_quickstart.html">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gemini_api_overview.html">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">LLM 概念指南</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">提示设计简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_best_practices.html">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semantic_retriever.html">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_tuning_guidance.html">模型微调指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_quickstart_python_palm.html">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="available_regions.html">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/prompt_intro.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/prompt_intro.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>提示设计简介</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">什么是提示</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">提示内容类型</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">输入</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">问题输入</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">任务输入</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">实体输入</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">补全输入</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">上下文</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">示例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">后续步骤</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>提示设计简介<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>提示设计是创建提示以从语言模型引出所需回复的过程。编写结构化良好的提示是确保从语言模型获得准确优质回复的重要环节。本页面介绍了一些基本概念、策略和最佳实践，可帮助您开始设计提示。</p>
+<section id="id2">
+<h2>什么是提示<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>提示是提交到语言模型以接收回复的自然语言请求。提示可以包含问题、说明、语境信息、样本以及模型完成或继续的部分输入。模型收到提示后，可以生成文本、嵌入、代码、图片、视频和音乐等，具体取决于所用的模型类型。</p>
+<section id="id3">
+<h3>提示内容类型<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+<p>提示可以包含以下一种或多种内容类型：</p>
+<ul class="simple">
+<li><p>输入（必需）</p></li>
+<li><p>上下文（可选）</p></li>
+<li><p>示例（可选）</p></li>
+</ul>
+<section id="id4">
+<h4>输入<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h4>
+<p>输入是您希望模型为其提供回复的提示中的文本，它是必需的内容类型。输入可以是模型回答的问题（问题输入）、模型执行的任务（任务输入）、模型操作的实体（实体输入），或模型完成或继续的部分输入（补全输入）。</p>
+<section id="id5">
+<h5>问题输入<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h5>
+<p>问题输入是您向提供回答的模型询问的问题。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">哪个名字最适合专门出售干花的花店？</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">回答</p>
+</div>
+<div class="card-body docutils">
+<ul class="simple">
+<li><p class="card-text"><strong>Dried Blooms</strong></p></li>
+<li><p class="card-text"><strong>Floral Arrangements</strong></p></li>
+<li><p class="card-text"><strong>The Flower Shop</strong></p></li>
+<li><p class="card-text"><strong>A Touch of Nature</strong></p></li>
+<li><p class="card-text"><strong>Bouquets Galore</strong></p></li>
+<li><p class="card-text"><strong>The Perfect Bloom</strong></p></li>
+<li><p class="card-text"><strong>Scented Splendor</strong></p></li>
+<li><p class="card-text"><strong>Dried Flower Arrangements</strong></p></li>
+<li><p class="card-text"><strong>Preserved Petals</strong></p></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="id6">
+<h5>任务输入<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h5>
+<p>任务输入是您希望模型执行的任务。例如，您可以要求模型为您提供有关某些内容的想法或建议。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">告诉我应该在露营时带哪些物品？</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">帐篷、睡袋、睡垫、野营火炉、烹饪器具、食品、水、急救箱、手电筒、灯笼、火柴或打火机、垃圾袋、地图和指南针、防晒霜、驱虫剂、帽子、墨镜和雨具。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="id7">
+<h5>实体输入<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h5>
+<p>实体输入是模型对其执行操作（例如分类或汇总）的对象。添加说明对这种类型的输入有帮助。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">将以下项分类为 [大，小]。
+大象
+老鼠
+蜗牛</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">大象归类为大。
+老鼠归类为小。
+蜗牛归类为小。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="id8">
+<h5>补全输入<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h5>
+<p>完成输入是模型预计需要完成或继续的文本。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">克服撰稿人障碍的一些策略包括：</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">回答</p>
+</div>
+<div class="card-body docutils">
+<ul class="simple">
+<li><p class="card-text"><strong>自由写作。</strong> 使用这种方法时，您无需停下来考虑语法或拼写，想什么就写什么。这有助于您产生灵感，让您的创意源源不断。</p></li>
+<li><p class="card-text"><strong>头脑风暴。</strong> 使用这种方法时，您可以写下自己想到的所有想法，而无需进行判断。有了想法后，您可以开始缩小其范围，然后再进一步展开。</p></li>
+<li><p class="card-text"><strong>思维导图。</strong> 使用这种方法时，您可以绘制一张想法图，用线条连接，以便展示它们之间的关系。这有助于您直观呈现自己的想法，并了解它们如何彼此关联。</p></li>
+<li><p class="card-text"><strong>休息一下。</strong> 有时，克服撰稿人障碍的最佳方式是摆脱写作休息一下，暂时做其他事情。这有助于您清醒头部，然后以崭新的视角重新开始写作。</p></li>
+<li><p class="card-text"><strong>向他人寻求帮助。</strong> 如果您正在努力克服撰稿人的障碍，请果断寻求他人的帮助。您可以与朋友、家人或老师交谈，也可以向治疗师或写作顾问寻求专业帮助。</p></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id9">
+<h4>上下文<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h4>
+<p>语境可以是以下项之一：</p>
+<ul class="simple">
+<li><p>指定模型行为方式的说明。</p></li>
+<li><p>模型使用或引用来生成回复的信息。
+当您需要向模型提供信息时，请在提示中添加语境信息，或者将回复的边界限制为仅提示中的内容。</p></li>
+</ul>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">大理石：<br />
+颜色：红色<br />
+数量：12<br />
+颜色：蓝色<br />
+数量：28<br />
+颜色：黄色<br />
+数量：15<br />
+颜色：绿色<br />
+数量：17<br />
+绿色大理石的数量是多少？</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">有 17 块绿色大理石。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="id10">
+<h4>示例<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h4>
+<p>样本是您在提示中添加的输入-输出对，以便为模型提供理想的回复样本。在提示中添加样本是自定义回复格式的有效策略。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">将以下项分类。
+选项：</p>
+<ul class="simple">
+<li><p class="card-text">红葡萄酒</p></li>
+<li><p class="card-text">白葡萄酒</p></li>
+</ul>
+<p class="card-text">文本：Chardonnay<br />
+回答：白葡萄酒<br />
+文本：Cabernet<br />
+回答：红葡萄酒<br />
+文字：Moscato<br />
+回答：白葡萄酒<br />
+文本：Riesling<br />
+回答：</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-6 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">白葡萄酒</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="id11">
+<h2>后续步骤<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>现在您已了解提示设计，请尝试使用<a class="reference external" href="http://makersuite.google.com/?hl=zh-cn">Google AI Studio</a>编写自己的提示。</p></li>
+<li><p>如需深入了解提示设计，请参阅<a class="reference internal" href="prompt_best_practices.html"><span class="doc std std-doc">提示策略</span></a>主题。</p></li>
+<li><p>如需了解多模态提示，请参阅<a class="reference internal" href="multimodal_concepts.html"><span class="doc std std-doc">多模态概念</span></a>概览。</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="concepts.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">LLM 概念指南</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="prompt_best_practices.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">提示设计策略</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">什么是提示</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">提示内容类型</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">输入</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">问题输入</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">任务输入</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">实体输入</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">补全输入</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">上下文</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">示例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">后续步骤</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1382 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>语义检索 &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/semantic_retriever';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="OAuth 身份验证" href="oauth_quickstart.html" />
+    <link rel="prev" title="多模态概念" href="multimodal_concepts.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_quickstart.html">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_quickstart.html">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_quickstart.html">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gemini_api_overview.html">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">LLM 概念指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_intro.html">提示设计简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_best_practices.html">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_tuning_guidance.html">模型微调指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_quickstart_python_palm.html">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="available_regions.html">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/semantic_retriever.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/semantic_retriever.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>语义检索</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">概述</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">导入生成语言 API</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">认证</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#oauth">使用服务帐户设置 OAuth</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">使用用户凭据设置 OAuth</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">创建语料库</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">获取创建的语料库</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">创建文档</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">获取创建的文档</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">摄取并分块文档</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#htmlchunker-html">通过 HtmlChunker 摄取 HTML 和块</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">批量创建块</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chunk">列出 chunk 并获取状态</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">摄取另一个文档</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">查询语料库</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">归因问答</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#answerable-probability">answerable_probability 和“我不知道”问题</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aqa">AQA 有用的提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">更多选项：使用内联通道的 AQA</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">分享语料库</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">删除语料库</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">总结和进一步阅读</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>语义检索<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p><img alt="image" src="../_images/cost_pay.jpg" />
+使用Google cloud 需要境外银行卡信息</p>
+<section id="id2">
+<h2>概述<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>大型语言模型 (LLM) 无需直接接受训练即可学习新能力。然而，众所周知，LLM在回答他们未经培训的问题时会产生“幻觉”。部分原因是LLMs不知道训练后发生的事件。追踪LLM的回复来源也非常困难。对于可靠、可扩展的应用程序，LLM提供基于事实的答复并能够引用其信息来源非常重要。</p>
+<p>用于克服这些限制的常用方法称为检索增强生成（Retrieval Augmented Generation, RAG），它使用通过信息检索（Information Retrieval ,IR）机制从外部知识库检索的相关数据来增强发送给LLM的提示。知识库可以是您自己的文档、数据库或 API 语料库。</p>
+<p>本笔记本将引导您完成一个工作流程，通过使用外部文本语料库增强 LLM 的知识，并使用<a class="reference external" href="https://ai.google.dev/api/python/google/ai/generativelanguage">Generative Language API</a> 的语义检索器和属性问答 (AQA) API 执行语义信息检索来回答问题，从而提高 LLM 的响应能力。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意：该API目前处于测试阶段，仅在某些地区可用。</p>
+</div>
+</section>
+<section id="id3">
+<h2>安装<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<section id="api">
+<h3>导入生成语言 API<a class="headerlink" href="#api" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install the Client library (Semantic Retriever is only supported for versions &gt;0.4.0)</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>google.ai.generativelanguage
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: google.ai.generativelanguage in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (0.4.0)
+Requirement already satisfied: google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (2.15.0)
+Requirement already satisfied: proto-plus&lt;2.0.0dev,&gt;=1.22.3 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from google.ai.generativelanguage) (1.23.0)
+Requirement already satisfied: protobuf!=3.20.0,!=3.20.1,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,&lt;5.0.0dev,&gt;=3.19.5 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from google.ai.generativelanguage) (4.23.4)
+Requirement already satisfied: googleapis-common-protos&lt;2.0.dev0,&gt;=1.56.2 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (1.62.0)
+Requirement already satisfied: google-auth&lt;3.0.dev0,&gt;=2.14.1 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (2.25.2)
+Requirement already satisfied: requests&lt;3.0.0.dev0,&gt;=2.18.0 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (2.31.0)
+Requirement already satisfied: grpcio&lt;2.0dev,&gt;=1.33.2 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (1.60.0)
+Requirement already satisfied: grpcio-status&lt;2.0.dev0,&gt;=1.33.2 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (1.60.0)
+Requirement already satisfied: cachetools&lt;6.0,&gt;=2.0.0 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from google-auth&lt;3.0.dev0,&gt;=2.14.1-&gt;google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (5.3.2)
+Requirement already satisfied: pyasn1-modules&gt;=0.2.1 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from google-auth&lt;3.0.dev0,&gt;=2.14.1-&gt;google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (0.3.0)
+Requirement already satisfied: rsa&lt;5,&gt;=3.1.4 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from google-auth&lt;3.0.dev0,&gt;=2.14.1-&gt;google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (4.9)
+Requirement already satisfied: charset-normalizer&lt;4,&gt;=2 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from requests&lt;3.0.0.dev0,&gt;=2.18.0-&gt;google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (3.3.2)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from requests&lt;3.0.0.dev0,&gt;=2.18.0-&gt;google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (3.6)
+Requirement already satisfied: urllib3&lt;3,&gt;=1.21.1 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from requests&lt;3.0.0.dev0,&gt;=2.18.0-&gt;google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (1.26.18)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from requests&lt;3.0.0.dev0,&gt;=2.18.0-&gt;google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (2023.11.17)
+Requirement already satisfied: pyasn1&lt;0.6.0,&gt;=0.4.6 in /home/st/miniconda3/envs/gemini/lib/python3.10/site-packages (from pyasn1-modules&gt;=0.2.1-&gt;google-auth&lt;3.0.dev0,&gt;=2.14.1-&gt;google-api-core!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,&lt;3.0.0dev,&gt;=1.34.0-&gt;google.ai.generativelanguage) (0.5.1)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2>认证<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<p>Semantic Retriever API 允许您对自己的数据执行语义搜索。由于这是您的数据，因此需要比 API 密钥更严格的访问控制。使用<a class="reference external" href="https://ai.google.dev/docs/semantic_retriever#scrollTo=eLjhFIOQ7_Dk">服务帐户</a>或通过您的用户凭据进行<a class="reference external" href="https://ai.google.dev/docs/semantic_retriever#scrollTo=9YGv4x9ehLba">OAuth 身份验证</a>。</p>
+<p>本快速入门使用适用于测试环境的简化身份验证方法，并且服务帐户设置通常更容易启动。对于生产环境，请先了解<a class="reference external" href="https://developers.google.com/workspace/guides/auth-overview">身份验证和授权</a>，然后再选择适合您的应用程序的<a class="reference external" href="https://developers.google.com/workspace/guides/create-credentials#choose_the_access_credential_that_is_right_for_you">访问凭据</a>。</p>
+<p>第一步，<a class="reference external" href="https://ai.google.dev/docs/oauth_quickstart#enable-api">启用生成语言 API</a>。</p>
+<section id="oauth">
+<h3>使用服务帐户设置 OAuth<a class="headerlink" href="#oauth" title="Permalink to this headline">#</a></h3>
+<p>请按照以下步骤使用服务帐户设置 OAuth：</p>
+<ol class="arabic simple">
+<li><p>按照<a class="reference external" href="https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount">文档</a>创建服务帐户。<br />
+创建服务帐户后，生成服务帐户密钥。</p></li>
+<li><p>使用左侧边栏上的文件图标，然后使用上传图标上传您的服务帐户文件，如下面的屏幕截图所示。
+<img alt="image" src="../_images/colab_upload.png" /></p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>google-auth-oauthlib
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Rename the uploaded file to `service_account_key.json` OR</span>
+<span class="c1"># Change the variable `service_account_file_name` in the code below.</span>
+<span class="n">service_account_file_name</span> <span class="o">=</span> <span class="s1">&#39;service_account_key.json&#39;</span>
+
+<span class="kn">from</span> <span class="nn">google.oauth2</span> <span class="kn">import</span> <span class="n">service_account</span>
+
+<span class="n">credentials</span> <span class="o">=</span> <span class="n">service_account</span><span class="o">.</span><span class="n">Credentials</span><span class="o">.</span><span class="n">from_service_account_file</span><span class="p">(</span><span class="n">service_account_file_name</span><span class="p">)</span>
+
+<span class="n">scoped_credentials</span> <span class="o">=</span> <span class="n">credentials</span><span class="o">.</span><span class="n">with_scopes</span><span class="p">(</span>
+    <span class="p">[</span><span class="s1">&#39;https://www.googleapis.com/auth/cloud-platform&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.googleapis.com/auth/generative-language.retriever&#39;</span><span class="p">])</span>
+
+</pre></div>
+</div>
+<p>使用服务帐户凭据初始化客户端库。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">google.ai.generativelanguage</span> <span class="k">as</span> <span class="nn">glm</span>
+<span class="n">generative_service_client</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">GenerativeServiceClient</span><span class="p">(</span><span class="n">credentials</span><span class="o">=</span><span class="n">scoped_credentials</span><span class="p">)</span>
+<span class="n">retriever_service_client</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">RetrieverServiceClient</span><span class="p">(</span><span class="n">credentials</span><span class="o">=</span><span class="n">scoped_credentials</span><span class="p">)</span>
+<span class="n">permission_service_client</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">PermissionServiceClient</span><span class="p">(</span><span class="n">credentials</span><span class="o">=</span><span class="n">scoped_credentials</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>使用用户凭据设置 OAuth<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h3>
+<p>按照<a class="reference external" href="https://ai.google.dev/docs/oauth_quickstart">OAuth 快速入门</a>中的以下步骤设置 OAuth 身份验证。</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://ai.google.dev/docs/oauth_quickstart#configure-oauth">配置 OAuth 同意屏幕。</a></p></li>
+<li><p><a class="reference external" href="https://ai.google.dev/docs/oauth_quickstart#authorize-credentials">授权桌面应用程序的凭据</a>。要在 Colab 中运行此笔记本，请首先将您的凭证文件（通常是<code class="docutils literal notranslate"><span class="pre">client_secret_*.json</span></code>）重命名为<code class="docutils literal notranslate"><span class="pre">client_secret.json</span></code>。然后使用左侧边栏上的文件图标上传文件，然后使用上传图标上传文件，如下面的屏幕截图所示。
+<img alt="image" src="../_images/colab_upload.png" /></p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># Replace TODO-your-project-name with the project used in the OAuth Quickstart
+project_name = &quot;TODO-your-project-name&quot; #  @param {type:&quot;string&quot;}
+# Replace TODO-your-email@gmail.com with the email added as a test user in the OAuth Quickstart
+email = &quot;TODO-your-email@gmail.com&quot; #  @param {type:&quot;string&quot;}
+# Rename the uploaded file to `client_secret.json` OR
+# Change the variable `client_file_name` in the code below.
+client_file_name = &quot;client_secret.json&quot;
+
+# IMPORTANT: Follow the instructions from the output - you must copy the command
+# to your terminal and copy the output after authentication back here.
+!gcloud config set project $project_name
+!gcloud config set account $email
+
+# NOTE: The simplified project setup in this tutorial triggers a &quot;Google hasn&#39;t verified this app.&quot; dialog.
+# This is normal, click &quot;Advanced&quot; -&gt; &quot;Go to [app name] (unsafe)&quot;
+!gcloud auth application-default login --no-browser --client-id-file=$client_file_name --scopes=&quot;https://www.googleapis.com/auth/generative-language.retriever,https://www.googleapis.com/auth/cloud-platform&quot;
+
+</pre></div>
+</div>
+<p>初始化客户端库。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">google.ai.generativelanguage</span> <span class="k">as</span> <span class="nn">glm</span>
+
+<span class="n">generative_service_client</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">GenerativeServiceClient</span><span class="p">()</span>
+<span class="n">retriever_service_client</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">RetrieverServiceClient</span><span class="p">()</span>
+<span class="n">permission_service_client</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">PermissionServiceClient</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id6">
+<h2>创建语料库<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h2>
+<p>Semantic Retriever API 允许您为每个项目定义最多 5 个自定义文本语料库。您可以在定义语料库时指定以下任一字段：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>：语料库资源名称 (ID)。最多只能包含 40 个字母数字字符。如果创建时名称为空，则将生成一个最大长度为 40 个字符的唯一名称，并带有来自 display_name 的前缀和 12 个字符的随机后缀。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">display_name</span></code>：语料库的人类可读的显示名称。最多只能包含 128 个字符，包括字母数字、空格和破折号。</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">example_corpus</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Corpus</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Google for Developers Blog&quot;</span><span class="p">)</span>
+<span class="n">create_corpus_request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">CreateCorpusRequest</span><span class="p">(</span><span class="n">corpus</span><span class="o">=</span><span class="n">example_corpus</span><span class="p">)</span>
+
+<span class="c1"># Make the request</span>
+<span class="n">create_corpus_response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">create_corpus</span><span class="p">(</span><span class="n">create_corpus_request</span><span class="p">)</span>
+
+<span class="c1"># Set the `corpus_resource_name` for subsequent sections.</span>
+<span class="n">corpus_resource_name</span> <span class="o">=</span> <span class="n">create_corpus_response</span><span class="o">.</span><span class="n">name</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">create_corpus_response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">_InactiveRpcError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="nn">File ~/miniconda3/envs/gemini/lib/python3.10/site-packages/google/api_core/grpc_helpers.py:79,</span> in <span class="ni">_wrap_unary_errors.&lt;locals&gt;.error_remapped_callable</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">78</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">79</span>     <span class="k">return</span> <span class="n">callable_</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">80</span> <span class="k">except</span> <span class="n">grpc</span><span class="o">.</span><span class="n">RpcError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+
+<span class="nn">File ~/miniconda3/envs/gemini/lib/python3.10/site-packages/grpc/_channel.py:1160,</span> in <span class="ni">_UnaryUnaryMultiCallable.__call__</span><span class="nt">(self, request, timeout, metadata, credentials, wait_for_ready, compression)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1154</span> <span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1155</span>     <span class="n">state</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1156</span>     <span class="n">call</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1157</span> <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_blocking</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1158</span>     <span class="n">request</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">credentials</span><span class="p">,</span> <span class="n">wait_for_ready</span><span class="p">,</span> <span class="n">compression</span>
+<span class="g g-Whitespace">   </span><span class="mi">1159</span> <span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1160</span> <span class="k">return</span> <span class="n">_end_unary_response_blocking</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">call</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="nn">File ~/miniconda3/envs/gemini/lib/python3.10/site-packages/grpc/_channel.py:1003,</span> in <span class="ni">_end_unary_response_blocking</span><span class="nt">(state, call, with_call, deadline)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1002</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1003</span>     <span class="k">raise</span> <span class="n">_InactiveRpcError</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="ne">_InactiveRpcError</span>: &lt;_InactiveRpcError of RPC that terminated with:
+	<span class="n">status</span> <span class="o">=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">PERMISSION_DENIED</span>
+	<span class="n">details</span> <span class="o">=</span> <span class="s2">&quot;Request had insufficient authentication scopes.&quot;</span>
+	<span class="n">debug_error_string</span> <span class="o">=</span> <span class="s2">&quot;UNKNOWN:Error received from peer ipv4:142.250.69.202:443 {created_time:&quot;</span><span class="mi">2023</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">22</span><span class="n">T14</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mf">46.650890513</span><span class="o">+</span><span class="mi">08</span><span class="p">:</span><span class="mi">00</span><span class="s2">&quot;, grpc_status:7, grpc_message:&quot;</span><span class="n">Request</span> <span class="n">had</span> <span class="n">insufficient</span> <span class="n">authentication</span> <span class="n">scopes</span><span class="o">.</span><span class="s2">&quot;}&quot;</span>
+<span class="o">&gt;</span>
+
+<span class="n">The</span> <span class="n">above</span> <span class="n">exception</span> <span class="n">was</span> <span class="n">the</span> <span class="n">direct</span> <span class="n">cause</span> <span class="n">of</span> <span class="n">the</span> <span class="n">following</span> <span class="n">exception</span><span class="p">:</span>
+
+<span class="ne">PermissionDenied</span><span class="g g-Whitespace">                          </span>Traceback (most recent call last)
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">st</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">jupyter_book</span><span class="o">/</span><span class="n">tutorial_gemini_api</span><span class="o">/</span><span class="n">content_sources</span><span class="o">/</span><span class="n">semantic_retriever</span><span class="o">.</span><span class="n">ipynb</span> <span class="n">Cell</span> <span class="mi">6</span> <span class="n">line</span> <span class="mi">5</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2B192.168.6.35/home/st/workspace/jupyter_book/tutorial_gemini_api/content_sources/semantic_retriever.ipynb#W5sdnNjb2RlLXJlbW90ZQ%3D%3D?line=1&#39;</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">create_corpus_request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">CreateCorpusRequest</span><span class="p">(</span><span class="n">corpus</span><span class="o">=</span><span class="n">example_corpus</span><span class="p">)</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2B192.168.6.35/home/st/workspace/jupyter_book/tutorial_gemini_api/content_sources/semantic_retriever.ipynb#W5sdnNjb2RlLXJlbW90ZQ%3D%3D?line=3&#39;</span><span class="o">&gt;</span><span class="mi">4</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="c1"># Make the request</span>
+<span class="o">----&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2B192.168.6.35/home/st/workspace/jupyter_book/tutorial_gemini_api/content_sources/semantic_retriever.ipynb#W5sdnNjb2RlLXJlbW90ZQ%3D%3D?line=4&#39;</span><span class="o">&gt;</span><span class="mi">5</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">create_corpus_response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">create_corpus</span><span class="p">(</span><span class="n">create_corpus_request</span><span class="p">)</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2B192.168.6.35/home/st/workspace/jupyter_book/tutorial_gemini_api/content_sources/semantic_retriever.ipynb#W5sdnNjb2RlLXJlbW90ZQ%3D%3D?line=6&#39;</span><span class="o">&gt;</span><span class="mi">7</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="c1"># Set the `corpus_resource_name` for subsequent sections.</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2B192.168.6.35/home/st/workspace/jupyter_book/tutorial_gemini_api/content_sources/semantic_retriever.ipynb#W5sdnNjb2RlLXJlbW90ZQ%3D%3D?line=7&#39;</span><span class="o">&gt;</span><span class="mi">8</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">corpus_resource_name</span> <span class="o">=</span> <span class="n">create_corpus_response</span><span class="o">.</span><span class="n">name</span>
+
+<span class="nn">File ~/miniconda3/envs/gemini/lib/python3.10/site-packages/google/ai/generativelanguage_v1beta/services/retriever_service/client.py:566,</span> in <span class="ni">RetrieverServiceClient.create_corpus</span><span class="nt">(self, request, corpus, retry, timeout, metadata)</span>
+<span class="g g-Whitespace">    </span><span class="mi">563</span> <span class="n">rpc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">_wrapped_methods</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">create_corpus</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">565</span> <span class="c1"># Send the request.</span>
+<span class="ne">--&gt; </span><span class="mi">566</span> <span class="n">response</span> <span class="o">=</span> <span class="n">rpc</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">567</span>     <span class="n">request</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">568</span>     <span class="n">retry</span><span class="o">=</span><span class="n">retry</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">569</span>     <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">570</span>     <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">571</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">573</span> <span class="c1"># Done; return the response.</span>
+<span class="g g-Whitespace">    </span><span class="mi">574</span> <span class="k">return</span> <span class="n">response</span>
+
+<span class="nn">File ~/miniconda3/envs/gemini/lib/python3.10/site-packages/google/api_core/gapic_v1/method.py:131,</span> in <span class="ni">_GapicCallable.__call__</span><span class="nt">(self, timeout, retry, compression, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">128</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compression</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">129</span>     <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;compression&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">compression</span>
+<span class="ne">--&gt; </span><span class="mi">131</span> <span class="k">return</span> <span class="n">wrapped_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/miniconda3/envs/gemini/lib/python3.10/site-packages/google/api_core/retry.py:372,</span> in <span class="ni">Retry.__call__.&lt;locals&gt;.retry_wrapped_func</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">368</span> <span class="n">target</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">369</span> <span class="n">sleep_generator</span> <span class="o">=</span> <span class="n">exponential_sleep_generator</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">370</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_initial</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maximum</span><span class="p">,</span> <span class="n">multiplier</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_multiplier</span>
+<span class="g g-Whitespace">    </span><span class="mi">371</span> <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">372</span> <span class="k">return</span> <span class="n">retry_target</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">373</span>     <span class="n">target</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">374</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_predicate</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">375</span>     <span class="n">sleep_generator</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">376</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">377</span>     <span class="n">on_error</span><span class="o">=</span><span class="n">on_error</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">378</span> <span class="p">)</span>
+
+<span class="nn">File ~/miniconda3/envs/gemini/lib/python3.10/site-packages/google/api_core/retry.py:207,</span> in <span class="ni">retry_target</span><span class="nt">(target, predicate, sleep_generator, timeout, on_error, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">205</span> <span class="k">for</span> <span class="n">sleep</span> <span class="ow">in</span> <span class="n">sleep_generator</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span>     <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">207</span>         <span class="n">result</span> <span class="o">=</span> <span class="n">target</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">208</span>         <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isawaitable</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span>             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">_ASYNC_RETRY_WARNING</span><span class="p">)</span>
+
+<span class="nn">File ~/miniconda3/envs/gemini/lib/python3.10/site-packages/google/api_core/timeout.py:120,</span> in <span class="ni">TimeToDeadlineTimeout.__call__.&lt;locals&gt;.func_with_timeout</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">117</span>     <span class="c1"># Avoid setting negative timeout</span>
+<span class="g g-Whitespace">    </span><span class="mi">118</span>     <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;timeout&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">-</span> <span class="n">time_since_first_attempt</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">120</span> <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/miniconda3/envs/gemini/lib/python3.10/site-packages/google/api_core/grpc_helpers.py:81,</span> in <span class="ni">_wrap_unary_errors.&lt;locals&gt;.error_remapped_callable</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">79</span>     <span class="k">return</span> <span class="n">callable_</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">80</span> <span class="k">except</span> <span class="n">grpc</span><span class="o">.</span><span class="n">RpcError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">81</span>     <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">from_grpc_error</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
+
+<span class="ne">PermissionDenied</span>: 403 Request had insufficient authentication scopes. [reason: &quot;ACCESS_TOKEN_SCOPE_INSUFFICIENT&quot;
+<span class="ne">domain</span>: &quot;googleapis.com&quot;
+<span class="n">metadata</span> <span class="p">{</span>
+  <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;service&quot;</span>
+  <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;generativelanguage.googleapis.com&quot;</span>
+<span class="p">}</span>
+<span class="n">metadata</span> <span class="p">{</span>
+  <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;method&quot;</span>
+  <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;google.ai.generativelanguage.v1beta.RetrieverService.CreateCorpus&quot;</span>
+<span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id7">
+<h3>获取创建的语料库<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h3>
+<p>使用<code class="docutils literal notranslate"><span class="pre">GetCorpusRequest</span></code>方法以编程方式访问您在上面创建的语料库。<code class="docutils literal notranslate"><span class="pre">name</span></code>参数的值是指语料库的完整资源名称，并在上面的单元格中设置为<code class="docutils literal notranslate"><span class="pre">corpus_resource_name</span></code>。预期格式为<code class="docutils literal notranslate"><span class="pre">corpora/corpus-123</span></code>。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">get_corpus_request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">GetCorpusRequest</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">corpus_resource_name</span><span class="p">)</span>
+
+<span class="c1"># Make the request</span>
+<span class="n">get_corpus_response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">get_corpus</span><span class="p">(</span><span class="n">get_corpus_request</span><span class="p">)</span>
+
+<span class="c1"># Print the response</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">get_corpus_response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id8">
+<h2>创建文档<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+<p>一个语料库最多可以包含 10,000 个文档。您可以在定义文档时指定以下任一字段：</p>
+<ul class="simple">
+<li><p>name：文档资源名称 (ID)。最多只能包含 40 个字符（仅限字母数字或破折号）。 ID 不能以破折号开头或结尾。如果创建时名称为空，则将从 display_name 派生出一个唯一名称以及 12 个字符的随机后缀。</p></li>
+<li><p>display_name：人类可读的显示名称。最多只能包含 512 个字符，包括字母数字、空格和破折号。
+<code class="docutils literal notranslate"><span class="pre">文档</span></code>还支持最多 20 个用户指定的<code class="docutils literal notranslate"><span class="pre">custom_metadata</span></code>字段，指定为键值对。自定义元数据可以是字符串、字符串列表或数字。请注意，字符串列表最多可支持 10 个值，并且数值在API中表示为浮点数。</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a document with a custom display name.</span>
+<span class="n">example_document</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Introducing Project IDX, An Experiment to Improve Full-stack, Multiplatform App Development&quot;</span><span class="p">)</span>
+
+<span class="c1"># Add metadata.</span>
+<span class="c1"># Metadata also supports numeric values not specified here</span>
+<span class="n">document_metadata</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">glm</span><span class="o">.</span><span class="n">CustomMetadata</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="n">string_value</span><span class="o">=</span><span class="s2">&quot;https://developers.googleblog.com/2023/08/introducing-project-idx-experiment-to-improve-full-stack-multiplatform-app-development.html&quot;</span><span class="p">)]</span>
+<span class="n">example_document</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">document_metadata</span><span class="p">)</span>
+
+<span class="c1"># Make the request</span>
+<span class="c1"># corpus_resource_name is a variable set in the &quot;Create a corpus&quot; section.</span>
+<span class="n">create_corpus_request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">CreateDocumentRequest</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">corpus_resource_name</span><span class="p">,</span> <span class="n">document</span><span class="o">=</span><span class="n">example_document</span><span class="p">)</span>
+<span class="n">create_document_response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">create_document</span><span class="p">(</span><span class="n">create_corpus_request</span><span class="p">)</span>
+
+<span class="c1"># Set the `document_resource_name` for subsequent sections.</span>
+<span class="n">document_resource_name</span> <span class="o">=</span> <span class="n">create_document_response</span><span class="o">.</span><span class="n">name</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">create_document_response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id9">
+<h3>获取创建的文档<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h3>
+<p>使用<code class="docutils literal notranslate"><span class="pre">GetDocumentRequest</span></code>方法以编程方式访问您在上面创建的文档。<code class="docutils literal notranslate"><span class="pre">name</span></code>参数的值是指文档的完整资源名称，并在上面的单元格中设置为<code class="docutils literal notranslate"><span class="pre">document_resource_name</span></code>。预期格式为<code class="docutils literal notranslate"><span class="pre">corpora/corpus-123/documents/document-123</span></code>。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">get_document_request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">GetDocumentRequest</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">document_resource_name</span><span class="p">)</span>
+
+<span class="c1"># Make the request</span>
+<span class="c1"># document_resource_name is a variable set in the &quot;Create a document&quot; section.</span>
+<span class="n">get_document_response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">get_document</span><span class="p">(</span><span class="n">get_document_request</span><span class="p">)</span>
+
+<span class="c1"># Print the response</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">get_document_response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id10">
+<h2>摄取并分块文档<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h2>
+<p>为了提高语义检索期间矢量数据库返回的内容的相关性，请在摄取文档时将大文档分解为较小的片段或块。</p>
+<p><code class="docutils literal notranslate"><span class="pre">Chunk</span></code>是<code class="docutils literal notranslate"><span class="pre">Document</span></code>的子部分，出于矢量表示和存储的目的，它被视为独立单元。一个<code class="docutils literal notranslate"><span class="pre">Chunk</span></code>最多可以有 2043 个<code class="docutils literal notranslate"><span class="pre">tokens</span></code>。一个语料库最多可以有 100 万个<code class="docutils literal notranslate"><span class="pre">Chunk</span></code>。</p>
+<p>与文档类似，块也支持最多 20 个用户指定的 custom_metadata 字段，指定为键值对。自定义元数据可以是字符串、字符串列表或数字。请注意，字符串列表最多可支持 10 个值，并且数值在 API 中表示为浮点数。</p>
+<p>本指南使用 Google 的<a class="reference external" href="https://github.com/google/labs-prototypes/tree/main/seeds/chunker-python">开源 HtmlChunker</a></p>
+<p>您可以使用的其他分块器包括<a class="reference external" href="https://python.langchain.com/docs/get_started/introduction">LangChain</a>或 <a class="reference external" href="https://www.llamaindex.ai/">LlamaIndex</a>。</p>
+<section id="htmlchunker-html">
+<h3>通过 HtmlChunker 摄取 HTML 和块<a class="headerlink" href="#htmlchunker-html" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>google-labs-html-chunker
+
+<span class="kn">from</span> <span class="nn">google_labs_html_chunker.html_chunker</span> <span class="kn">import</span> <span class="n">HtmlChunker</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>获取网站的<code class="docutils literal notranslate"><span class="pre">HTML</span> <span class="pre">DOM</span></code>。在这里，直接读取HTML，但最好让<code class="docutils literal notranslate"><span class="pre">HTML</span></code>后渲染包含<code class="docutils literal notranslate"><span class="pre">Javascript</span></code>注入的 HTML，例如<code class="docutils literal notranslate"><span class="pre">document.documentElement.innerHTML</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span><span class="p">(</span><span class="n">urlopen</span><span class="p">(</span><span class="s2">&quot;https://developers.googleblog.com/2023/08/introducing-project-idx-experiment-to-improve-full-stack-multiplatform-app-development.html&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+  <span class="n">html</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>将文本文档分解为段落并从这些段落创建块。此步骤创建<code class="docutils literal notranslate"><span class="pre">Chunk</span></code>对象本身，下一部分将它们上传到语义检索器 API。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Chunk the file using HtmlChunker</span>
+<span class="n">chunker</span> <span class="o">=</span> <span class="n">HtmlChunker</span><span class="p">(</span>
+    <span class="n">max_words_per_aggregate_passage</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">greedily_aggregate_sibling_nodes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">html_tags_to_exclude</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;noscript&quot;</span><span class="p">,</span> <span class="s2">&quot;script&quot;</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="n">passages</span> <span class="o">=</span> <span class="n">chunker</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">passages</span><span class="p">)</span>
+
+
+<span class="c1"># Create `Chunk` entities.</span>
+<span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">passage</span> <span class="ow">in</span> <span class="n">passages</span><span class="p">:</span>
+    <span class="n">chunk</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Chunk</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;string_value&#39;</span><span class="p">:</span> <span class="n">passage</span><span class="p">})</span>
+    <span class="c1"># Optionally, you can add metadata to a chunk</span>
+    <span class="n">chunk</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">CustomMetadata</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span>
+                                                    <span class="n">string_list_value</span><span class="o">=</span><span class="n">glm</span><span class="o">.</span><span class="n">StringList</span><span class="p">(</span>
+                                                        <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Google For Developers&quot;</span><span class="p">,</span> <span class="s2">&quot;Project IDX&quot;</span><span class="p">,</span> <span class="s2">&quot;Blog&quot;</span><span class="p">,</span> <span class="s2">&quot;Announcement&quot;</span><span class="p">])))</span>
+    <span class="n">chunk</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">CustomMetadata</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;chunking_strategy&quot;</span><span class="p">,</span>
+                                                    <span class="n">string_value</span><span class="o">=</span><span class="s2">&quot;greedily_aggregate_sibling_nodes&quot;</span><span class="p">))</span>
+    <span class="n">chunk</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">CustomMetadata</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;publish_date&quot;</span><span class="p">,</span>
+                                                    <span class="n">numeric_value</span> <span class="o">=</span> <span class="mi">20230808</span><span class="p">))</span>
+    <span class="n">chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id11">
+<h2>批量创建块<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h2>
+<p>批量创建块。您可以为每个批量请求指定最多 100 个块。</p>
+<p>使用<code class="docutils literal notranslate"><span class="pre">CreateChunk()</span></code>创建单个块。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Option 1: Use HtmlChunker in the section above.</span>
+<span class="c1"># `chunks` is the variable set from the section above.</span>
+<span class="n">create_chunk_requests</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+  <span class="n">create_chunk_requests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">CreateChunkRequest</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">document_resource_name</span><span class="p">,</span> <span class="n">chunk</span><span class="o">=</span><span class="n">chunk</span><span class="p">))</span>
+
+<span class="c1"># Make the request</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">BatchCreateChunksRequest</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">document_resource_name</span><span class="p">,</span> <span class="n">requests</span><span class="o">=</span><span class="n">create_chunk_requests</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">batch_create_chunks</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>或者，您可以在不使用 HtmlChunker 的情况下创建块。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add up to 100 CreateChunk requests per batch request.</span>
+<span class="c1"># document_resource_name is a variable set in the &quot;Create a document&quot; section.</span>
+<span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">chunk_1</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Chunk</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;string_value&#39;</span><span class="p">:</span> <span class="s2">&quot;Chunks support user specified metadata.&quot;</span><span class="p">})</span>
+<span class="n">chunk_1</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">CustomMetadata</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;section&quot;</span><span class="p">,</span>
+                                                  <span class="n">string_value</span><span class="o">=</span><span class="s2">&quot;Custom metadata filters&quot;</span><span class="p">))</span>
+<span class="n">chunk_2</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Chunk</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;string_value&#39;</span><span class="p">:</span> <span class="s2">&quot;The maximum number of metadata supported is 20&quot;</span><span class="p">})</span>
+<span class="n">chunk_2</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">CustomMetadata</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;num_keys&quot;</span><span class="p">,</span>
+                                                  <span class="n">numeric_value</span> <span class="o">=</span> <span class="mi">20</span><span class="p">))</span>
+<span class="n">chunks</span> <span class="o">=</span> <span class="p">[</span><span class="n">chunk_1</span><span class="p">,</span> <span class="n">chunk_2</span><span class="p">]</span>
+<span class="n">create_chunk_requests</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+  <span class="n">create_chunk_requests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">CreateChunkRequest</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">document_resource_name</span><span class="p">,</span> <span class="n">chunk</span><span class="o">=</span><span class="n">chunk</span><span class="p">))</span>
+
+<span class="c1"># Make the request</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">BatchCreateChunksRequest</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">document_resource_name</span><span class="p">,</span> <span class="n">requests</span><span class="o">=</span><span class="n">create_chunk_requests</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">batch_create_chunks</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="chunk">
+<h3>列出 chunk 并获取状态<a class="headerlink" href="#chunk" title="Permalink to this headline">#</a></h3>
+<p>使用<code class="docutils literal notranslate"><span class="pre">ListChunksRequest</span></code>方法以分页列表的形式获取所有可用的<code class="docutils literal notranslate"><span class="pre">Chunks</span></code>，每页最大大小限制为 100 个<code class="docutils literal notranslate"><span class="pre">Chunks</span></code>，按 <code class="docutils literal notranslate"><span class="pre">Chunk.create_time</span></code>的升序排序。如果不指定限制，则最多返回 10 个<code class="docutils literal notranslate"><span class="pre">chunk</span></code>。</p>
+<p>提供 ListChunksRequest 响应中返回的 next_page_token 作为下一个请求的参数以检索下一页。请注意，分页时，提供给 ListChunks 的所有其他参数必须与提供页面令牌的调用相匹配。</p>
+<p>所有块都会返回一个状态。在查询语料库之前，使用它来检查块的状态。块状态包括 -<code class="docutils literal notranslate"><span class="pre">UNSPECIFIED</span></code>、<code class="docutils literal notranslate"><span class="pre">PENDING_PROCESSING</span></code>、<code class="docutils literal notranslate"><span class="pre">ACTIVE</span></code>和<code class="docutils literal notranslate"><span class="pre">FAILED</span></code>。您只能查询<code class="docutils literal notranslate"><span class="pre">ACTIVE</span></code> Chunks。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make the request</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">ListChunksRequest</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">document_resource_name</span><span class="p">)</span>
+<span class="n">list_chunks_response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">list_chunks</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">chunks</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list_chunks_response</span><span class="o">.</span><span class="n">chunks</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Chunk # </span><span class="si">{</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Resource Name: </span><span class="si">{</span><span class="n">chunks</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+  <span class="c1"># Only ACTIVE chunks can be queried.</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;State: </span><span class="si">{</span><span class="n">glm</span><span class="o">.</span><span class="n">Chunk</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="n">chunks</span><span class="o">.</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id12">
+<h2>摄取另一个文档<a class="headerlink" href="#id12" title="Permalink to this headline">#</a></h2>
+<p>通过 HtmlChunker 添加另一个文档并添加过滤器。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a document with a custom display name.</span>
+<span class="n">example_document</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;How it’s Made: Interacting with Gemini through multimodal prompting&quot;</span><span class="p">)</span>
+
+<span class="c1"># Add document metadata.</span>
+<span class="c1"># Metadata also supports numeric values not specified here</span>
+<span class="n">document_metadata</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">glm</span><span class="o">.</span><span class="n">CustomMetadata</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="n">string_value</span><span class="o">=</span><span class="s2">&quot;https://developers.googleblog.com/2023/12/how-its-made-gemini-multimodal-prompting.html&quot;</span><span class="p">)]</span>
+<span class="n">example_document</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">document_metadata</span><span class="p">)</span>
+
+<span class="c1"># Make the CreateDocument request</span>
+<span class="c1"># corpus_resource_name is a variable set in the &quot;Create a corpus&quot; section.</span>
+<span class="n">create_document_request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">CreateDocumentRequest</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">corpus_resource_name</span><span class="p">,</span> <span class="n">document</span><span class="o">=</span><span class="n">example_document</span><span class="p">)</span>
+<span class="n">create_document_response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">create_document</span><span class="p">(</span><span class="n">create_document_request</span><span class="p">)</span>
+
+<span class="c1"># Set the `document_resource_name` for subsequent sections.</span>
+<span class="n">document_resource_name</span> <span class="o">=</span> <span class="n">create_document_response</span><span class="o">.</span><span class="n">name</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">create_document_response</span><span class="p">)</span>
+
+<span class="c1"># Chunks - add another webpage from Google for Developers</span>
+<span class="k">with</span><span class="p">(</span><span class="n">urlopen</span><span class="p">(</span><span class="s2">&quot;https://developers.googleblog.com/2023/12/how-its-made-gemini-multimodal-prompting.html&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+  <span class="n">html</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+
+<span class="c1"># Chunk the file using HtmlChunker</span>
+<span class="n">chunker</span> <span class="o">=</span> <span class="n">HtmlChunker</span><span class="p">(</span>
+    <span class="n">max_words_per_aggregate_passage</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">greedily_aggregate_sibling_nodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">passages</span> <span class="o">=</span> <span class="n">chunker</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+
+<span class="c1"># Create `Chunk` entities.</span>
+<span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">passage</span> <span class="ow">in</span> <span class="n">passages</span><span class="p">:</span>
+    <span class="n">chunk</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Chunk</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;string_value&#39;</span><span class="p">:</span> <span class="n">passage</span><span class="p">})</span>
+    <span class="n">chunk</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">CustomMetadata</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span>
+                                                    <span class="n">string_list_value</span><span class="o">=</span><span class="n">glm</span><span class="o">.</span><span class="n">StringList</span><span class="p">(</span>
+                                                        <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Google For Developers&quot;</span><span class="p">,</span> <span class="s2">&quot;Gemini API&quot;</span><span class="p">,</span> <span class="s2">&quot;Blog&quot;</span><span class="p">,</span> <span class="s2">&quot;Announcement&quot;</span><span class="p">])))</span>
+    <span class="n">chunk</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">CustomMetadata</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;chunking_strategy&quot;</span><span class="p">,</span>
+                                                    <span class="n">string_value</span><span class="o">=</span><span class="s2">&quot;no_aggregate_sibling_nodes&quot;</span><span class="p">))</span>
+    <span class="n">chunk</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">CustomMetadata</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;publish_date&quot;</span><span class="p">,</span>
+                                                    <span class="n">numeric_value</span> <span class="o">=</span> <span class="mi">20231206</span><span class="p">))</span>
+    <span class="n">chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+<span class="c1"># Make the request</span>
+<span class="n">create_chunk_requests</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+  <span class="n">create_chunk_requests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">CreateChunkRequest</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">document_resource_name</span><span class="p">,</span> <span class="n">chunk</span><span class="o">=</span><span class="n">chunk</span><span class="p">))</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">BatchCreateChunksRequest</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">document_resource_name</span><span class="p">,</span> <span class="n">requests</span><span class="o">=</span><span class="n">create_chunk_requests</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">batch_create_chunks</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id13">
+<h2>查询语料库<a class="headerlink" href="#id13" title="Permalink to this headline">#</a></h2>
+<p>使用<code class="docutils literal notranslate"><span class="pre">QueryCorpusRequest</span></code>方法执行语义搜索以获取相关段落。</p>
+<ul class="simple">
+<li><p>results_count：指定要返回的段落数。最大值为 100。如果未指定，API 最多返回 10 个块。</p></li>
+<li><p>metadata_filters：按 chunk_metadata 或 document_metadata 过滤。每个MetadataFilter需要对应一个唯一的key。多个 MetadataFilter 对象通过逻辑 AND 连接。类似的元数据过滤条件通过逻辑 OR 连接。一些例子：</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">year</span> <span class="o">&gt;=</span> <span class="mi">2020</span> <span class="n">OR</span> <span class="n">year</span> <span class="o">&lt;</span> <span class="mi">2010</span><span class="p">)</span> <span class="n">AND</span> <span class="p">(</span><span class="n">genre</span> <span class="o">=</span> <span class="n">drama</span> <span class="n">OR</span> <span class="n">genre</span> <span class="o">=</span> <span class="n">action</span><span class="p">)</span>
+
+<span class="n">metadata_filter</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;document.custom_metadata.year&quot;</span>
+    <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">{</span><span class="n">int_value</span> <span class="o">=</span> <span class="mi">2020</span><span class="p">,</span> <span class="n">operation</span> <span class="o">=</span> <span class="n">GREATER_EQUAL</span><span class="p">},</span>
+      <span class="p">{</span><span class="n">int_value</span> <span class="o">=</span> <span class="mi">2010</span><span class="p">,</span> <span class="n">operation</span> <span class="o">=</span> <span class="n">LESS</span><span class="p">}]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;document.custom_metadata.genre&quot;</span>
+    <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">{</span><span class="n">string_value</span> <span class="o">=</span> <span class="s2">&quot;drama&quot;</span><span class="p">,</span> <span class="n">operation</span> <span class="o">=</span> <span class="n">EQUAL</span><span class="p">},</span>
+      <span class="p">{</span><span class="n">string_value</span> <span class="o">=</span> <span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="n">operation</span> <span class="o">=</span> <span class="n">EQUAL</span><span class="p">}</span> <span class="p">}]</span>
+  <span class="p">}]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>请注意，只有数字值支持同一键的“AND”。字符串值仅支持同一键的“OR”。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># (&quot;Google for Developers&quot; in tags) and (20230314 &gt; publish_date)</span>
+
+<span class="n">metadata_filter</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;chunk.custom_metadata.tags&quot;</span><span class="p">,</span>
+    <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="n">string_value</span> <span class="o">=</span> <span class="s1">&#39;Google for Developers&#39;</span><span class="p">,</span> <span class="n">operation</span> <span class="o">=</span> <span class="n">INCLUDES</span><span class="p">},</span>
+  <span class="p">},{</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;chunk.custom_metadata.publish_date&quot;</span><span class="p">,</span>
+    <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="n">numeric_value</span> <span class="o">=</span> <span class="mi">20230314</span><span class="p">,</span> <span class="n">operation</span> <span class="o">=</span> <span class="n">GREATER_EQUAL</span><span class="p">}]</span>
+  <span class="p">}]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">user_query</span> <span class="o">=</span> <span class="s2">&quot;What is the purpose of Project IDX?&quot;</span>
+<span class="n">results_count</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="c1"># Add metadata filters for both chunk and document.</span>
+<span class="n">chunk_metadata_filter</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">MetadataFilter</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;chunk.custom_metadata.tags&#39;</span><span class="p">,</span>
+                                           <span class="n">conditions</span><span class="o">=</span><span class="p">[</span><span class="n">glm</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span>
+                                              <span class="n">string_value</span><span class="o">=</span><span class="s1">&#39;Google For Developers&#39;</span><span class="p">,</span>
+                                              <span class="n">operation</span><span class="o">=</span><span class="n">glm</span><span class="o">.</span><span class="n">Condition</span><span class="o">.</span><span class="n">Operator</span><span class="o">.</span><span class="n">INCLUDES</span><span class="p">)])</span>
+
+<span class="c1"># Make the request</span>
+<span class="c1"># corpus_resource_name is a variable set in the &quot;Create a corpus&quot; section.</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">QueryCorpusRequest</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">corpus_resource_name</span><span class="p">,</span>
+                                 <span class="n">query</span><span class="o">=</span><span class="n">user_query</span><span class="p">,</span>
+                                 <span class="n">results_count</span><span class="o">=</span><span class="n">results_count</span><span class="p">,</span>
+                                 <span class="n">metadata_filters</span><span class="o">=</span><span class="p">[</span><span class="n">chunk_metadata_filter</span><span class="p">])</span>
+<span class="n">query_corpus_response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">query_corpus</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">query_corpus_response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id14">
+<h2>归因问答<a class="headerlink" href="#id14" title="Permalink to this headline">#</a></h2>
+<p>Attributed Question-Answering, AQA<br />
+使用GenerateAnswer 方法对文档、语料库或一组段落执行属性问答。<br />
+归因问答 (AQA) 是指回答基于给定上下文的问题并提供归因，同时最大限度地减少幻觉。</p>
+<p>在需要 AQA 的情况下，GenerateAnswer 比使用未调整的 LLM 具有多个优势：</p>
+<ul class="simple">
+<li><p>底层模型经过训练，只返回基于所提供上下文的答案。</p></li>
+<li><p>它识别归因（所提供的上下文中对答案有贡献的部分）。归因使用户能够验证答案。</p></li>
+<li><p>它估计给定（问题、上下文）对的answerable_probability，这进一步使您能够根据返回的答案的合理性和正确性来转移产品行为。</p></li>
+</ul>
+<section id="answerable-probability">
+<h3>answerable_probability 和“我不知道”问题<a class="headerlink" href="#answerable-probability" title="Permalink to this headline">#</a></h3>
+<p>在某些情况下，对这个问题的最佳回答实际上是“我不知道”。例如，如果提供的上下文不包含问题的答案，则该问题被视为“无法回答”。</p>
+<p>AQA 模型非常擅长识别此类情况。它甚至可以区分可回答性和不可回答性的程度。</p>
+<p>然而，<code class="docutils literal notranslate"><span class="pre">GenerateAnswer</span></code>API 通过以下方式将最终决策权交给您：</p>
+<ul class="simple">
+<li><p>始终尝试返回一个有根据的答案 - 即使该答案相对不太可能有根据和正确。</p></li>
+<li><p>返回值<code class="docutils literal notranslate"><span class="pre">answerable_probability</span></code> - 模型对答案有根据且正确的概率的估计。</p></li>
+</ul>
+<p>低<code class="docutils literal notranslate"><span class="pre">answerable_probability</span></code>可能由以下 1 个或多个因素解释：</p>
+<ul class="simple">
+<li><p>该模型不确定其答案是否正确。</p></li>
+<li><p>该模型不确定其答案是否基于所引用的段落；答案可能是从世界知识中得出的。例如：<code class="docutils literal notranslate"><span class="pre">问题=“1+1=？”，段落=[“2+2=4”]</span></code>→<code class="docutils literal notranslate"><span class="pre">答案=2</span></code>，<code class="docutils literal notranslate"><span class="pre">answerable_probability=0.02</span></code></p></li>
+<li><p>该模型提供了并未完全回答问题的相关信息。示例：<code class="docutils literal notranslate"><span class="pre">question=“我的尺码有吗？”，passages=[“尺码</span> <span class="pre">5-11</span> <span class="pre">有吗”]</span></code>→<code class="docutils literal notranslate"><span class="pre">answer=“是的，尺码有</span> <span class="pre">5-11”</span></code>，<code class="docutils literal notranslate"><span class="pre">answerable_probability=0.03”</span></code></p></li>
+<li><p>在GenerateAnswerRequest 中没有提出格式正确的问题。</p></li>
+</ul>
+<p>由于较低的<code class="docutils literal notranslate"><span class="pre">answerable_probability</span></code>表明GenerateAnswerResponse.answer可能是错误的或没有根据的，因此强烈建议通过检查<code class="docutils literal notranslate"><span class="pre">answerable_probability</span></code>来进一步处理响应。</p>
+<p>当<code class="docutils literal notranslate"><span class="pre">answerable_probability</span></code>较低时，一些客户可能希望：</p>
+<ul class="simple">
+<li><p>向最终用户显示一条消息，大意是“我们无法回答该问题”。</p></li>
+<li><p>回到通用的<code class="docutils literal notranslate"><span class="pre">LLM</span></code>，从世界知识中回答问题。此类回退的阈值和性质将取决于各个用例。<code class="docutils literal notranslate"><span class="pre">answerable_probability</span> <span class="pre">&lt;=</span> <span class="pre">0.5</span></code>的值是一个很好的起始阈值。</p></li>
+</ul>
+</section>
+<section id="aqa">
+<h3>AQA 有用的提示<a class="headerlink" href="#aqa" title="Permalink to this headline">#</a></h3>
+<p>有关完整的 API 规范，请参阅<a class="reference external" href="https://ai.google.dev/api/python/google/ai/generativelanguage/GenerateAnswerRequest">GenerateAnswerRequest API 参考</a>。</p>
+<ul class="simple">
+<li><p>段落长度：建议每段最多 300 个令牌。</p></li>
+<li><p>段落排序：</p>
+<ul>
+<li><p>如果您提供<code class="docutils literal notranslate"><span class="pre">GenerateAnswerRequest.inline_passages</span></code>，则应按与查询相关性的降序对段落进行排序。如果超出模型的上下文长度限制，则最后（最不相关）的段落将被省略。</p></li>
+<li><p>如果您提供<code class="docutils literal notranslate"><span class="pre">GenerateAnswerRequest.semantic_retriever</span></code>，那么将自动为您完成相关性排序。</p></li>
+</ul>
+</li>
+<li><p>局限性：AQA 模型专门用于问答。对于其他用例，例如创意写作、摘要等，请通过GenerateContent调用通用模型。</p>
+<ul>
+<li><p>聊天：如果已知用户输入是可以从特定上下文中回答的问题，则 AQA 可以回答聊天查询。但如果用户输入可能是任何类型的条目，那么通用模型可能是更好的选择。</p></li>
+</ul>
+</li>
+<li><p>温度</p>
+<ul>
+<li><p>一般来说，为了获得准确的 AQA，建议使用相对较低的温度 (~0.2)。</p></li>
+<li><p>如果您的用例依赖于确定性输出，则设置温度=0。</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">user_query</span> <span class="o">=</span> <span class="s2">&quot;What is the purpose of Project IDX?&quot;</span>
+<span class="n">answer_style</span> <span class="o">=</span> <span class="s2">&quot;ABSTRACTIVE&quot;</span> <span class="c1"># Or VERBOSE, EXTRACTIVE</span>
+<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;models/aqa&quot;</span>
+
+<span class="c1"># Make the request</span>
+<span class="c1"># corpus_resource_name is a variable set in the &quot;Create a corpus&quot; section.</span>
+<span class="n">content</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Content</span><span class="p">(</span><span class="n">parts</span><span class="o">=</span><span class="p">[</span><span class="n">glm</span><span class="o">.</span><span class="n">Part</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">user_query</span><span class="p">)])</span>
+<span class="n">retriever_config</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">SemanticRetrieverConfig</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">corpus_resource_name</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+<span class="n">req</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">GenerateAnswerRequest</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">MODEL_NAME</span><span class="p">,</span>
+                                <span class="n">contents</span><span class="o">=</span><span class="p">[</span><span class="n">content</span><span class="p">],</span>
+                                <span class="n">semantic_retriever</span><span class="o">=</span><span class="n">retriever_config</span><span class="p">,</span>
+                                <span class="n">answer_style</span><span class="o">=</span><span class="n">answer_style</span><span class="p">)</span>
+<span class="n">aqa_response</span> <span class="o">=</span> <span class="n">generative_service_client</span><span class="o">.</span><span class="n">generate_answer</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">aqa_response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get the metadata from the first attributed passages for the source</span>
+<span class="n">chunk_resource_name</span> <span class="o">=</span> <span class="n">aqa_response</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">grounding_attributions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">source_id</span><span class="o">.</span><span class="n">semantic_retriever_chunk</span><span class="o">.</span><span class="n">chunk</span>
+<span class="n">get_chunk_response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">get_chunk</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">chunk_resource_name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">get_chunk_response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id15">
+<h3>更多选项：使用内联通道的 AQA<a class="headerlink" href="#id15" title="Permalink to this headline">#</a></h3>
+<p>或者，您可以直接使用 AQA 端点，而无需通过传递 inline_passages 使用语义检索器 API。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">user_query</span> <span class="o">=</span> <span class="s2">&quot;What is AQA from Google?&quot;</span>
+<span class="n">user_query_content</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Content</span><span class="p">(</span><span class="n">parts</span><span class="o">=</span><span class="p">[</span><span class="n">glm</span><span class="o">.</span><span class="n">Part</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">user_query</span><span class="p">)])</span>
+<span class="n">answer_style</span> <span class="o">=</span> <span class="s2">&quot;VERBOSE&quot;</span> <span class="c1"># or ABSTRACTIVE, EXTRACTIVE</span>
+<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;models/aqa&quot;</span>
+
+<span class="c1"># Create the grounding inline passages</span>
+<span class="n">grounding_passages</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">GroundingPassages</span><span class="p">()</span>
+<span class="n">passage_a</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Content</span><span class="p">(</span><span class="n">parts</span><span class="o">=</span><span class="p">[</span><span class="n">glm</span><span class="o">.</span><span class="n">Part</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Attributed Question and Answering (AQA) refers to answering questions grounded to a given corpus and providing citation&quot;</span><span class="p">)])</span>
+<span class="n">grounding_passages</span><span class="o">.</span><span class="n">passages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">GroundingPassage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">passage_a</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;001&quot;</span><span class="p">))</span>
+<span class="n">passage_b</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Content</span><span class="p">(</span><span class="n">parts</span><span class="o">=</span><span class="p">[</span><span class="n">glm</span><span class="o">.</span><span class="n">Part</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;An LLM is not designed to generate content grounded in a set of passages. Although instructing an LLM to answer questions only based on a set of passages reduces hallucination, hallucination still often occurs when LLMs generate responses unsupported by facts provided by passages&quot;</span><span class="p">)])</span>
+<span class="n">grounding_passages</span><span class="o">.</span><span class="n">passages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">GroundingPassage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">passage_b</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;002&quot;</span><span class="p">))</span>
+<span class="n">passage_c</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">Content</span><span class="p">(</span><span class="n">parts</span><span class="o">=</span><span class="p">[</span><span class="n">glm</span><span class="o">.</span><span class="n">Part</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hallucination is one of the biggest problems in Large Language Models (LLM) development. Large Language Models (LLMs) could produce responses that are fictitious and incorrect, which significantly impacts the usefulness and trustworthiness of applications built with language models.&quot;</span><span class="p">)])</span>
+<span class="n">grounding_passages</span><span class="o">.</span><span class="n">passages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">glm</span><span class="o">.</span><span class="n">GroundingPassage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">passage_c</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;003&quot;</span><span class="p">))</span>
+
+<span class="c1"># Create the request</span>
+<span class="n">req</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">GenerateAnswerRequest</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">MODEL_NAME</span><span class="p">,</span>
+                                <span class="n">contents</span><span class="o">=</span><span class="p">[</span><span class="n">user_query_content</span><span class="p">],</span>
+                                <span class="n">inline_passages</span><span class="o">=</span><span class="n">grounding_passages</span><span class="p">,</span>
+                                <span class="n">answer_style</span><span class="o">=</span><span class="n">answer_style</span><span class="p">)</span>
+<span class="n">aqa_response</span> <span class="o">=</span> <span class="n">generative_service_client</span><span class="o">.</span><span class="n">generate_answer</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">aqa_response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id16">
+<h2>分享语料库<a class="headerlink" href="#id16" title="Permalink to this headline">#</a></h2>
+<p>您可以选择使用 CreatePermissionRequest API 与其他人共享语料库。
+限制条件：</p>
+<ul class="simple">
+<li><p>共享有 2 个角色：READER 和 EDITOR</p>
+<ul>
+<li><p>READER可以查询语料库。</p></li>
+<li><p>EDITOR拥有读者的权限，此外还可以编辑和共享语料库。</p></li>
+</ul>
+</li>
+<li><p>通过授予每个人 user_type 读取权限，可以公开语料库。</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace your-email@gmail.com with the email added as a test user in the OAuth Quickstart</span>
+<span class="n">shared_user_email</span> <span class="o">=</span> <span class="s2">&quot;TODO-your-email@gmail.com&quot;</span> <span class="c1">#  @param {type:&quot;string&quot;}</span>
+<span class="n">user_type</span> <span class="o">=</span> <span class="s2">&quot;USER&quot;</span>
+<span class="n">role</span> <span class="o">=</span> <span class="s2">&quot;READER&quot;</span>
+
+<span class="c1"># Make the request</span>
+<span class="c1"># corpus_resource_name is a variable set in the &quot;Create a corpus&quot; section.</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">CreatePermissionRequest</span><span class="p">(</span>
+    <span class="n">parent</span><span class="o">=</span><span class="n">corpus_resource_name</span><span class="p">,</span>
+    <span class="n">permission</span><span class="o">=</span><span class="n">glm</span><span class="o">.</span><span class="n">Permission</span><span class="p">(</span><span class="n">grantee_type</span><span class="o">=</span><span class="n">user_type</span><span class="p">,</span>
+                              <span class="n">email_address</span><span class="o">=</span><span class="n">shared_user_email</span><span class="p">,</span>
+                              <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">))</span>
+<span class="n">create_permission_response</span> <span class="o">=</span> <span class="n">permission_service_client</span><span class="o">.</span><span class="n">create_permission</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">create_permission_response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id17">
+<h2>删除语料库<a class="headerlink" href="#id17" title="Permalink to this headline">#</a></h2>
+<p>使用<code class="docutils literal notranslate"><span class="pre">DeleteCorpusRequest</span></code>删除用户语料库以及所有关联的文档和块。</p>
+<p>请注意，如果不指定<code class="docutils literal notranslate"><span class="pre">force=True</span></code>标志，非空语料库将引发错误。如果设置<code class="docutils literal notranslate"><span class="pre">force=True</span></code>，则与此<code class="docutils literal notranslate"><span class="pre">Document</span></code>相关的任何<code class="docutils literal notranslate"><span class="pre">Chunk</span></code>和对象也将被删除。</p>
+<p>如果<code class="docutils literal notranslate"><span class="pre">force=False</span></code>（默认值）并且文档包含任何块，则将返回<code class="docutils literal notranslate"><span class="pre">FAILED_PRECONDITION</span></code>错误。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set force to False if you don&#39;t want to delete non-empty corpora.</span>
+<span class="n">req</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">DeleteCorpusRequest</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">corpus_resource_name</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">delete_corpus_response</span> <span class="o">=</span> <span class="n">retriever_service_client</span><span class="o">.</span><span class="n">delete_corpus</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully deleted corpus: &quot;</span> <span class="o">+</span> <span class="n">corpus_resource_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id18">
+<h2>总结和进一步阅读<a class="headerlink" href="#id18" title="Permalink to this headline">#</a></h2>
+<p>本指南介绍了生成语言 API 的语义检索器和属性问答 (AQA) API，并展示了如何使用它对自定义文本数据执行语义信息检索。请注意，此 API 也适用于<a class="reference external" href="https://www.llamaindex.ai/">LlamaIndex</a>数据框架。请参阅<a class="reference external" href="https://github.com/run-llama/llama_index/blob/main/docs/examples/managed/GoogleDemo.ipynb">LlamaIndex 教程</a>以了解更多信息。</p>
+<p>另请参阅<a class="reference external" href="https://ai.google.dev/api">API 文档</a>以了解有关其他可用功能的更多信息。</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "gemini"
+        },
+        kernelOptions: {
+            name: "gemini",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'gemini'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="multimodal_concepts.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">多模态概念</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="oauth_quickstart.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">OAuth 身份验证</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">概述</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">导入生成语言 API</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">认证</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#oauth">使用服务帐户设置 OAuth</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">使用用户凭据设置 OAuth</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">创建语料库</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">获取创建的语料库</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">创建文档</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">获取创建的文档</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">摄取并分块文档</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#htmlchunker-html">通过 HtmlChunker 摄取 HTML 和块</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">批量创建块</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chunk">列出 chunk 并获取状态</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">摄取另一个文档</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">查询语料库</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">归因问答</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#answerable-probability">answerable_probability 和“我不知道”问题</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aqa">AQA 有用的提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">更多选项：使用内联通道的 AQA</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">分享语料库</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">删除语料库</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">总结和进一步阅读</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

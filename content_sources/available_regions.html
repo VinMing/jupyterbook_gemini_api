@@ -1,0 +1,794 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>可用地区 &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/available_regions';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="PaLM API：使用 Python 微调快速入门" href="tuning_quickstart_python_palm.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_quickstart.html">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_quickstart.html">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_quickstart.html">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gemini_api_overview.html">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">LLM 概念指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_intro.html">提示设计简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_best_practices.html">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semantic_retriever.html">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_tuning_guidance.html">模型微调指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_quickstart_python_palm.html">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/available_regions.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/available_regions.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>可用地区</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">支持的语言</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">可用区域</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>可用地区<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>Google AI Studio 和 Gemini API 支持的语言和地区</p>
+<section id="id2">
+<h2>支持的语言<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>Gemini API 支持以下语言：</p>
+<ul class="simple">
+<li><p>阿拉伯语 (ar)</p></li>
+<li><p>孟加拉语 (bn)</p></li>
+<li><p>保加利亚语 (bg)</p></li>
+<li><p>简体中文和繁体中文 (zh)</p></li>
+<li><p>克罗地亚语 (hr)</p></li>
+<li><p>捷克语 (cs)</p></li>
+<li><p>丹麦语 (da)</p></li>
+<li><p>荷兰语 (nl)</p></li>
+<li><p>英语 (en)</p></li>
+<li><p>爱沙尼亚语 (et)</p></li>
+<li><p>芬兰语 (fi)</p></li>
+<li><p>法语 (fr)</p></li>
+<li><p>德语 (de)</p></li>
+<li><p>希腊语 (el)</p></li>
+<li><p>希伯来语 (iw)</p></li>
+<li><p>印地语 (hi)</p></li>
+<li><p>匈牙利语 (hu)</p></li>
+<li><p>印度尼西亚语 (id)</p></li>
+<li><p>意大利语 (it)</p></li>
+<li><p>日语 (ja)</p></li>
+<li><p>韩语 (ko)</p></li>
+<li><p>拉脱维亚语 (lv)</p></li>
+<li><p>立陶宛语 (lt)</p></li>
+<li><p>挪威语 (no)</p></li>
+<li><p>波兰语 (pl)</p></li>
+<li><p>葡萄牙语 (pt)</p></li>
+<li><p>罗马尼亚语 (ro)</p></li>
+<li><p>俄语 (ru)</p></li>
+<li><p>塞尔维亚语 (sr)</p></li>
+<li><p>斯洛伐克语 (sk)</p></li>
+<li><p>斯洛维尼亚语 (sl)</p></li>
+<li><p>西班牙语 (es)</p></li>
+<li><p>斯瓦希里语 (sw)</p></li>
+<li><p>瑞典语 (sv)</p></li>
+<li><p>泰语 (th)</p></li>
+<li><p>土耳其语 (tr)</p></li>
+<li><p>乌克兰语 (uk)</p></li>
+<li><p>越南语 (vi)</p></li>
+</ul>
+<p>PaLM API 仅支持英语。使用其他语言可能会产生意外的结果。</p>
+</section>
+<section id="id3">
+<h2>可用区域<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意 ：对于 Colab 用户 - 系统会根据 Colab 实例所在的区域（而不是用户所在的区域）应用区域限制。您可以使用!curl <a class="reference external" href="http://ipinfo.io">ipinfo.io</a></p>
+</div>
+<p><strong>查看 Colab 实例的位置</strong></p>
+<p>Gemini API 和 Google AI Studio 已在以下国家/地区推出：</p>
+<ul class="simple">
+<li><p>阿尔及利亚</p></li>
+<li><p>美属萨摩亚</p></li>
+<li><p>安哥拉</p></li>
+<li><p>安圭拉</p></li>
+<li><p>南极洲</p></li>
+<li><p>安提瓜和巴布达</p></li>
+<li><p>阿根廷</p></li>
+<li><p>亚美尼亚</p></li>
+<li><p>阿鲁巴</p></li>
+<li><p>澳大利亚</p></li>
+<li><p>阿塞拜疆</p></li>
+<li><p>巴哈马</p></li>
+<li><p>巴林</p></li>
+<li><p>孟加拉</p></li>
+<li><p>巴巴多斯</p></li>
+<li><p>伯利兹</p></li>
+<li><p>贝宁</p></li>
+<li><p>百慕大</p></li>
+<li><p>不丹</p></li>
+<li><p>玻利维亚</p></li>
+<li><p>博茨瓦纳</p></li>
+<li><p>巴西</p></li>
+<li><p>英属印度洋领地</p></li>
+<li><p>英属维尔京群岛</p></li>
+<li><p>文莱</p></li>
+<li><p>布基纳法索</p></li>
+<li><p>布隆迪</p></li>
+<li><p>佛得角</p></li>
+<li><p>柬埔寨</p></li>
+<li><p>喀麦隆</p></li>
+<li><p>荷属加勒比地区</p></li>
+<li><p>开曼群岛</p></li>
+<li><p>中非共和国</p></li>
+<li><p>乍得</p></li>
+<li><p>智利</p></li>
+<li><p>圣诞岛</p></li>
+<li><p>科科斯（基林）群岛</p></li>
+<li><p>哥伦比亚</p></li>
+<li><p>科摩罗</p></li>
+<li><p>库克群岛</p></li>
+<li><p>科特迪瓦</p></li>
+<li><p>哥斯达黎加</p></li>
+<li><p>库拉索</p></li>
+<li><p>刚果民主共和国</p></li>
+<li><p>吉布提</p></li>
+<li><p>多米尼克</p></li>
+<li><p>多米尼加共和国</p></li>
+<li><p>厄瓜多尔</p></li>
+<li><p>埃及</p></li>
+<li><p>萨尔瓦多</p></li>
+<li><p>赤道几内亚</p></li>
+<li><p>厄立特里亚</p></li>
+<li><p>斯威士兰</p></li>
+<li><p>埃塞俄比亚</p></li>
+<li><p>福克兰群岛（即马尔维纳斯群岛）</p></li>
+<li><p>斐济</p></li>
+<li><p>加蓬</p></li>
+<li><p>冈比亚</p></li>
+<li><p>格鲁吉亚</p></li>
+<li><p>加纳</p></li>
+<li><p>直布罗陀</p></li>
+<li><p>格林纳达</p></li>
+<li><p>关岛</p></li>
+<li><p>危地马拉</p></li>
+<li><p>根西</p></li>
+<li><p>几内亚</p></li>
+<li><p>几内亚比绍</p></li>
+<li><p>圭亚那</p></li>
+<li><p>海地</p></li>
+<li><p>赫德岛和麦克唐纳群岛</p></li>
+<li><p>洪都拉斯</p></li>
+<li><p>印度</p></li>
+<li><p>印度尼西亚</p></li>
+<li><p>伊拉克</p></li>
+<li><p>马恩岛</p></li>
+<li><p>以色列</p></li>
+<li><p>牙买加</p></li>
+<li><p>日本</p></li>
+<li><p>泽西岛</p></li>
+<li><p>约旦</p></li>
+<li><p>哈萨克斯坦</p></li>
+<li><p>肯尼亚</p></li>
+<li><p>基里巴斯</p></li>
+<li><p>吉尔吉斯斯坦</p></li>
+<li><p>科威特</p></li>
+<li><p>老挝</p></li>
+<li><p>黎巴嫩</p></li>
+<li><p>莱索托</p></li>
+<li><p>利比里亚</p></li>
+<li><p>利比亚</p></li>
+<li><p>马达加斯加</p></li>
+<li><p>马拉维</p></li>
+<li><p>马来西亚</p></li>
+<li><p>马尔代夫</p></li>
+<li><p>Mali</p></li>
+<li><p>马绍尔群岛</p></li>
+<li><p>毛里塔尼亚</p></li>
+<li><p>毛里求斯</p></li>
+<li><p>墨西哥</p></li>
+<li><p>密克罗尼西亚</p></li>
+<li><p>蒙古</p></li>
+<li><p>蒙塞拉特岛</p></li>
+<li><p>摩洛哥</p></li>
+<li><p>莫桑比克</p></li>
+<li><p>纳米比亚</p></li>
+<li><p>瑙鲁</p></li>
+<li><p>尼泊尔</p></li>
+<li><p>新喀里多尼亚</p></li>
+<li><p>新西兰</p></li>
+<li><p>尼加拉瓜</p></li>
+<li><p>尼日尔</p></li>
+<li><p>尼日利亚</p></li>
+<li><p>纽埃</p></li>
+<li><p>诺福克岛</p></li>
+<li><p>北马里亚纳群岛</p></li>
+<li><p>阿曼</p></li>
+<li><p>巴基斯坦</p></li>
+<li><p>帕劳</p></li>
+<li><p>巴勒斯坦</p></li>
+<li><p>巴拿马</p></li>
+<li><p>巴布亚新几内亚</p></li>
+<li><p>巴拉圭</p></li>
+<li><p>秘鲁</p></li>
+<li><p>菲律宾</p></li>
+<li><p>皮特凯恩群岛</p></li>
+<li><p>波多黎各</p></li>
+<li><p>卡塔尔</p></li>
+<li><p>刚果共和国</p></li>
+<li><p>卢旺达</p></li>
+<li><p>圣巴泰勒米岛</p></li>
+<li><p>圣基茨和尼维斯</p></li>
+<li><p>圣卢西亚</p></li>
+<li><p>圣皮埃尔和密克隆</p></li>
+<li><p>圣文森特和格林纳丁斯</p></li>
+<li><p>圣赫勒拿岛、阿森松岛和特里斯坦-达库尼亚群岛</p></li>
+<li><p>萨摩亚</p></li>
+<li><p>圣多美和普林西比</p></li>
+<li><p>沙特阿拉伯</p></li>
+<li><p>塞内加尔</p></li>
+<li><p>塞舌尔</p></li>
+<li><p>塞拉利昂</p></li>
+<li><p>新加坡</p></li>
+<li><p>所罗门群岛</p></li>
+<li><p>索马里</p></li>
+<li><p>南非</p></li>
+<li><p>南乔治亚和南桑威奇群岛</p></li>
+<li><p>韩国</p></li>
+<li><p>南苏丹</p></li>
+<li><p>斯里兰卡</p></li>
+<li><p>苏丹</p></li>
+<li><p>苏里南</p></li>
+<li><p>台湾</p></li>
+<li><p>塔吉克斯坦</p></li>
+<li><p>坦桑尼亚</p></li>
+<li><p>泰国</p></li>
+<li><p>东帝汶</p></li>
+<li><p>多哥</p></li>
+<li><p>托克劳</p></li>
+<li><p>汤加</p></li>
+<li><p>特立尼达岛和多巴哥</p></li>
+<li><p>突尼斯</p></li>
+<li><p>土耳其</p></li>
+<li><p>土库曼斯坦</p></li>
+<li><p>特克斯和凯科斯群岛</p></li>
+<li><p>图瓦卢</p></li>
+<li><p>乌干达</p></li>
+<li><p>阿拉伯联合酋长国</p></li>
+<li><p>美国</p></li>
+<li><p>美国本土外小岛屿</p></li>
+<li><p>美属维尔京群岛</p></li>
+<li><p>乌拉圭</p></li>
+<li><p>乌兹别克斯坦</p></li>
+<li><p>瓦努阿图</p></li>
+<li><p>委内瑞拉</p></li>
+<li><p>越南</p></li>
+<li><p>瓦利斯和富图纳</p></li>
+<li><p>西撒哈拉</p></li>
+<li><p>也门</p></li>
+<li><p>赞比亚</p></li>
+<li><p>津巴布韦</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tuning_quickstart_python_palm.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">PaLM API：使用 Python 微调快速入门</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">支持的语言</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">可用区域</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

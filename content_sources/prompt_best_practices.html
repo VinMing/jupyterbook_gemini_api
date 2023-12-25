@@ -1,0 +1,1522 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>提示设计策略 &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/prompt_best_practices';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="多模态概念" href="multimodal_concepts.html" />
+    <link rel="prev" title="提示设计简介" href="prompt_intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_quickstart.html">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_quickstart.html">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_quickstart.html">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gemini_api_overview.html">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">LLM 概念指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_intro.html">提示设计简介</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semantic_retriever.html">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_tuning_guidance.html">模型微调指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_quickstart_python_palm.html">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="available_regions.html">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/prompt_best_practices.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/prompt_best_practices.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>提示设计策略</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">提供清晰的指令</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">添加示例</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">让模型补全 部分输入</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">提示模型设置其回答格式</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">添加上下文信息</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">添加前缀</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">使用不同的参数值进行实验</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">输出词元数上限</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">温度</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#top-k">Top-K</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#top-p">Top-P</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">提示迭代策略</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">使用不同的措辞</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">改为类似的任务</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">更改提示内容的顺序</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">后备响应</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">需要避免的事项</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>提示设计策略<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>提示设计可让刚接触机器学习 (ML) 的用户以最小的开销控制模型输出。通过精心设计提示，您可以智能地调整模型以生成所需的结果。通过提示设计，您可以进行多次实验，有效地针对特定用例调整语言模型。</p>
+<p>语言模型（尤其是大语言模型 [LLM]）使用大量文本数据进行训练，以学习字词之间的模式和关系。在获得一些文本（提示）后，语言模型可以预测接下的内容，就像一个复杂的自动补全工具。因此，在设计提示时，请考虑可能影响模型预测结果的不同因素。</p>
+<p>虽然提示设计方法没有正确或错误一说，但您可以使用常见的策略来影响模型的回答。本部分介绍一些常见的提示设计策略。</p>
+<p><strong>实际回答的参数设置：</strong>
+在Google AI studio上的my library 的提示设计策略。设置参数：<br />
+模型：Genmini Pro<br />
+温度：0.9<br />
+默认没有 添加断句<br />
+默认安全设置<br />
+输出长度：2048<br />
+Top K: 1<br />
+Top P: 1</p>
+<section id="id2">
+<h2>提供清晰的指令<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>提供模型指令意味着告知模型要怎么做。此策略是一种自定义模型行为的有效方法。请确保您提供的指令清晰而简洁。</p>
+<p>以下提示提供一段文本并告诉模型进行文本摘要：</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">进行文本摘要。<br />
+文本：量子计算机利用量子力学现象来执行计算，其速度比当前的任何传统计算机都快得多。在非常小的尺度上，物质的行为既具有粒子的特征，又具有波的特征，而量子计算通过专用硬件来利用这一特性。量子设备的工作原理超出了经典物理学的范畴。大规模部署的量子计算机可广泛应用于各个领域，例如：在信息安全中，打破现有的加密方法，同时帮助研究人员创造新的加密方法；在气象学中，提供更准确的天气预报等。但是，当前最先进的量子计算机在很大程度上仍是实验性的，无法实际应用。</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">量子计算机是使用量子力学执行计算的设备。它的计算速度比当前的任何传统计算机都快得多。量子计算机通过专用硬件来利用物质在极小尺度上的行为。此行为超出了经典物理学的范畴。大规模部署的量子计算机可广泛应用于各个领域。包括网络安全、气象学和药物研发。但是，当前最先进的量子计算机在很大程度上仍是实验性的，无法实际应用。</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<ul class="simple">
+<li><p class="card-text">量子计算机利用量子力学现象执行计算。</p></li>
+<li><p class="card-text">量子计算机的速度比当前的任何传统计算机都快得多。</p></li>
+<li><p class="card-text">量子计算通过专用硬件利用物质在非常小的尺度上既具有粒子的特征，又具有波的特征这一特性。</p></li>
+<li><p class="card-text">量子计算机有望在信息安全、气象学等领域发挥广泛的作用。</p></li>
+<li><p class="card-text">当前最先进的量子计算机在很大程度上仍是实验性的，无法实际应用。</p></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>模型提供了简洁的摘要，但您可能希望摘要写得更容易理解的一些。例如，以下提示包括一条指令，要求模型写的摘要能够让五年级的学生理解：</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">进行文本摘要。摘要应使五年级的学生能够理解。文本：量子计算机利用量子力学现象来执行计算，其速度比当前的任何传统计算机都快得多。在非常小的尺度上，物质的行为既具有粒子的特征，又具有波的特征，而量子计算通过专用硬件来利用这一特性。量子设备的工作原理超出了经典物理学的范畴。大规模部署的量子计算机可广泛应用于各个领域，例如：在信息安全中，打破现有的加密方法，同时帮助研究人员创造新的加密方法；在气象学中，提供更准确的天气预报等。但是，当前最先进的量子计算机在很大程度上仍是实验性的，无法实际应用。</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">量子计算机是一种新型计算机，它利用与常规计算机不同的定律。它的计算速度比常规计算机要快得多。量子计算机仍在研究阶段，但可用于破解密码和天气预报等。</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">量子计算机利用非常小的物质粒子，同时具有波粒两重性，用专用硬件来做计算，这样计算机做计算的速度会比现在用的普通计算机快很多。量子计算机可以用来破译密码、帮助研究人员创建新的代码，还可以用来做天气预报等。但是现在最先进的量子计算机还是在试验阶段，还需要继续研究和完善。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>对文本进行摘要以使五年级学生能够理解的指令使输出结果更容易理解。<br />
+<strong>总结：</strong></p>
+<ol class="arabic simple">
+<li><p>为模型提供指令以自定义其行为。</p></li>
+<li><p>确保每项指令清晰且简洁。</p></li>
+</ol>
+</section>
+<section id="id3">
+<h2>添加示例<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<p>可以在提示中添加示例，以向模型示范想要的结果。模型会尝试识别示例中的模式和关系，并应用它们来形成回答。包含少量示例的提示称为少样本提示，而不提供示例的提示称为零样本提示。少样本提示通常用于规定模型回答的格式、措辞、范围界定或一般模式。</p>
+<p>零样本提示与少样本提示<br />
+以下零样本提示要求模型选择最佳解释。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">请选择问题的最佳解释：</p>
+<p class="card-text">问题：雪是如何形成的？
+解释 1：空气中的水蒸气在大气中冻结成冰晶，冰晶在下落的过程中聚集形成雪花，并堆积在地面上，便形成了雪。<br />
+解释 2：水蒸气冻结成冰晶，便形成了雪。回答：</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">解释 1</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">解释 1</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>如果您的用例要求模型生成简洁的回答，您可以在提示中添加偏好简洁回答的示例。</p>
+<p>以下提示提供了两个偏好较短解释的示例。在回答中，您可以看到这些示例引导模型选择较短的解释（解释 2），而不是像之前那样较长的解释（解释 1）。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">请选择问题的最佳解释：</p>
+<p class="card-text">问题：为什么天空是蓝色的？
+解释 1：瑞利散射导致波长较短的蓝光比波长较长的红光更容易被散射，从而使天空呈现蓝色。</p>
+<p class="card-text">解释 2：由于瑞利散射效应。回答：解释 2，因为解释 2 更短。问题：地震的成因是什么？</p>
+<p class="card-text">解释 1：地壳中的能量突然释放。解释 2：构造板块突然滑动或裂开，释放能量，能量产生地震波，晃动地面并造成破坏，这就是地震。回答：解释 1，因为解释 1 更短。问题：雪是如何形成的？</p>
+<p class="card-text">解释 1：空气中的水蒸气在大气中冻结成冰晶，冰晶在下落的过程中聚集形成雪花，并堆积在地面上，便形成了雪。解释 2：水蒸气冻结成冰晶，便形成了雪。回答：</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">解释 2</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">解释 2，因为解释 2 更短。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>找到最佳示例数量</p>
+<p>可以改变提示中提供的示例数量来进行实验，以获得最想要的结果。PaLM 等模型通常可以通过少量示例来学习模式，但您可能需要进行多次实验，以找到可产生所需结果的示例数量。对于 BERT 等较简单的模型，您可能需要更多示例。但是，如果您添加太多示例，模型的回答可能会与示例<a class="reference external" href="https://developers.google.com/machine-learning/glossary?hl=zh-cn#overfitting">过拟合</a>。
+使用示例展示模式而不是反模式</p>
+<p>使用示例向模型展示要遵循的模式比使用示例向模型展示要避免的反模式更有效。</p>
+<p><strong>反模式：</strong></p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">示例</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">不要使用问句作为俳句的结尾：<br />
+俳句很有趣<br />
+是简单的短诗<br />
+您不喜爱它们吗？</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>正模式：</strong></p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">示例</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">始终使用肯定句作为俳句的结尾：<br />
+俳句很有趣<br />
+是简单的短诗<br />
+是愉快的写作经历</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>总结：</strong></p>
+<ul class="simple">
+<li><p>在提示中包含提示回答示例有助于模型学习如何回答。</p></li>
+<li><p>向模型提供要遵循的模式示例，而不是应避免的模式示例。</p></li>
+<li><p>尝试在提示中添加不同数量的示例。具体取决于模型，示例太少会导致无法有效改变模型行为，示例太多会导致模型过拟合。</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>让模型补全 部分输入<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<p>生成式语言模型的工作方式类似于高级自动补全工具。当您提供部分内容时，模型可以提供剩余的内容或者它认为是该内容的延续内容来作为回答。如果您添加了任何示例或上下文，模型可以参考这些示例或上下文。</p>
+<p>以下示例提供了包含指令和实体输入的提示：</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">对于给定点餐返回一个 JSON 对象，包含以下字段：芝士汉堡、汉堡、薯条或饮料，值为数量。点餐：一个汉堡和一杯饮料。</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">没问题，这是您请求的 JSON 对象：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;汉堡&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;饮料&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p class="card-text">希望对您有帮助！</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;芝士汉堡&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s2">&quot;汉堡&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s2">&quot;薯条&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s2">&quot;饮料&quot;</span><span class="p">:</span> <span class="mi">1</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>虽然模型按照提示提供了回答，但以自然语言编写指令有时可能并不容易。在这种情况下，您可以提供一个示例和回答前缀，让模型来补全它：</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">有效字段包括芝士汉堡、汉堡、薯条和饮料。点餐：给我一个芝士汉堡和薯条
+输出：{“芝士汉堡”: 1, “薯条”: 1}</p>
+<p class="card-text">点餐：我要两个汉堡、一杯饮品和华夫饼。
+输出：</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">{“汉堡”: 2, “饮料”: 1}
+希望对您有帮助！</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">{“汉堡”: 2, “饮料”: 1}</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>可以看到，输出中排除了“华夫饼”，因为它不在提示列出的有效字段中。</p>
+</section>
+<section id="id5">
+<h2>提示模型设置其回答格式<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
+<p>补全策略也有助于设置回答的格式。以下示例提示模型创建论文大纲：</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">创建一篇关于蜂鸟的论文的大纲。</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text"><strong>简介</strong><br />
+蜂鸟是世界上最小的鸟类，也是最迷人的鸟类之一。蜂鸟分布于北美洲和南美洲，以其又长又细的喙和高速飞行的能力而闻名。
+<strong>正文</strong><br />
+蜂鸟有三个主要部分：头、身体和尾巴。头小而圆，包含着眼睛、喙和大脑。身体修长，具有翅膀、腿和心脏。尾巴长并且分叉，有助于蜂鸟在飞行时保持平衡。蜂鸟也因其颜色而闻名。它们有多种颜色，包括绿色、蓝色、红色和紫色。有些蜂鸟甚至能够改变颜色！蜂鸟是非常活跃的生物。它们大部分时间都在飞行，也非常擅长悬停。蜂鸟需要吃大量的食物才能维持能量，它们经常到花丛中吸食花蜜。
+<strong>总结</strong><br />
+蜂鸟是令人惊叹的生物。它们虽小，但也非常强大。它们很美丽，而且对生态系统非常重要。<br />
+<strong>关于蜂鸟的事实</strong></p>
+<ul class="simple">
+<li><p class="card-text">蜂鸟是世界上最小的鸟类。</p></li>
+<li><p class="card-text">蜂鸟分布在北美洲和南美洲。</p></li>
+<li><p class="card-text">蜂鸟以其又长又细的喙和高速飞行的能力而闻名。* 蜂鸟有三个主要部分：头、身体和尾巴。* 蜂鸟也因其颜色而闻名。* 蜂鸟是非常活跃的生物。</p></li>
+<li><p class="card-text">蜂鸟需要吃大量的食物才能维持能量。</p></li>
+<li><p class="card-text">蜂鸟对生态系统非常重要。</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<p class="rubric">一、概述</p>
+<ol class="arabic simple">
+<li><p class="card-text">蜂鸟简介</p></li>
+<li><p class="card-text">蜂鸟的特点</p></li>
+</ol>
+<p class="rubric">二、蜂鸟的分布和栖息地</p>
+<ol class="arabic simple">
+<li><p class="card-text">蜂鸟分布的地理范围</p></li>
+<li><p class="card-text">蜂鸟的栖息地类型</p></li>
+<li><p class="card-text">蜂鸟在栖息地中的分布情况</p></li>
+</ol>
+<p class="rubric">三、蜂鸟的生活习性</p>
+<ol class="arabic simple">
+<li><p class="card-text">蜂鸟的食物</p></li>
+<li><p class="card-text">蜂鸟的求偶和繁殖</p></li>
+<li><p class="card-text">蜂鸟的迁徙</p></li>
+</ol>
+<p class="rubric">四、蜂鸟的保护</p>
+<ol class="arabic simple">
+<li><p class="card-text">蜂鸟面临的威胁</p></li>
+<li><p class="card-text">蜂鸟的保护措施</p></li>
+<li><p class="card-text">蜂鸟保护的意义</p></li>
+</ol>
+<p class="rubric">五、蜂鸟研究的进展</p>
+<ol class="arabic simple">
+<li><p class="card-text">蜂鸟的研究历史</p></li>
+<li><p class="card-text">蜂鸟的研究方法</p></li>
+<li><p class="card-text">蜂鸟研究的最新进展</p></li>
+</ol>
+<p class="rubric">六、蜂鸟在文化中的地位</p>
+<ol class="arabic simple">
+<li><p class="card-text">蜂鸟在神话和传说中的形象</p></li>
+<li><p class="card-text">蜂鸟在艺术和文学中的表现</p></li>
+<li><p class="card-text">蜂鸟在民间风俗中的意义</p></li>
+</ol>
+<p class="rubric">七、总结和展望</p>
+<ol class="arabic simple">
+<li><p class="card-text">蜂鸟研究的总结和展望</p></li>
+<li><p class="card-text">蜂鸟保护的前景和挑战</p></li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>提示没有指定大纲的格式，模型为您选择了格式。如需使模型以特定格式返回大纲，您可以添加表示大纲开头的文本，并让模型根据您起头的模式补全大纲。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">创建一篇关于蜂鸟的论文的大纲。
+I. 简介
+*</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">蜂鸟是世界上最小的鸟类。</p>
+<ul class="simple">
+<li><p class="card-text">它们分布在北美洲和南美洲。</p></li>
+<li><p class="card-text">它们由于花蜜而被花朵吸引。</p></li>
+<li><p class="card-text">蜂鸟的飞行速度很快，可达每小时 20 英里。</p></li>
+<li><p class="card-text">它们也很擅长悬停在半空中。</p></li>
+</ul>
+<p class="card-text">II. 正文</p>
+<ul class="simple">
+<li><p class="card-text">蜂鸟的身体细长，脖子短，头大。</p></li>
+<li><p class="card-text">它们有长而尖的喙，用于吸食花蜜。</p></li>
+<li><p class="card-text">它们可以快速扇动翅膀，频率可达每秒 80 次。</p></li>
+<li><p class="card-text">它们有长长的尾巴，用于保持平衡。</p></li>
+<li><p class="card-text">蜂鸟有许多不同的颜色，但最常见的颜色是绿色、蓝色和红色。</p></li>
+</ul>
+<p class="card-text">III. 总结</p>
+<ul class="simple">
+<li><p class="card-text">蜂鸟是令人惊叹的生物，极具观赏价值。</p></li>
+<li><p class="card-text">它们对于生态系统非常重要，因为它们可以帮助花朵授粉。</p></li>
+<li><p class="card-text">由于美丽的外表和极快的飞行速度，它们吸引了许多游客前来观赏。</p></li>
+</ul>
+<p class="card-text">IV. 关于蜂鸟的事实</p>
+<ul class="simple">
+<li><p class="card-text">蜂鸟是世界上最小的鸟类，某些种类只有十分硬币那么长。</p>
+<ul>
+<li><p class="card-text">它们分布在北美洲和南美洲，栖息地非常多样化，包括森林、沙漠，甚至是城市。</p></li>
+<li><p class="card-text">蜂鸟由于花蜜而被花朵吸引，当它们吸食花蜜时，常常会在半空中悬停。</p></li>
+<li><p class="card-text">蜂鸟的飞行速度很快，可达每小时 20 英里。</p></li>
+<li><ul>
+<li><p class="card-text">它们也很擅长悬停在半空中，甚至还能倒着飞！</p></li>
+</ul>
+</li>
+<li><p class="card-text">蜂鸟是重要的传粉者，它们帮助将花粉从一朵花传播到另一朵花。</p></li>
+<li><p class="card-text">许多游客慕名前来观赏它们飞舞和吸食花蜜的美妙姿态。</p></li>
+</ul>
+</li>
+</ul>
+<p class="card-text">V. 蜂鸟的养殖</p>
+<ul class="simple">
+<li><p class="card-text">养殖蜂鸟并不难，但您需要做到以下几点以保证它们的健康。</p></li>
+<li><p class="card-text">首先，你需要为它们提供一个居住的地方。这可以是鸟舍或蜂鸟喂食器。</p></li>
+<li><p class="card-text">你还需要为它们提供食物。蜂鸟吃花蜜，您可以在大多数宠物商店购买到蜂鸟花蜜。</p></li>
+<li><p class="card-text">您还需要保持鸟舍或喂食器清洁。</p></li>
+<li><p class="card-text">最后，您需要防范蜂鸟的捕食者。您可以在鸟舍或喂食器的周围布置网。</p></li>
+</ul>
+<p class="card-text">VI. 蜂鸟的保护</p>
+<ul class="simple">
+<li><p class="card-text">蜂鸟是重要的传粉者，它们帮助将花粉从一朵花传播到另一朵花。</p></li>
+<li><p class="card-text">许多游客慕名前来观赏它们飞舞和吸食花蜜的美妙姿态。</p></li>
+<li><p class="card-text">然而，蜂鸟正面临着许多威胁，包括栖息地丧失、气候变化和杀虫剂。</p></li>
+<li><p class="card-text">所有人都可以通过种植本土植物、避免使用杀虫剂和支持蜂鸟保护组织来帮助保护蜂鸟。</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">蜂鸟: 小鸟，大奇迹<br />
+A. 蜂鸟是什么？</p>
+<ul class="simple">
+<li><p class="card-text">最小的鸟类</p></li>
+<li><p class="card-text">广泛分布</p></li>
+<li><p class="card-text">独特的物理特征
+B. 蜂鸟与生态系统</p></li>
+<li><p class="card-text">重要传粉者</p></li>
+<li><p class="card-text">有助于植物生长</p></li>
+<li><p class="card-text">维持生物多样性
+II. 蜂鸟的物理特征<br />
+A. 大脑</p></li>
+<li><p class="card-text">相对大脑的尺寸很大</p></li>
+<li><p class="card-text">学习和记忆能力强
+B. 翅膀</p></li>
+<li><p class="card-text">翅膀比例大</p></li>
+<li><p class="card-text">灵活的飞行能力</p></li>
+<li><p class="card-text">能够悬停和倒飞
+C. 喙</p></li>
+<li><p class="card-text">长而细的喙</p></li>
+<li><p class="card-text">用于吸食花蜜和昆虫
+D. 代谢率</p></li>
+<li><p class="card-text">新陈代谢率极高</p></li>
+<li><p class="card-text">需要不断进食以维持能量
+III. 蜂鸟的生活习性<br />
+A. 迁徙</p></li>
+<li><p class="card-text">大多数蜂鸟都会迁徙</p></li>
+<li><p class="card-text">迁徙距离可以长达数千公里</p></li>
+<li><p class="card-text">迁徙路线是学习和遗传的组合
+B. 筑巢</p></li>
+<li><p class="card-text">巢穴通常建在树枝或其他植物上</p></li>
+<li><p class="card-text">由柔软的材料制成，如羽毛、蜘蛛网和苔藓</p></li>
+<li><p class="card-text">通常只有一个卵
+C. 育雏</p></li>
+<li><p class="card-text">由雌性蜂鸟独自抚养雏鸟</p></li>
+<li><p class="card-text">雏鸟在出生后 18-21 天左右离巢
+D. 食性</p></li>
+<li><p class="card-text">主要以花蜜为食</p></li>
+<li><p class="card-text">也吃昆虫、水果和树液
+IV. 蜂鸟面临的威胁<br />
+A. 栖息地丧失</p></li>
+<li><p class="card-text">森林砍伐和开发导致蜂鸟栖息地丧失</p></li>
+<li><p class="card-text">减少了可用的筑巢和觅食场所
+B. 气候变化</p></li>
+<li><p class="card-text">气候变化导致花期变化</p></li>
+<li><p class="card-text">花粉和花蜜的供应减少</p></li>
+<li><p class="card-text">影响蜂鸟的生存
+C. 使用农药</p></li>
+<li><p class="card-text">农药的使用会导致昆虫数量减少</p></li>
+<li><p class="card-text">减少了蜂鸟的食物来源
+V. 保护蜂鸟<br />
+A. 保护栖息地</p></li>
+<li><p class="card-text">保护现有的蜂鸟栖息地</p></li>
+<li><p class="card-text">恢复退化的栖息地
+B. 减少农药的使用</p></li>
+<li><p class="card-text">减少农药的使用，以保护昆虫数量</p></li>
+<li><p class="card-text">提供给蜂鸟更多的食物来源
+C. 教育和宣传</p></li>
+<li><p class="card-text">提高公众对蜂鸟保护重要性的认识</p></li>
+<li><p class="card-text">鼓励人们采取行动保护蜂鸟
+VI. 结论</p></li>
+<li><p class="card-text">蜂鸟是自然界的重要组成部分</p></li>
+<li><p class="card-text">面临着栖息地丧失、气候变化和农药使用等威胁</p></li>
+<li><p class="card-text">需要采取措施保护蜂鸟</p></li>
+<li><p class="card-text">保护蜂鸟，就是保护我们的生态系统</p></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>总结：</strong></p>
+<ul class="simple">
+<li><p>如果为模型提供部分输入，模型会根据提示中的任何可用示例或上下文补全输入。</p></li>
+<li><p>有时，让模型补全输入可能比用自然语言描述任务更容易。</p></li>
+<li><p>在提示中添加部分答案，可引导模型遵循所需的模式或格式。</p></li>
+</ul>
+</section>
+<section id="id6">
+<h2>添加上下文信息<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h2>
+<p>您可以在提示中添加指令和模型解决问题所需的信息，而不是假设模型具备所有必要信息。</p>
+<p>以下示例要求模型提供路由器的问题排查指导：</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">我该如何解决 Wi-Fi 连接断开的问题？我的 Google Wi-Fi 路由器上的灯是黄色的，并且缓慢地闪烁。</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">如果您的 Google Wifi 路由器上的灯是黄色的，并且缓慢地闪烁，您可以通过以下方法尝试解决 Wi-Fi 连接断开的问题。</p>
+<ol class="arabic simple">
+<li><p class="card-text">检查互联网连接。 确保调制解调器已打开，并且线缆正确连接到路由器。您还可以尝试重启调制解调器。</p></li>
+<li><p class="card-text">检查您的 Wi-Fi 连接。确保 Wi-Fi 已打开，并且您位于路由器的覆盖范围内。您还可以尝试重启 Wi-Fi。</p></li>
+<li><p class="card-text">将路由器移到其他位置。确保路由器没有被墙或其他物体遮挡。<br />
+4.更新路由器的固件。您可以访问 Google Wifi 网站并按照说明来更新路由器的固件。</p></li>
+<li><p class="card-text">将路由器恢复出厂设置。如果仍有问题，您可以将路由器恢复出厂设置。这将清除您的所有设置，您需要从头开始重新设置。如需将路由器恢复出厂设置，您需要登录 Google Wifi 应用并进入“设置”菜单。然后，选择“高级”标签页，并点击“恢复出厂设置”按钮。您需要确认要将路由器恢复出厂设置。重置完成后，您需要从头开始重新设置。如果在尝试以上步骤后问题仍然未解决，您可以联系 Google 支持团队寻求帮助。</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<ol class="arabic simple">
+<li><p class="card-text">检查电源适配器和电缆是否已正确插入和固定。</p></li>
+<li><p class="card-text">确认您的设备在 Google Wi-Fi 的覆盖范围内。</p></li>
+<li><p class="card-text">将 Google Wi-Fi 路由器恢复出厂设置，然后重新设置它。</p></li>
+<li><p class="card-text">确保 Google Wi-Fi 应用是最新版本。</p></li>
+<li><p class="card-text">重新启动 Google Wi-Fi 路由器。</p></li>
+<li><p class="card-text">确保您的互联网服务提供商 (ISP) 提供服务。</p></li>
+<li><p class="card-text">检查是否有任何干扰源，例如无线电话、微波炉或其他电子设备。</p></li>
+<li><p class="card-text">尝试将 Google Wi-Fi 路由器重置为出厂设置，然后重新设置它。</p></li>
+<li><p class="card-text">联系您的互联网服务提供商 (ISP) 以检查服务是否有任何问题。</p></li>
+<li><p class="card-text">如果问题仍然存在，请联系 Google Wi-Fi 客服。</p></li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>这个回答看起来是通用的问题排查信息，并非特定于路由器或 LED 指示灯的状态。</p>
+<p>如需针对特定路由器自定义回答，您可以在提示中添加该路由器的问题排查指南作为上下文，供模型在回答时参考。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">使用下方的文本回答问题。仅使用提供的文本回答。
+问题：我该如何解决 Wi-Fi 连接断开的问题？我的 Google Wi-Fi 路由器上的灯是黄色的，并且缓慢地闪烁。</p>
+<p class="card-text">文本：
+颜色：呈黄色缓慢而有节奏地闪烁
+含义：存在网络错误。
+要做什么：
+确保以太网网线已连接到路由器和调制解调器，并且两台设备均已开启。您可能需要重新拔插每个设备。</p>
+<p class="card-text">颜色：呈黄色快速闪烁
+含义：您正按住重置按钮，要将设备恢复出厂设置。
+要做什么：
+如果您一直按住重置按钮，大约 12 秒后，指示灯会呈黄色常亮。指示灯呈黄色常亮后，松开恢复出厂设置按钮。</p>
+<p class="card-text">颜色：黄色常亮
+含义：路由器正在恢复出厂设置。要做什么：
+此过程最多可能需要 10 分钟。完成设置后，设备会自行重置，并开始闪烁白光，提示你可以设置设备了。</p>
+<p class="card-text">颜色：纯红色
+含义：出了点问题。
+需要采取的措施：
+严重故障。将路由器恢复出厂设置。如果指示灯持续亮起红色，请与 Wifi 客户服务团队联系。</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">您的 Google Wifi 路由器似乎出现网络连接错误。根据该文本，您应该检查以确保以太网网线已连接到路由器和调制解调器，并且两个设备均已开启。您可能需要重新拔插每个设备。</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<ol class="arabic simple">
+<li><p class="card-text">确保以太网网线已连接到路由器和调制解调器，并且两台设备均已开启。</p></li>
+<li><p class="card-text">您可能需要重新拔插每个设备</p></li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>总结：</strong></p>
+<ul class="simple">
+<li><p>在希望模型在生成回答时使用的提示中添加信息（上下文）。</p></li>
+<li><p>向模型提供有关要做什么的指令。</p></li>
+</ul>
+</section>
+<section id="id7">
+<h2>添加前缀<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
+<p>前缀是您添加到提示内容中的字词或短语，有多种用途，具体取决于前缀的位置：</p>
+<ul class="simple">
+<li><p>输入前缀：为输入添加前缀可向模型指示输入中在语义上有意义的部分。例如，前缀“英语：”和“法语：”区分两种不同的语言。</p></li>
+<li><p>输出前缀：虽然输出由模型生成，您也可以在提示中为输出添加前缀。输出前缀可为模型提供有关预期回答的信息。例如，输出前缀“JSON：”告诉模型输出应采用 JSON 格式。</p></li>
+<li><p>示例前缀：在少样本提示中，为示例添加前缀提供了模型在生成输出时可以使用的标签，使解析输出内容变得更加容易。</p></li>
+</ul>
+<p>在以下示例中，“文本：”是输入前缀，“答案是：”是输出前缀。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">将文本分类为以下类别之一。</p>
+<ul class="simple">
+<li><p class="card-text">大</p></li>
+<li><p class="card-text">小<br />
+文本：犀牛<br />
+答案是：大<br />
+文本：老鼠<br />
+答案是：小<br />
+文本：蜗牛<br />
+答案是：小<br />
+文本：大象<br />
+答案是：</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">大</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">大</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="id8">
+<h2>使用不同的参数值进行实验<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+<p>向模型发送的每次调用都包含控制模型如何生成回答的参数值。对于不同的参数值，模型会生成不同的结果。因此请尝试不同的参数值，以获得任务的最佳值。不同模型的可用参数可能有所不同。最常见的参数如下：</p>
+<ul class="simple">
+<li><p>输出词元数上限</p></li>
+<li><p>温度</p></li>
+<li><p>Top-K</p></li>
+<li><p>Top-P</p></li>
+</ul>
+<section id="id9">
+<h3>输出词元数上限<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h3>
+<p>回复中可生成的词元数量上限。词元约为 4 个字符。100 个词元对应大约 60-80 个单词。</p>
+<p>指定较低的值可获得较短的响应，指定较高的值可获得较长的响应。</p>
+</section>
+<section id="id10">
+<h3>温度<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h3>
+<p>温度在生成响应期间用于采样，在应用 topP 和 topK 时会生成响应。温度可以控制词元选择的随机程度。较低的温度有利于需要更具确定性、更少开放性或创造性响应的提示，而较高的温度可以导致更具多样性或创造性的结果。温度为 0 表示确定，即始终选择概率最高的响应。</p>
+<p>对于大多数应用场景，不妨先试着将温度设为 0.2。如果模型返回的响应过于笼统、过于简短，或者模型给出后备响应，请尝试提高温度。</p>
+</section>
+<section id="top-k">
+<h3>Top-K<a class="headerlink" href="#top-k" title="Permalink to this headline">#</a></h3>
+<p>Top-K 可更改模型选择输出词元的方式。如果 top-K 设为 1，表示所选词元是模型词汇表的所有词元中概率最高的词元（也称为贪心解码）。如果 top-K 设为 3，则表示系统将从 3 个概率最高的词元（通过温度确定）中选择下一个词元。</p>
+<p>在每个词元选择步骤中，系统都会对概率最高的 top-K 词元进行采样。然后，系统会根据 top-P 进一步过滤词元，并使用温度采样选择最终的词元。</p>
+<p>指定较低的值可获得随机程度较低的响应，指定较高的值可获得随机程度较高的响应。默认的 top-K 为 40。</p>
+</section>
+<section id="top-p">
+<h3>Top-P<a class="headerlink" href="#top-p" title="Permalink to this headline">#</a></h3>
+<p>Top-P 可更改模型选择输出词元的方式。系统会按照概率从最高（见 top-K）到最低的顺序选择词元，直到所选词元的概率总和等于 top-P 的值。例如，如果词元 A、B 和 C 的概率分别为 0.3、0.2 和 0.1，并且 top-P 值为 0.5，则模型将选择 A 或 B 作为下一个词元（通过温度确定），并会排除 C，将其作为候选词元。</p>
+<p>指定较低的值可获得随机程度较低的响应，指定较高的值可获得随机程度较高的响应。默认 top-P 为 0.95。</p>
+</section>
+</section>
+<section id="id11">
+<h2>提示迭代策略<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h2>
+<p>提示设计是一个迭代过程，通常需要多次迭代才能稳定获得所需的回答。本部分提供了有关在迭代提示时可以尝试的做法的指导。</p>
+<section id="id12">
+<h3>使用不同的措辞<a class="headerlink" href="#id12" title="Permalink to this headline">#</a></h3>
+<p>即使含义相同，在提示中使用不同的字词或措辞通常也会使模型生成不同的回答。如果您的提示无法产生预期结果，请尝试重新措辞。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>版本 1：怎么烤馅饼？
+
+版本 2：推荐馅饼食谱。
+
+版本 3：什么是好的馅饼食谱？
+</pre></div>
+</div>
+</section>
+<section id="id13">
+<h3>改为类似的任务<a class="headerlink" href="#id13" title="Permalink to this headline">#</a></h3>
+<p>如果您无法让模型遵循您的任务指令，请尝试为其提供可实现相同结果的类似任务的指令。</p>
+<p>此提示指示模型使用预定义的类别对一本书进行分类。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">《奥德赛》属于哪个类别：</p>
+<ul class="simple">
+<li><p class="card-text">惊险</p></li>
+<li><p class="card-text">科幻</p></li>
+<li><p class="card-text">神话</p></li>
+<li><p class="card-text">传记</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">答案：神话</p>
+<p class="card-text">说明：</p>
+<p class="card-text">《奥德赛》是古希腊文学中的一首史诗。它是荷马的两首主要古希腊史诗之一。《奥德赛》是一部史诗，讲述了希腊英雄奥德修斯在特洛伊战争结束后，漂泊十年才回到了故乡伊萨卡的故事。《奥德赛》是一部神话作品。</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">神话</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>回答正确，但模型超出了选项的范围。您还希望模型仅使用其中一个选项（而不是完整的句子）来回答。在这种情况下，您可以将指令改为单选题，并要求模型选择一个选项。</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">提示</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">单选题：以下哪个选项描述了《奥德赛》一书？
+选项：</p>
+<ul class="simple">
+<li><p class="card-text">惊险</p></li>
+<li><p class="card-text">科幻</p></li>
+<li><p class="card-text">神话</p></li>
+<li><p class="card-text">传记</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">预测回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">答案是：神话</p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 border-2 docutils">
+<div class="card-header docutils">
+<p class="card-text">实际回答</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">神话</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="id14">
+<h3>更改提示内容的顺序<a class="headerlink" href="#id14" title="Permalink to this headline">#</a></h3>
+<p>提示中内容的顺序有时会影响回答。请尝试更改内容顺序，看看对回答有何影响。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Version</span> <span class="mi">1</span><span class="p">:</span>
+<span class="p">[</span><span class="n">examples</span><span class="p">]</span>
+<span class="p">[</span><span class="n">context</span><span class="p">]</span>
+<span class="p">[</span><span class="nb">input</span><span class="p">]</span>
+
+<span class="n">Version</span> <span class="mi">2</span><span class="p">:</span>
+<span class="p">[</span><span class="nb">input</span><span class="p">]</span>
+<span class="p">[</span><span class="n">examples</span><span class="p">]</span>
+<span class="p">[</span><span class="n">context</span><span class="p">]</span>
+
+<span class="n">Version</span> <span class="mi">3</span><span class="p">:</span>
+<span class="p">[</span><span class="n">examples</span><span class="p">]</span>
+<span class="p">[</span><span class="nb">input</span><span class="p">]</span>
+<span class="p">[</span><span class="n">context</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id15">
+<h2>后备响应<a class="headerlink" href="#id15" title="Permalink to this headline">#</a></h2>
+<p>后备回答是当提示或回答触发安全过滤条件时模型返回的回答。后备回答的一个示例是“我无法提供帮助，因为我只是一个语言模型”。</p>
+<p>如果模型给出后备回答，请尝试提高温度。</p>
+</section>
+<section id="id16">
+<h2>需要避免的事项<a class="headerlink" href="#id16" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>避免依赖模型来生成事实信息。</p></li>
+<li><p>对于数学和逻辑问题请谨慎使用。</p></li>
+</ul>
+<p>后续步骤</p>
+<ul class="simple">
+<li><p>现在您对提示设计有了更深入的了解，不妨尝试使用<a class="reference external" href="http://makersuite.google.com/?hl=zh-cn">Google AI Studio</a>编写自己的提示</p></li>
+<li><p>如需了解多模态提示，请参阅<a class="reference internal" href="multimodal_concepts.html"><span class="doc std std-doc">多模态概念</span></a>概览。</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="prompt_intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">提示设计简介</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="multimodal_concepts.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">多模态概念</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">提供清晰的指令</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">添加示例</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">让模型补全 部分输入</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">提示模型设置其回答格式</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">添加上下文信息</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">添加前缀</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">使用不同的参数值进行实验</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">输出词元数上限</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">温度</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#top-k">Top-K</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#top-p">Top-P</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">提示迭代策略</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">使用不同的措辞</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">改为类似的任务</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">更改提示内容的顺序</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">后备响应</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">需要避免的事项</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

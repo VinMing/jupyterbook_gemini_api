@@ -1,0 +1,804 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>LLM 概念指南 &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/concepts';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="提示设计简介" href="prompt_intro.html" />
+    <link rel="prev" title="下载或安装库以访问 Gemini" href="downloads.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_quickstart.html">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_quickstart.html">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_quickstart.html">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gemini_api_overview.html">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">LLM 概念指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_intro.html">提示设计简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_best_practices.html">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semantic_retriever.html">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_tuning_guidance.html">模型微调指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_quickstart_python_palm.html">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="available_regions.html">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/concepts.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/concepts.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>LLM 概念指南</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">示例应用</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt-design-101">提示设计基础知识</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-parameters">模型参数</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">提示类型</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">零样本提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">单样本提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">少样本提示</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">LLM幕后故事</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">深入阅读</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="llm">
+<h1>LLM 概念指南<a class="headerlink" href="#llm" title="Permalink to this headline">#</a></h1>
+<p>从最基本的层面来讲，大语言模型 (LLM) 就像是复杂的自动补全。给定输入文本（“您可以引一匹马去水”），LLM 会根据从其训练数据中学到的模式，输出从统计学上来说可能会遵循的文本（“但你不能让它喝水”）。您可以使用 LLM 的这一基本属性为多种不同类型的应用提供支持：</p>
+<ul class="simple">
+<li><p>生成诗歌、短篇故事、比喻、博文和其他创意文案</p></li>
+<li><p>将结构化数据转换为自由格式文本</p></li>
+<li><p>从自由格式文本中提取和汇总信息</p></li>
+<li><p>生成代码</p></li>
+<li><p>翻译</p></li>
+<li><p>构建聊天机器人等
+使用 LLM 构建这些功能不需要任何机器学习 (ML) 专业知识。您无需收集大型数据集或训练模型。启动您的第一个 LLM 原型只需用几句话描述您希望模型执行的操作。</p></li>
+</ul>
+<section id="id1">
+<h2>示例应用<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<p><strong>诗歌生成器</strong></p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>用户输入</p></th>
+<th class="head"><p>模型输出：</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Write me a four-line poem about puppies and Android phones. Make sure it rhymes.</p></td>
+<td><p>Puppies are cute,<br>Android phones are neat,<br>They both bring joy,<br>And make life complete.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>列表生成器</strong></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>用户输入</p></th>
+<th class="head"><p>模型输出</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Generate a bulleted list of items I need to pack for a three-day camping trip.</p></td>
+<td><p>*   Tent<br>*   Sleeping bag<br>*   Sleeping pad<br>*   Camp stove<br>*   Pots and pans<br>*   Utensils<br>*   Food<br>*   Water<br>*   First-aid kit<br>*   Sunscreen<br>*   Insect repellent<br>*   …</p></td>
+</tr>
+</tbody>
+</table>
+<p>您可以让 LLM 生成各种类似于这样的有用行为，只需撰写正确的输入文本（也称为“提示符”）即可。找出合适的措辞来让 LLM 完成你期望的操作，这门艺术和科学叫做“提示设计”（也称为“提示工程”，简称“提示”）。</p>
+</section>
+<section id="prompt-design-101">
+<span id="id2"></span><h2>提示设计基础知识<a class="headerlink" href="#prompt-design-101" title="Permalink to this headline">#</a></h2>
+<p>上一部分展示了一些包含说明的提示示例，例如“给我写首诗”。这种说明可能适用于某些类型的任务。但是，对于其他应用，另一种称为小样本提示的方法可能效果更好。少样本提示充分利用了大型语言模型非常擅长识别和复制文本数据中的模式这一事实。其想法是向 LLM 发送一个它会学习完成的文本模式。例如，假设您要构建一个应用，该应用将国家/地区名称作为输入并输出其首府。以下是一个专门用来实现此目的的文本提示：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Italy</span> <span class="p">:</span> <span class="n">Rome</span>
+<span class="n">France</span> <span class="p">:</span> <span class="n">Paris</span>
+<span class="n">Germany</span> <span class="p">:</span>
+</pre></div>
+</div>
+<p>在此提示中，您需要建立一种模式：<code class="docutils literal notranslate"><span class="pre">[country]</span> <span class="pre">:</span> <span class="pre">[capital]</span></code>。如果您将此提示发送到大型语言模型，模型将自动补全相应模式并返回如下内容：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">Berlin</span>
+<span class="n">Turkey</span> <span class="p">:</span> <span class="n">Ankara</span>
+<span class="n">Greece</span> <span class="p">:</span> <span class="n">Athens</span>
+</pre></div>
+</div>
+<p>此模型的回答可能有点奇怪。模型不仅返回了德国的大写（您的手写提示中的最后一个国家/地区），还返回了额外国家/大写对的完整列表。这是因为 LLM 正在“延续这种模式”。如果您只是想构建一个函数来告诉您输入国家/地区的首都（例如“Germany : Berlin”），那么您可能并不在意模型在“Berlin”之后生成的任何文本。事实上，作为应用设计人员，您可能希望截断这些无关的示例。此外，您可能希望将输入参数化，以便 Germany 不是固定字符串，而是最终用户提供的变量：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Italy</span> <span class="p">:</span> <span class="n">Rome</span>
+<span class="n">France</span> <span class="p">:</span> <span class="n">Paris</span>
+<span class="o">&lt;</span><span class="n">user</span> <span class="nb">input</span> <span class="n">here</span><span class="o">&gt;</span> <span class="p">:</span>
+</pre></div>
+</div>
+<p>你刚刚写了几个关于发展国家首都的提示。</p>
+<p>您可以按照此“少样本提示”模板完成大量任务。以下是几张提示，格式略有不同，用于将 Python 代码转换成 JavaScript 代码：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Convert Python to Javascript.
+Python: print(&quot;hello world&quot;)
+Javascript: console.log(&quot;hello world&quot;)
+Python: for x in range(0, 100):
+Javascript: for(var i = 0; i &lt; 100; i++) {
+Python: ${USER INPUT HERE}
+Javascript:
+
+</pre></div>
+</div>
+<p>或者，按照这个“反向字典”提示操作。在给定定义后，它会返回符合该定义的单词：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Given a definition, return the word it defines.
+Definition: When you&#39;re happy that other people are also sad.
+Word: schadenfreude
+Definition: existing purely in the mind, but not in physical reality
+Word: abstract
+Definition: ${USER INPUT HERE}
+Word:
+
+</pre></div>
+</div>
+<p>您可能已经注意到，这些小样本提示的确切模式略有不同。除了包含示例之外，在提示中提供说明也是您在编写自己的提示时需要考虑的另一种策略，因为这有助于将您的意图传达给模型。<br />
+提示与传统软件开发<br />
+与按照精心编写的规范设计的传统软件不同，LLM 的行为在很大程度上是不透明的，即使对于模型训练器而言也是如此。因此，您通常无法提前预测哪种类型的提示结构最适合特定模型。此外，LLM 的行为在很大程度上取决于其训练数据，由于模型会不断根据新数据集进行调整，有时模型的变化幅度过大，以至于它无意中更改了哪个提示结构的效果最佳。这对您来说意味着什么？进行实验！尝试使用不同的提示格式。</p>
+</section>
+<section id="model-parameters">
+<span id="id3"></span><h2>模型参数<a class="headerlink" href="#model-parameters" title="Permalink to this headline">#</a></h2>
+<p>您发送到模型的每个提示都包含用于控制模型如何生成回答的参数值。对于不同的参数值，模型会生成不同的结果。最常见的模型参数包括：</p>
+<ul class="simple">
+<li><p>输出令牌数量上限：指定响应中可生成的令牌数量上限。一个词元约为 4 个字符。100 个令牌大约对应 60-80 个单词。</p></li>
+<li><p>温度：温度用于控制令牌选择的随机性。该温度用于在响应生成过程中进行采样（在应用 topP 和 topK 时发生）。较低的温度适合需要更具确定性或不够开放的回答的提示，而较高的温度可以产生更加多样化或更具创意的结果。温度为 0 表示确定性，即始终选择概率最高的响应。</p></li>
+<li><p>topK：topK 参数可更改模型选择输出令牌的方式。topK 为 1 表示所选词元是模型词汇表的所有词元中概率最高的词元（也称为贪心解码）。如果 topK 为 3，则表示系统将根据该温度从 3 个概率最高的词元中选择下一个词元。对于每个词元选择步骤，系统都会对概率最高的 topK 词元进行采样。然后，系统会根据 topP 进一步过滤令牌，并使用温度采样选择最终令牌。</p></li>
+<li><p>topP：topP 参数可更改模型选择输出令牌的方式。系统会按照概率从最高到最低的顺序选择词元，直到所选词元的概率总和等于 topP 值。例如，如果词元 A、B 和 C 的概率分别是 0.3、0.2 和 0.1，并且 topP 值为 0.5，则模型将根据温度选择 A 或 B 作为下一个词元，并将 C 作为候选词元。topP 的默认值为 0.95。</p></li>
+<li><p>stop_sequences：设置停止序列，告知模型停止生成内容。停止序列可以是任何字符序列。请尽量避免使用可能出现在生成内容中的字符序列。</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>提示类型<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<p>根据提示中包含的上下文信息的级别，提示大致可分为三种类型。</p>
+<section id="id5">
+<h3>零样本提示<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h3>
+<p>这些提示不包含要复制的模型的示例。零样本提示本质上显示了模型完成提示的能力，而无需任何其他示例或信息。这意味着模型必须依靠其先前存在的知识来生成合理的答案。</p>
+<p>一些常用的零样本提示模式包括：</p>
+<ul class="simple">
+<li><p>说明内容</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">Overall</span> <span class="n">instruction</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">Content</span> <span class="n">to</span> <span class="n">operate</span> <span class="n">on</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>例如：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Summarize the following into two sentences at the third-grade level:
+
+Hummingbirds are the smallest birds in the world, and they are also one of the
+most fascinating. They are found in North and South America, and they are known
+for their long, thin beaks and their ability to fly at high speeds.
+
+Hummingbirds are made up of three main parts: the head, the body, and the tail.
+The head is small and round, and it contains the eyes, the beak, and the brain.
+The body is long and slender, and it contains the wings, the legs, and the
+heart. The tail is long and forked, and it helps the hummingbird to balance
+while it is flying.
+
+Hummingbirds are also known for their coloration. They come in a variety of
+colors, including green, blue, red, and purple. Some hummingbirds are even able
+to change their color!
+
+Hummingbirds are very active creatures. They spend most of their time flying,
+and they are also very good at hovering. Hummingbirds need to eat a lot of food
+in order to maintain their energy, and they often visit flowers to drink nectar.
+
+Hummingbirds are amazing creatures. They are small, but they are also very
+powerful. They are beautiful, and they are very important to the ecosystem.
+
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>说明-内容-说明</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">Overall</span> <span class="n">instruction</span> <span class="ow">or</span> <span class="n">context</span> <span class="n">setting</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">Content</span> <span class="n">to</span> <span class="n">operate</span> <span class="n">on</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">Final</span> <span class="n">instruction</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>例如，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Here is some text I&#39;d like you to summarize:
+
+Hummingbirds are the smallest birds in the world, and they are also one of the
+most fascinating. They are found in North and South America, and they are known
+for their long, thin beaks and their ability to fly at high speeds. Hummingbirds
+are made up of three main parts: the head, the body, and the tail. The head is
+small and round, and it contains the eyes, the beak, and the brain. The body is
+long and slender, and it contains the wings, the legs, and the heart. The tail
+is long and forked, and it helps the hummingbird to balance while it is flying.
+Hummingbirds are also known for their coloration. They come in a variety of
+colors, including green, blue, red, and purple. Some hummingbirds are even able
+to change their color! Hummingbirds are very active creatures. They spend most
+of their time flying, and they are also very good at hovering. Hummingbirds need
+to eat a lot of food in order to maintain their energy, and they often visit
+flowers to drink nectar. Hummingbirds are amazing creatures. They are small, but
+they are also very powerful. They are beautiful, and they are very important to
+the ecosystem.
+
+Summarize it in two sentences at the third-grade reading level.
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>继续。有时，您可以让模型在没有任何指令的情况下继续文本。例如，下面是一个零样本提示，其中模型旨在继续输入所提供的输入：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Once</span> <span class="n">upon</span> <span class="n">a</span> <span class="n">time</span><span class="p">,</span> <span class="n">there</span> <span class="n">was</span> <span class="n">a</span> <span class="n">little</span> <span class="n">sparrow</span> <span class="n">building</span> <span class="n">a</span> <span class="n">nest</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">farmer</span><span class="s1">&#39;s</span>
+<span class="n">barn</span><span class="o">.</span> <span class="n">This</span> <span class="n">sparrow</span>
+</pre></div>
+</div>
+<p>使用零样本提示生成创造性文本格式，例如诗歌、代码、脚本、音乐作品、电子邮件、信件等。</p>
+</section>
+<section id="id6">
+<h3>单样本提示<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
+<p>这些提示为模型提供单个示例来复制并继续模式。这样就可以从模型生成可预测的响应。</p>
+<p>例如，您可以生成如下所示的食物配对：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Food</span><span class="p">:</span> <span class="n">Apple</span>
+<span class="n">Pairs</span> <span class="k">with</span><span class="p">:</span> <span class="n">Cheese</span>
+<span class="n">Food</span><span class="p">:</span> <span class="n">Pear</span>
+<span class="n">Pairs</span> <span class="k">with</span><span class="p">:</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>少样本提示<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h3>
+<p>这些提示为模型提供了多个可复制的样本。使用少样本提示来完成复杂的任务，例如根据模式合成数据。</p>
+<p>示例提示可能是：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Generate</span> <span class="n">a</span> <span class="n">grocery</span> <span class="n">shopping</span> <span class="nb">list</span> <span class="k">for</span> <span class="n">a</span> <span class="n">week</span> <span class="k">for</span> <span class="n">one</span> <span class="n">person</span><span class="o">.</span> <span class="n">Use</span> <span class="n">the</span> <span class="n">JSON</span> <span class="nb">format</span>
+<span class="n">given</span> <span class="n">below</span><span class="o">.</span>
+<span class="p">{</span><span class="s2">&quot;item&quot;</span><span class="p">:</span> <span class="s2">&quot;eggs&quot;</span><span class="p">,</span> <span class="s2">&quot;quantity&quot;</span><span class="p">:</span> <span class="s2">&quot;6&quot;</span><span class="p">}</span>
+<span class="p">{</span><span class="s2">&quot;item&quot;</span><span class="p">:</span> <span class="s2">&quot;bread&quot;</span><span class="p">,</span> <span class="s2">&quot;quantity&quot;</span><span class="p">:</span> <span class="s2">&quot;one loaf&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id8">
+<h2>LLM幕后故事<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+<p>本部分旨在解答以下问题：<strong>LLM 回答是随机性的，还是确定性的？</strong></p>
+<p>简而言之，两个问题的答案都是肯定的。当您向 LLM 提出提示时，系统会分两个阶段生成其文本响应。在第一阶段，LLM 会处理输入提示，并针对可能紧随其后的可能词元（字词）生成概率分布。例如，如果您使用输入文本“The dog jumped over the …”来提示，LLM 将生成一个可能的后续字词数组：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s2">&quot;fence&quot;</span><span class="p">,</span> <span class="mf">0.77</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;ledge&quot;</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;blanket&quot;</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">),</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>这个过程是确定的；LLM 每次输入相同的提示文本时都会生成相同的分布。</p>
+<p>在第二阶段，LLM 会通过多种解码策略之一将这些分布转换为实际的文本响应。一个简单的解码策略可以在每个时间步选择最有可能的令牌。此过程始终具有确定性。不过，您也可以选择通过对模型返回的分布进行随机采样来生成响应。此过程是随机的（随机）。通过设置温度来控制此解码过程中允许的随机性。温度为 0 表示仅选择最可能的词元，不具有随机性。相反，高温会向模型选择的词元注入高度的随机性，从而导致模型响应更加意外和惊人。</p>
+</section>
+<section id="id9">
+<h2>深入阅读<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>现在您对提示和 LLM 有了更深入的了解，不妨尝试使用<a class="reference external" href="https://aistudio.google.com/?hl=zh-cn">Google AI Studio</a>编写自己的提示。</p></li>
+<li><p>如需详细了解创建提示的<a class="reference internal" href="prompt_best_practices.html"><span class="doc std std-doc">最佳实践</span></a>，请参阅提示指南。</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="downloads.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">下载或安装库以访问 Gemini</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="prompt_intro.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">提示设计简介</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">示例应用</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt-design-101">提示设计基础知识</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-parameters">模型参数</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">提示类型</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">零样本提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">单样本提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">少样本提示</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">LLM幕后故事</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">深入阅读</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

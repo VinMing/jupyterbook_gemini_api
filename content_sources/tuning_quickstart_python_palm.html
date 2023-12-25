@@ -1,0 +1,968 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>PaLM API：使用 Python 微调快速入门 &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/tuning_quickstart_python_palm';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="可用地区" href="available_regions.html" />
+    <link rel="prev" title="模型微调指南" href="model_tuning_guidance.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_quickstart.html">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_quickstart.html">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_quickstart.html">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gemini_api_overview.html">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">LLM 概念指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_intro.html">提示设计简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_best_practices.html">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semantic_retriever.html">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_tuning_guidance.html">模型微调指南</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="available_regions.html">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/tuning_quickstart_python_palm.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/tuning_quickstart_python_palm.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>PaLM API：使用 Python 微调快速入门</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">认证</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">安装客户端库</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">导入客户端库</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">创建调整模型</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">检查调整进度</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">评估您的模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">更新描述</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">删除模型</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="palm-api-python">
+<h1>PaLM API：使用 Python 微调快速入门<a class="headerlink" href="#palm-api-python" title="Permalink to this headline">#</a></h1>
+<p>在本笔记本中，您将了解如何使用 PaLM API 的 Python 客户端库开始使用调整服务。在这里，您将学习如何调整 PaLM API 文本生成服务背后的文本模型。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意：目前，调整仅适用于 text-bison-001 模型。</p>
+</div>
+<section id="id1">
+<h2>安装<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<section id="id2">
+<h3>认证<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h3>
+<p>PaLM API 允许您根据自己的数据调整模型。由于这是您的数据和调整后的模型，因此需要比 API 密钥提供的更严格的访问控制。</p>
+<p>在运行本教程之前，您需要<a class="reference external" href="https://ai.google.dev/palm_docs/oauth_quickstart">为您的项目设置 OAuth</a>。</p>
+<p>如果您想在 Colab 中运行此笔记本，请首先使用“文件 &gt; 上传”选项上传<code class="docutils literal notranslate"><span class="pre">client_secret*.json</span></code>文件。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>client_secret*.json<span class="w"> </span>client_secret.json
+ls<span class="w"> </span>client_secret.json
+</pre></div>
+</div>
+<p>此 gcloud 命令将 client_secret.json 文件转换为可用于对服务进行身份验证的凭据。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>import os
+if &#39;COLAB_RELEASE_TAG&#39; in os.environ:
+  # Use `--no-browser` in colab
+  !gcloud auth application-default login --no-browser --client-id-file client_secret.json --scopes=&#39;https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/generative-language.tuning&#39;
+else:
+  !gcloud auth application-default login --client-id-file client_secret.json --scopes=&#39;https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/generative-language.tuning&#39;
+
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>安装客户端库<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">q</span> <span class="n">google</span><span class="o">-</span><span class="n">generativeai</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Note: you may need to restart the kernel to use updated packages.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id4">
+<h3>导入客户端库<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">google.generativeai</span> <span class="k">as</span> <span class="nn">genai</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GOOGLE_API_KEY</span> <span class="o">=</span> <span class="s2">&quot;AIzaSyBityeJag9WTYwuZ75VJvqn3I4kzRm1Omo&quot;</span>
+<span class="n">genai</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">GOOGLE_API_KEY</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">genai</span><span class="o">.</span><span class="n">list_models</span><span class="p">():</span>
+    <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model(name=&#39;models/chat-bison-001&#39;,
+      base_model_id=&#39;&#39;,
+      version=&#39;001&#39;,
+      display_name=&#39;PaLM 2 Chat (Legacy)&#39;,
+      description=&#39;A legacy text-only model optimized for chat conversations&#39;,
+      input_token_limit=4096,
+      output_token_limit=1024,
+      supported_generation_methods=[&#39;generateMessage&#39;, &#39;countMessageTokens&#39;],
+      temperature=0.25,
+      top_p=0.95,
+      top_k=40)
+Model(name=&#39;models/text-bison-001&#39;,
+      base_model_id=&#39;&#39;,
+      version=&#39;001&#39;,
+      display_name=&#39;PaLM 2 (Legacy)&#39;,
+      description=&#39;A legacy model that understands text and generates text as an output&#39;,
+      input_token_limit=8196,
+      output_token_limit=1024,
+      supported_generation_methods=[&#39;generateText&#39;, &#39;countTextTokens&#39;, &#39;createTunedTextModel&#39;],
+      temperature=0.7,
+      top_p=0.95,
+      top_k=40)
+Model(name=&#39;models/embedding-gecko-001&#39;,
+      base_model_id=&#39;&#39;,
+      version=&#39;001&#39;,
+      display_name=&#39;Embedding Gecko&#39;,
+      description=&#39;Obtain a distributed representation of a text.&#39;,
+      input_token_limit=1024,
+      output_token_limit=1,
+      supported_generation_methods=[&#39;embedText&#39;, &#39;countTextTokens&#39;],
+      temperature=None,
+      top_p=None,
+      top_k=None)
+Model(name=&#39;models/gemini-pro&#39;,
+      base_model_id=&#39;&#39;,
+      version=&#39;001&#39;,
+      display_name=&#39;Gemini Pro&#39;,
+      description=&#39;The best model for scaling across a wide range of tasks&#39;,
+      input_token_limit=30720,
+      output_token_limit=2048,
+      supported_generation_methods=[&#39;generateContent&#39;, &#39;countTokens&#39;],
+      temperature=0.9,
+      top_p=1.0,
+      top_k=1)
+Model(name=&#39;models/gemini-pro-vision&#39;,
+      base_model_id=&#39;&#39;,
+      version=&#39;001&#39;,
+      display_name=&#39;Gemini Pro Vision&#39;,
+      description=&#39;The best image understanding model to handle a broad range of applications&#39;,
+      input_token_limit=12288,
+      output_token_limit=4096,
+      supported_generation_methods=[&#39;generateContent&#39;, &#39;countTokens&#39;],
+      temperature=0.4,
+      top_p=1.0,
+      top_k=32)
+Model(name=&#39;models/embedding-001&#39;,
+      base_model_id=&#39;&#39;,
+      version=&#39;001&#39;,
+      display_name=&#39;Embedding 001&#39;,
+      description=&#39;Obtain a distributed representation of a text.&#39;,
+      input_token_limit=2048,
+      output_token_limit=1,
+      supported_generation_methods=[&#39;embedContent&#39;, &#39;countTextTokens&#39;],
+      temperature=None,
+      top_p=None,
+      top_k=None)
+Model(name=&#39;models/aqa&#39;,
+      base_model_id=&#39;&#39;,
+      version=&#39;001&#39;,
+      display_name=&#39;Model that performs Attributed Question Answering.&#39;,
+      description=(&#39;Model trained to return answers to questions that are grounded in provided &#39;
+                   &#39;sources, along with estimating answerable probability.&#39;),
+      input_token_limit=7168,
+      output_token_limit=1024,
+      supported_generation_methods=[&#39;generateAnswer&#39;],
+      temperature=0.2,
+      top_p=1.0,
+      top_k=40)
+</pre></div>
+</div>
+</div>
+</div>
+<p>您可以使用 genai.list_tuned_model 方法检查现有的调整模型。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">genai</span><span class="o">.</span><span class="n">list_tuned_models</span><span class="p">()):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id5">
+<h2>创建调整模型<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
+<p>要创建调整模型，您需要将数据集传递给<code class="docutils literal notranslate"><span class="pre">genai.create_tuned_model</span></code>方法中的模型。您可以通过直接定义调用中的输入和输出值或从文件导入数据帧以传递给方法来执行此操作。</p>
+<p>对于此示例，您将调整模型以生成序列中的下一个数字。例如，如果输入为 1，则模型应输出 2。如果输入为 100，则输出应为 101。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_model</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">genai</span><span class="o">.</span><span class="n">list_models</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">&quot;createTunedTextModel&quot;</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">supported_generation_methods</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">base_model</span><span class="o">.</span><span class="n">name</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;models/text-bison-001&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;generate-num-</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+<span class="n">operation</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">create_tuned_model</span><span class="p">(</span>
+    <span class="c1"># You can use a tuned model here too. Set `source_model=&quot;tunedModels/...&quot;`</span>
+    <span class="n">source_model</span><span class="o">=</span><span class="n">base_model</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+    <span class="n">training_data</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;-3&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;-2&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;twenty two&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;twenty three&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;two hundred&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;two hundred one&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;ninety nine&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;one hundred&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;-98&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;-97&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;1,000&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;1,001&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;10,100,000&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;10,100,001&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;thirteen&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;fourteen&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;eighty&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;eighty one&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;one&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;three&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;four&#39;</span><span class="p">,</span>
+        <span class="p">},{</span>
+             <span class="s1">&#39;text_input&#39;</span><span class="p">:</span> <span class="s1">&#39;seven&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;eight&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span>
+    <span class="n">epoch_count</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>您的调整后的模型会立即添加到调整后的模型列表中，但在模型调整时其状态会设置为“正在创建”。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">get_tuned_model</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;tunedModels/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">model</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">state</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id6">
+<h3>检查调整进度<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
+<p>使用<code class="docutils literal notranslate"><span class="pre">元数据</span></code>检查状态：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">operation</span><span class="o">.</span><span class="n">metadata</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>使用<code class="docutils literal notranslate"><span class="pre">operation.result()</span></code>或<code class="docutils literal notranslate"><span class="pre">operation.wait_bar()</span></code>等待训练完成</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">for</span> <span class="n">status</span> <span class="ow">in</span> <span class="n">operation</span><span class="o">.</span><span class="n">wait_bar</span><span class="p">():</span>
+  <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>您可以随时使用 cancel() 方法取消调整作业。取消注释下面的行并运行代码单元以在作业完成之前取消作业。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># operation.cancel()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>调优完成后，您可以从调优结果中查看损耗曲线。<a class="reference external" href="https://generativeai.devsite.corp.google.com/guide/model_tuning_guidance#recommended_configurations">损失曲线</a>显示模型的预测与理想输出的偏差程度。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+<span class="n">snapshots</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">tuning_task</span><span class="o">.</span><span class="n">snapshots</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">snapshots</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;epoch&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;mean_loss&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id7">
+<h2>评估您的模型<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
+<p>您可以使用<code class="docutils literal notranslate"><span class="pre">genai.generate_text</span></code>方法并指定模型名称来测试模型性能。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">completion</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">generate_text</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;tunedModels/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                                <span class="n">prompt</span><span class="o">=</span><span class="s1">&#39;5&#39;</span><span class="p">)</span>
+<span class="n">completion</span><span class="o">.</span><span class="n">result</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">completion</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">generate_text</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;tunedModels/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                                <span class="n">prompt</span><span class="o">=</span><span class="s1">&#39;-9&#39;</span><span class="p">)</span>
+<span class="n">completion</span><span class="o">.</span><span class="n">result</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">completion</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">generate_text</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;tunedModels/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                                <span class="n">prompt</span><span class="o">=</span><span class="s1">&#39;four&#39;</span><span class="p">)</span>
+<span class="n">completion</span><span class="o">.</span><span class="n">result</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>正如您所看到的，最后一个提示没有产生理想的结果，即<code class="docutils literal notranslate"><span class="pre">5</span></code>。为了产生更好的结果，您可以尝试一些不同的方法，例如将温度调整为接近零以获得更一致的结果，向数据集中添加更多质量示例以供模型学习，或者向示例添加提示或序言。</p>
+<p>有关提高性能的更多指导，请参阅<a class="reference external" href="https://generativeai.devsite.corp.google.com/guide/model_tuning_guidance">调优指南</a>。</p>
+</section>
+<section id="id8">
+<h2>更新描述<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+<p>您可以随时使用<code class="docutils literal notranslate"><span class="pre">genai.update_tuned_model</span></code>方法更新调整模型的描述。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">genai</span><span class="o">.</span><span class="n">update_tuned_model</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;tunedModels/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span><span class="s2">&quot;This is my model.&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">get_tuned_model</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;tunedModels/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">model</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>model.description</p>
+</section>
+<section id="id9">
+<h2>删除模型<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h2>
+<p>您可以通过删除不再需要的模型来清理调整后的模型列表。使用<code class="docutils literal notranslate"><span class="pre">genai.delete_tuned_model</span></code>方法删除模型。如果您取消了任何调整作业，您可能需要删除这些作业，因为它们的性能可能无法预测。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">genai</span><span class="o">.</span><span class="n">delete_tuned_model</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;tunedModels/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">m</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">get_tuned_model</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;tunedModels/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "gemini"
+        },
+        kernelOptions: {
+            name: "gemini",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'gemini'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="model_tuning_guidance.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">模型微调指南</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="available_regions.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">可用地区</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">认证</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">安装客户端库</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">导入客户端库</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">创建调整模型</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">检查调整进度</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">评估您的模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">更新描述</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">删除模型</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

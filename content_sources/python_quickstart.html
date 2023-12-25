@@ -1,0 +1,1634 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Gemini API: Python 快速入门 &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/python_quickstart';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="快速入门：使用 REST API 开始使用 Gemini" href="rest_quickstart.html" />
+    <link rel="prev" title="Gemini API 教程" href="tutorials.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_quickstart.html">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_quickstart.html">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gemini_api_overview.html">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">LLM 概念指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_intro.html">提示设计简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_best_practices.html">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semantic_retriever.html">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_tuning_guidance.html">模型微调指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_quickstart_python_palm.html">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="available_regions.html">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/python_quickstart.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/python_quickstart.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Gemini API: Python 快速入门</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">前提条件</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-sdk">安装 Python SDK</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">导入包</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">设置API 密钥</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">列出模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">从文本输入生成文本</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">输入图像和文本, 输出文本</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">聊天对话</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-quickstart-use-embeddings">使用嵌入</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">高级用例</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">安全设置</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">对消息进行编码</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">多轮对话</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">生成配置</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">下一步是什么</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="gemini-api-python">
+<h1>Gemini API: Python 快速入门<a class="headerlink" href="#gemini-api-python" title="Permalink to this headline">#</a></h1>
+<p>本快速入门演示了如何使用适用于 Gemini API 的 Python SDK，它使您可以访问 Google 的 Gemini 大语言模型。在本快速入门中，您将学习如何：</p>
+<ol class="arabic simple">
+<li><p>设置您的开发环境和 API 访问权限以使用 Gemini。</p></li>
+<li><p>从文本输入生成文本响应。</p></li>
+<li><p>从多模式输入（文本和图像）生成文本响应。</p></li>
+<li><p>使用 Gemini 进行多轮对话（聊天）。</p></li>
+<li><p>对大型语言模型使用嵌入。</p></li>
+</ol>
+<section id="id1">
+<h2>前提条件<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<p>可以在 <a class="reference external" href="https://colab.research.google.com/github/google/generative-ai-docs/blob/main/site/en/tutorials/python_quickstart.ipynb">Google Colab</a> 中运行此快速入门，它直接在浏览器中运行此笔记本，不需要额外的环境配置。<br />
+或者，要在本地完成此快速入门，请确保您的开发环境满足以下要求：</p>
+<ul class="simple">
+<li><p>Python 3.9+</p></li>
+<li><p>安装 jupyter 来运行笔记本。</p></li>
+</ul>
+</section>
+<section id="id2">
+<h2>安装<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<section id="python-sdk">
+<h3>安装 Python SDK<a class="headerlink" href="#python-sdk" title="Permalink to this headline">#</a></h3>
+<p>Gemini API 的 Python SDK 包含在 <a class="reference external" href="https://pypi.org/project/google-generativeai/">google-generativeai</a> 包中。使用 pip 安装依赖项：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-q<span class="w"> </span>-U<span class="w"> </span>google-generativeai
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id3">
+<h3>导入包<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+<p>导入必要的包</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
+
+<span class="kn">import</span> <span class="nn">google.generativeai</span> <span class="k">as</span> <span class="nn">genai</span>
+
+<span class="c1"># # Used to securely store your API key</span>
+<span class="c1"># from google.colab import userdata</span>
+
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span>
+
+
+<span class="k">def</span> <span class="nf">to_markdown</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+  <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;•&#39;</span><span class="p">,</span> <span class="s1">&#39;  *&#39;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">Markdown</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;&gt; &#39;</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="api">
+<h3>设置API 密钥<a class="headerlink" href="#api" title="Permalink to this headline">#</a></h3>
+<p>在使用 Gemini API 之前，您必须先获取 API 密钥。如果您还没有密钥，请在 Google AI Studio 中一键创建密钥。<br />
+获得 API 密钥后，将其传递给 SDK。您可以通过两种方式执行此操作：</p>
+<ul class="simple">
+<li><p>将密钥放入 GOOGLE_API_KEY 环境变量中（SDK 会自动从那里获取它）。</p></li>
+<li><p>将密钥传递给 genai.configure(api_key=…)</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### jupyter notebook 无法获取宿主机的系统环境变量</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="c1"># os.environ</span>
+<span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;GOOGLE_API_KEY&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Or use `os.getenv(&#39;GOOGLE_API_KEY&#39;)` to fetch an environment variable.</span>
+<span class="c1"># GOOGLE_API_KEY=userdata.get(&#39;GOOGLE_API_KEY&#39;)</span>
+<span class="n">GOOGLE_API_KEY</span> <span class="o">=</span> <span class="s2">&quot;AIzaSyBityeJag9WTYwuZ75VJvqn3I4kzRm1Omo&quot;</span>
+<span class="n">genai</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">GOOGLE_API_KEY</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2>列出模型<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<p>现在您已准备好调用 Gemini API。使用 <code class="docutils literal notranslate"><span class="pre">list_models</span></code> 查看可用的 Gemini 型号：</p>
+<ul class="simple">
+<li><p>gemini-pro：针对纯文本提示进行了优化。</p></li>
+<li><p>gemini-pro-vision：针对文本和图像提示进行了优化。</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">genai</span><span class="o">.</span><span class="n">list_models</span><span class="p">():</span>
+  <span class="k">if</span> <span class="s1">&#39;generateContent&#39;</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">supported_generation_methods</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>models/gemini-pro
+models/gemini-pro-vision
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意：有关可用模型的详细信息，包括其功能和速率限制，请参阅 <a class="reference internal" href="models/gemini.html"><span class="doc std std-doc">Gemini 模型</span></a>。我们提供请求<a class="reference internal" href="increase_quota.html"><span class="doc std std-doc">提高速率限制</span></a>的选项。 Gemini-Pro 型号的速率限制为每分钟 60 个请求 (RPM)。</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">genai</span></code> 包还支持 PaLM 系列模型，但只有 Gemini 模型支持 <code class="docutils literal notranslate"><span class="pre">generateContent</span></code> 方法的通用多模式功能。</p>
+</section>
+<section id="id5">
+<h2>从文本输入生成文本<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
+<p>对于纯文本提示，请使用 gemini-pro 模型：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">GenerativeModel</span><span class="p">(</span><span class="s1">&#39;gemini-pro&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">generate_content</span></code> 方法可以处理各种用例，包括多轮聊天和多模式输入，具体取决于底层模型支持的内容。可用模型仅支持文本和图像作为输入，以及文本作为输出。</p>
+<p>在最简单的情况下，您可以将提示字符串传递给<code class="docutils literal notranslate"><span class="pre">GenerativeModel.generate_content</span></code>方法：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span><span class="s2">&quot;What is the meaning of life?&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CPU times: user 5.9 ms, sys: 327 µs, total: 6.23 ms
+Wall time: 8.15 s
+</pre></div>
+</div>
+</div>
+</div>
+<p>在简单的情况下，<code class="docutils literal notranslate"><span class="pre">response.text</span></code>访问器就足够了。要显示格式化的 Markdown 文本，请使用 to_markdown 函数：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">to_markdown</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<blockquote>
+<div><p>The meaning of life is a profound and multifaceted question that has been contemplated by philosophers, theologians, artists, and scientists throughout history. There is no one definitive answer to this question, as it is personal and subjective, and can vary depending on one’s beliefs, values, and experiences. Some common themes that emerge in discussions about the meaning of life include:</p>
+<ol class="arabic simple">
+<li><p><strong>Purpose and Fulfillment</strong>: Many people find meaning in life through pursuing their passions and goals, whether it’s in their career, hobbies, or personal development. Achieving a sense of purpose and fulfillment can provide a sense of direction and satisfaction.</p></li>
+<li><p><strong>Relationships and Connection</strong>: Building strong and meaningful relationships with others is often considered a key aspect of finding meaning in life. Human connection and intimacy can provide a sense of belonging, love, and support.</p></li>
+<li><p><strong>Contribution to Society</strong>: Many individuals find purpose and meaning by contributing their time, skills, and resources to help others or make a positive impact on the world. This can involve volunteering, charitable work, or simply performing acts of kindness and compassion.</p></li>
+<li><p><strong>Self-Exploration and Growth</strong>: Embarking on a journey of self-discovery and personal growth can be a meaningful pursuit for many people. This may involve learning new things, exploring different perspectives, or working on self-improvement and becoming the best version of oneself.</p></li>
+<li><p><strong>Spiritual and Religious Beliefs</strong>: For those who are religious or spiritual, finding meaning in life may be closely tied to their beliefs and practices. This can involve connecting with a higher power, following religious teachings, or engaging in spiritual rituals and practices.</p></li>
+<li><p><strong>Experiencing the Present Moment</strong>: Some individuals find meaning in life by simply being present and savoring each moment. This may involve practicing mindfulness, appreciating the beauty of nature, or engaging in activities that bring a sense of joy and gratitude.</p></li>
+<li><p><strong>Creating and Expressing Oneself</strong>: Expressing oneself through creative outlets such as art, music, writing, or dance can be a meaningful pursuit for many people. Creating something unique and sharing it with others can provide a sense of purpose and fulfillment.</p></li>
+</ol>
+<p>Ultimately, the meaning of life is a deeply personal question that each individual must explore and discover for themselves. There is no right or wrong answer, and what is meaningful to one person may not be meaningful to another. The journey of finding meaning in life is an ongoing process that can involve moments of introspection, reflection, and exploration.</p>
+</div></blockquote>
+</div>
+</div>
+<p>如果 API 未能返回结果，请使用<code class="docutils literal notranslate"><span class="pre">GenerateContentRespose.prompt_feedback</span></code>来查看它是否由于提示的安全问题而被阻止。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span><span class="o">.</span><span class="n">prompt_feedback</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>safety_ratings {
+  category: HARM_CATEGORY_SEXUALLY_EXPLICIT
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_HATE_SPEECH
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_HARASSMENT
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_DANGEROUS_CONTENT
+  probability: NEGLIGIBLE
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Gemini 可以针对单个提示生成多种可能的响应。这些可能的响应称为候选响应，您可以查看它们以选择最合适的响应。</p>
+<p>使用<code class="docutils literal notranslate"><span class="pre">GenerateContentResponse.candidates</span></code>查看响应候选者：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span><span class="o">.</span><span class="n">candidates</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[index: 0
+content {
+  parts {
+    text: &quot;The meaning of life is a profound and multifaceted question that has been contemplated by philosophers, theologians, artists, and scientists throughout history. There is no one definitive answer to this question, as it is personal and subjective, and can vary depending on one\&#39;s beliefs, values, and experiences. Some common themes that emerge in discussions about the meaning of life include:\n\n1. **Purpose and Fulfillment**: Many people find meaning in life through pursuing their passions and goals, whether it\&#39;s in their career, hobbies, or personal development. Achieving a sense of purpose and fulfillment can provide a sense of direction and satisfaction.\n\n2. **Relationships and Connection**: Building strong and meaningful relationships with others is often considered a key aspect of finding meaning in life. Human connection and intimacy can provide a sense of belonging, love, and support.\n\n3. **Contribution to Society**: Many individuals find purpose and meaning by contributing their time, skills, and resources to help others or make a positive impact on the world. This can involve volunteering, charitable work, or simply performing acts of kindness and compassion.\n\n4. **Self-Exploration and Growth**: Embarking on a journey of self-discovery and personal growth can be a meaningful pursuit for many people. This may involve learning new things, exploring different perspectives, or working on self-improvement and becoming the best version of oneself.\n\n5. **Spiritual and Religious Beliefs**: For those who are religious or spiritual, finding meaning in life may be closely tied to their beliefs and practices. This can involve connecting with a higher power, following religious teachings, or engaging in spiritual rituals and practices.\n\n6. **Experiencing the Present Moment**: Some individuals find meaning in life by simply being present and savoring each moment. This may involve practicing mindfulness, appreciating the beauty of nature, or engaging in activities that bring a sense of joy and gratitude.\n\n7. **Creating and Expressing Oneself**: Expressing oneself through creative outlets such as art, music, writing, or dance can be a meaningful pursuit for many people. Creating something unique and sharing it with others can provide a sense of purpose and fulfillment.\n\nUltimately, the meaning of life is a deeply personal question that each individual must explore and discover for themselves. There is no right or wrong answer, and what is meaningful to one person may not be meaningful to another. The journey of finding meaning in life is an ongoing process that can involve moments of introspection, reflection, and exploration.&quot;
+  }
+  role: &quot;model&quot;
+}
+finish_reason: STOP
+safety_ratings {
+  category: HARM_CATEGORY_SEXUALLY_EXPLICIT
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_HATE_SPEECH
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_HARASSMENT
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_DANGEROUS_CONTENT
+  probability: NEGLIGIBLE
+}
+]
+</pre></div>
+</div>
+</div>
+</div>
+<p>默认情况下，模型在完成整个生成过程后返回响应。您还可以在生成响应时流式传输响应，并且模型将在生成响应后立即返回响应块。</p>
+<p>要流式传输响应，请使用<code class="docutils literal notranslate"><span class="pre">GenerativeModel.generate_content(...,</span> <span class="pre">stream=True)</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">response_stream</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span><span class="s2">&quot;What is the meaning of life?&quot;</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CPU times: user 2.2 ms, sys: 0 ns, total: 2.2 ms
+Wall time: 1.13 s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response_stream</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="o">*</span><span class="mi">80</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1. **Finding Purpose and Fulfillment:**
+   - Discovering your unique passions,
+________________________________________________________________________________
+ interests, and values.
+   - Setting meaningful goals and working towards personal growth.
+   - Engaging in activities that bring you joy and fulfillment.
+   
+________________________________________________________________________________
+- Contributing to something larger than yourself, such as a cause or community.
+
+
+2. **Building Relationships:**
+   - Nurturing strong connections with family and friends.
+   - Forming meaningful relationships with others who share your values and interests.
+   - Experiencing love, companionship, and emotional intimacy.
+
+________________________________________________________________________________
+   - Creating a supportive network that enhances your well-being.
+
+
+3. **Learning and Growing:**
+   - Embracing a lifelong journey of learning and personal development.
+   - Seeking new knowledge and skills to expand your horizons.
+   - Reflecting on your experiences to gain insights and wisdom.
+   - Adapting and evolving as you navigate life&#39;s challenges and opportunities.
+
+
+4. **Making a Difference:**
+   - Leaving a positive impact on the world through your actions and contributions.
+   - Helping others in need through acts of kindness, service, or advocacy.
+   - Creating something that will endure
+________________________________________________________________________________
+ and benefit others, such as a work of art, a business, or a legacy.
+
+
+5. **Living in the Present:**
+   - Savoring each moment and appreciating the beauty and wonder of life.
+   - Practicing mindfulness and gratitude to cultivate a sense of contentment.
+   - Letting go of regrets and worries to fully embrace the present.
+   - Creating memories and experiences that you will cherish for years to come.
+
+
+6. **Overcoming Challenges:**
+   - Embracing challenges as opportunities for growth and resilience.
+   - Developing inner strength and perseverance to navigate adversity.
+   - Learning from your mistakes and using them as stepping stones to success.
+   - Finding meaning and purpose in overcoming obstacles.
+
+
+7. **Connecting with Nature:**
+   - Appreciating the beauty and wonder of the natural world.
+   - Spending time outdoors to renew and recharge your spirit.
+   - Recognizing your interconnectedness with all living things.
+   - Seeking inspiration and peace in the natural world.
+
+
+8. **Seeking Meaning and Spirituality:**
+   - Exploring your spiritual beliefs and practices, if any.
+   - Finding a sense of purpose and belonging through faith or spirituality.
+   - Connecting with a higher power or transcendent
+________________________________________________________________________________
+ reality.
+   - Experiencing awe, wonder, and a sense of the sacred.
+
+
+9. **Creating a Legacy:**
+   - Leaving behind a positive and lasting impact on the world.
+   - Being remembered for your kindness, generosity, or accomplishments.
+   - Creating a legacy through your work, family, or contributions to society.
+   - Inspiring others to live meaningful and fulfilling lives.
+
+
+10. **Finding Inner Peace and Happiness:**
+    - Cultivating a sense of inner peace and tranquility.
+    - Practicing self-care and mindfulness to reduce stress and anxiety.
+    - Accepting yourself for who you are, with all your strengths and weaknesses.
+    - Living in accordance with your values and beliefs.
+________________________________________________________________________________
+</pre></div>
+</div>
+</div>
+</div>
+<p>流式传输时，某些响应属性在您迭代所有响应块之前不可用。下面演示了这一点：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response_stream</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span><span class="s2">&quot;What is the meaning of life?&quot;</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">prompt_feedback</span></code>属性的工作原理：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response_stream</span><span class="o">.</span><span class="n">prompt_feedback</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>safety_ratings {
+  category: HARM_CATEGORY_SEXUALLY_EXPLICIT
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_HATE_SPEECH
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_HARASSMENT
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_DANGEROUS_CONTENT
+  probability: NEGLIGIBLE
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>但像文本这样的属性却不会：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+  <span class="n">response_stream</span><span class="o">.</span><span class="n">text</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>如果有错误的话，应该会显示如下</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>IncompleteIterationError: Please let the response complete iteration before accessing the final accumulated
+attributes (or call `response.resolve()`)
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2>输入图像和文本, 输出文本<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h2>
+<p>Gemini 提供了一个多模式模型（<code class="docutils literal notranslate"><span class="pre">gemini-pro-vision</span></code>），它接受文本和图像以及输入。 <code class="docutils literal notranslate"><span class="pre">GenerativeModel.generate_content</span></code> API 旨在处理多模式提示并返回文本输出。<br />
+让添加一张图片：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>curl<span class="w"> </span>-o<span class="w"> </span>image.jpg<span class="w"> </span>https://t0.gstatic.com/licensed-image?q<span class="o">=</span>tbn:ANd9GcQ_Kevbk21QBRy-PgB4kQpS79brbmmEG7m3VOTShAn4PecDU5H5UxrJxE3Dw1JiaG17V88QIol19-3TM2wCHw
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  405k  100  405k    0     0   292k      0  0:00:01  0:00:01 --:--:--  293k
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">PIL.Image</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;image.jpg&#39;</span><span class="p">)</span>
+<span class="n">img</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/99a7419349b21968eb95094f27258550ac29c4f9b449023ca58de56022e5775c.png" src="../_images/99a7419349b21968eb95094f27258550ac29c4f9b449023ca58de56022e5775c.png" />
+</div>
+</div>
+<p>使用<code class="docutils literal notranslate"><span class="pre">gemini-pro-vision</span></code>模型并使用<code class="docutils literal notranslate"><span class="pre">generate_content</span></code>将图像传递给模型。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">GenerativeModel</span><span class="p">(</span><span class="s1">&#39;gemini-pro-vision&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+<span class="n">to_markdown</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<blockquote>
+<div><p>Meal prepping is a great way to save time and money, and it can also help you to eat healthier. By planning your meals ahead of time and cooking them in advance, you can make sure that you have healthy and nutritious meals ready to eat when you’re hungry.</p>
+<p>There are many different ways to meal prep, and the best approach for you will depend on your individual needs and preferences. Some people prefer to cook all of their meals for the week on Sunday, while others prefer to cook just a few meals at a time. You can also meal prep for breakfast, lunch, or dinner, or all three.</p>
+<p>No matter how you choose to meal prep, there are a few tips that can help you to make the most of it. First, make sure to choose recipes that are healthy and nutritious. You should also choose recipes that are easy to make and that you will enjoy eating. Second, be sure to cook your food properly. This will help to ensure that it is safe to eat and that it tastes its best. Finally, store your food properly. This will help to keep it fresh and safe to eat.</p>
+<p>Meal prepping can be a great way to save time, money, and eat healthier. By following these tips, you can make the most of your meal prepping efforts.</p>
+</div></blockquote>
+</div>
+</div>
+<p>要在提示中提供文本和图像，请传递包含字符串和图像的列表：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">([</span><span class="s2">&quot;Write a short, engaging blog post based on this picture. It should include a description of the meal in the photo and talk about my journey meal prepping.&quot;</span><span class="p">,</span> <span class="n">img</span><span class="p">],</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">response</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">to_markdown</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<blockquote>
+<div><p>Meal prepping is a great way to save time and money, and it can also help you to eat healthier. This meal is a perfect example of a healthy and delicious meal that can be easily prepped ahead of time.</p>
+<p>This meal features brown rice, roasted vegetables, and chicken teriyaki. The brown rice is a whole grain that is high in fiber and nutrients. The roasted vegetables are a great way to get your daily dose of vitamins and minerals. And the chicken teriyaki is a delicious and protein-rich option that will keep you feeling full and satisfied.</p>
+<p>This meal is also very easy to prepare. Simply cook the brown rice according to the package directions. While the rice is cooking, roast the vegetables in the oven. Then, cook the chicken teriyaki in a skillet. Once everything is cooked, assemble the meals by dividing the rice, vegetables, and chicken teriyaki into two meal prep containers.</p>
+<p>These meals are perfect for busy people who want to eat healthy. They can be easily grabbed and eaten on the go, or they can be reheated and enjoyed at home.</p>
+<p>If you’re looking for a healthy and delicious meal that can be easily prepped ahead of time, this meal is a great option. Give it a try today!</p>
+</div></blockquote>
+</div>
+</div>
+</section>
+<section id="id7">
+<h2>聊天对话<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
+<p>Gemini 使您能够在多个回合中进行自由形式的对话。 <code class="docutils literal notranslate"><span class="pre">ChatSession</span></code>类通过管理对话状态来简化流程，因此与<code class="docutils literal notranslate"><span class="pre">generate_content</span></code>不同，您不必将对话历史记录存储为列表。<br />
+初始化聊天：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">GenerativeModel</span><span class="p">(</span><span class="s1">&#39;gemini-pro&#39;</span><span class="p">)</span>
+<span class="n">chat</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">start_chat</span><span class="p">(</span><span class="n">history</span><span class="o">=</span><span class="p">[])</span>
+<span class="n">chat</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;google.generativeai.generative_models.ChatSession at 0x7f4bae43d120&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意：视觉模型gemini-pro-vision并未针对多回合聊天进行优化。</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">ChatSession.send_message</span></code>方法返回与<code class="docutils literal notranslate"><span class="pre">GenerativeModel.generate_content</span> <span class="pre">相同的GenerateContentResponse</span></code>类型。它还会将您的消息和回复附加到聊天历史记录中：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="s2">&quot;In one sentence, explain how a computer works to a young child.&quot;</span><span class="p">)</span>
+<span class="n">to_markdown</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<blockquote>
+<div><p>A computer is like a magic box that can store your favorite games, videos, and stories, and it can help you learn new things and make new friends.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">chat</span><span class="o">.</span><span class="n">history</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[parts {
+   text: &quot;In one sentence, explain how a computer works to a young child.&quot;
+ }
+ role: &quot;user&quot;,
+ parts {
+   text: &quot;A computer is like a magic box that can store your favorite games, videos, and stories, and it can help you learn new things and make new friends.&quot;
+ }
+ role: &quot;model&quot;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>您可以继续发送消息以继续对话。使用stream=True参数来流式传输聊天：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="s2">&quot;Okay, how about a more detailed explanation to a high schooler?&quot;</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="o">*</span><span class="mi">80</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A computer is a machine that can be programmed to carry out a set of instructions
+________________________________________________________________________________
+. It consists of hardware, which are the physical components like the processor, memory, and storage, and software, which are the programs that tell the computer what
+________________________________________________________________________________
+ to do. The processor, or CPU, is the brain of the computer and it executes the instructions in the software. The memory, or RAM, stores the instructions and data that are being processed by the CPU. The storage, or hard drive, stores data permanently so that it can be accessed later. Input devices,
+________________________________________________________________________________
+ such as the keyboard and mouse, allow the user to interact with the computer, and output devices, such as the monitor and printer, allow the computer to communicate with the user. The computer follows a set of instructions called an operating system, which manages the hardware and software resources and provides basic services such as file management, memory management, and task scheduling.
+
+So, in a nutshell, a computer is a programmable machine that can store, process, and communicate information.
+________________________________________________________________________________
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">glm.Content</span></code>对象包含一个<code class="docutils literal notranslate"><span class="pre">glm.Part</span></code>对象列表，每个对象包含文本（字符串）或 inline_data (<code class="docutils literal notranslate"><span class="pre">glm.Blob</span></code>)，其中 blob 包含二进制数据和<code class="docutils literal notranslate"><span class="pre">mime_type</span></code>。聊天历史记录以<code class="docutils literal notranslate"><span class="pre">ChatSession.history</span></code>中的<code class="docutils literal notranslate"><span class="pre">glm.Content</span></code>对象列表的形式提供：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">chat</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
+  <span class="n">display</span><span class="p">(</span><span class="n">to_markdown</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;**</span><span class="si">{</span><span class="n">message</span><span class="o">.</span><span class="n">role</span><span class="si">}</span><span class="s1">**: </span><span class="si">{</span><span class="n">message</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<blockquote>
+<div><p><strong>user</strong>: In one sentence, explain how a computer works to a young child.</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>model</strong>: A computer is like a magic box that can store your favorite games, videos, and stories, and it can help you learn new things and make new friends.</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>user</strong>: Okay, how about a more detailed explanation to a high schooler?</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>model</strong>: A computer is a machine that can be programmed to carry out a set of instructions. It consists of hardware, which are the physical components like the processor, memory, and storage, and software, which are the programs that tell the computer what to do. The processor, or CPU, is the brain of the computer and it executes the instructions in the software. The memory, or RAM, stores the instructions and data that are being processed by the CPU. The storage, or hard drive, stores data permanently so that it can be accessed later. Input devices, such as the keyboard and mouse, allow the user to interact with the computer, and output devices, such as the monitor and printer, allow the computer to communicate with the user. The computer follows a set of instructions called an operating system, which manages the hardware and software resources and provides basic services such as file management, memory management, and task scheduling.</p>
+<p>So, in a nutshell, a computer is a programmable machine that can store, process, and communicate information.</p>
+</div></blockquote>
+</div>
+</div>
+</section>
+<section id="python-quickstart-use-embeddings">
+<span id="id8"></span><h2>使用嵌入<a class="headerlink" href="#python-quickstart-use-embeddings" title="Permalink to this headline">#</a></h2>
+<p><a class="reference external" href="https://developers.google.com/machine-learning/glossary#embedding-vector">嵌入</a>是一种用于<strong>将信息表示为数组中的浮点数列表</strong>的技术。使用 Gemini，您可以以矢量化形式表示文本（单词、句子和文本块），从而更轻松地比较和对比嵌入。例如，共享相似主题或情感的两个文本应该具有相似的嵌入，这可以通过余弦相似度等数学比较技术来识别。有关如何以及为何使用嵌入的更多信息，请参阅<a class="reference internal" href="embeddings_guide.html"><span class="doc std std-doc">嵌入指南</span></a>。</p>
+<p>使用<code class="docutils literal notranslate"><span class="pre">embed_content</span></code>方法生成嵌入。该方法处理以下任务（<code class="docutils literal notranslate"><span class="pre">task_type</span></code>）的嵌入：</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>任务类型</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RETRIEVAL_QUERY</p></td>
+<td><p>指定给定文本是搜索/检索设置中的查询。</p></td>
+</tr>
+<tr class="row-odd"><td><p>RETRIEVAL_DOCUMENT</p></td>
+<td><p>指定给定文本是搜索/检索设置中的文档。使用此任务类型需要<code class="docutils literal notranslate"><span class="pre">标题</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p>SEMANTIC_SIMILARITY</p></td>
+<td><p>指定给定文本将用于语义文本相似性 (STS)。</p></td>
+</tr>
+<tr class="row-odd"><td><p>CLASSIFICATION</p></td>
+<td><p>指定嵌入将用于分类。</p></td>
+</tr>
+<tr class="row-even"><td><p>CLUSTERING</p></td>
+<td><p>指定嵌入将用于聚类。</p></td>
+</tr>
+</tbody>
+</table>
+<p>以下代码生成用于文档检索的单个字符串的嵌入：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">embed_content</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;models/embedding-001&quot;</span><span class="p">,</span>
+    <span class="n">content</span><span class="o">=</span><span class="s2">&quot;What is the meaning of life?&quot;</span><span class="p">,</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;retrieval_document&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Embedding of single string&quot;</span><span class="p">)</span>
+
+<span class="c1"># 1 input &gt; 1 vector output</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;embedding&#39;</span><span class="p">])[:</span><span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;... TRIMMED]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.003216741, -0.013358698, -0.017649598, -0.0091 ... TRIMMED]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意：retrieval_document 任务类型是唯一接受标题的任务。</p>
+</div>
+<p>要处理批量字符串，请在 content 中传递字符串列表：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">embed_content</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;models/embedding-001&quot;</span><span class="p">,</span>
+    <span class="n">content</span><span class="o">=</span><span class="p">[</span>
+      <span class="s1">&#39;What is the meaning of life?&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;How much wood would a woodchuck chuck?&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;How does the brain work?&#39;</span><span class="p">],</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;retrieval_document&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Embedding of list of strings&quot;</span><span class="p">)</span>
+
+<span class="c1"># A list of inputs &gt; A list of vectors output</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;embedding&#39;</span><span class="p">]:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)[:</span><span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;... TRIMMED ...&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.0040260437, 0.004124458, -0.014209415, -0.00183 ... TRIMMED ...
+[-0.004049845, -0.0075574904, -0.0073463684, -0.03 ... TRIMMED ...
+[0.025310587, -0.0080734305, -0.029902633, 0.01160 ... TRIMMED ...
+</pre></div>
+</div>
+</div>
+</div>
+<p>虽然<code class="docutils literal notranslate"><span class="pre">genai.embed_content</span></code>函数接受简单的字符串或字符串列表，但它实际上是围绕<code class="docutils literal notranslate"><span class="pre">glm.Content</span></code>类型构建的（如<code class="docutils literal notranslate"><span class="pre">GenerativeModel.generate_content</span></code>）。<code class="docutils literal notranslate"><span class="pre">glm.Content</span></code>对象是 API 中的主要对话单元。</p>
+<p>虽然<code class="docutils literal notranslate"><span class="pre">glm.Content</span></code>对象是多模式的，但<code class="docutils literal notranslate"><span class="pre">embed_content</span></code>方法仅支持文本嵌入。这种设计使 API 能够扩展到多模式嵌入。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span><span class="o">.</span><span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>parts {
+  text: &quot;A computer is a machine that can be programmed to carry out a set of instructions. It consists of hardware, which are the physical components like the processor, memory, and storage, and software, which are the programs that tell the computer what to do. The processor, or CPU, is the brain of the computer and it executes the instructions in the software. The memory, or RAM, stores the instructions and data that are being processed by the CPU. The storage, or hard drive, stores data permanently so that it can be accessed later. Input devices, such as the keyboard and mouse, allow the user to interact with the computer, and output devices, such as the monitor and printer, allow the computer to communicate with the user. The computer follows a set of instructions called an operating system, which manages the hardware and software resources and provides basic services such as file management, memory management, and task scheduling.\n\nSo, in a nutshell, a computer is a programmable machine that can store, process, and communicate information.&quot;
+}
+role: &quot;model&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">embed_content</span><span class="p">(</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;models/embedding-001&#39;</span><span class="p">,</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+<span class="c1"># 1 input &gt; 1 vector output</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;embedding&#39;</span><span class="p">])[:</span><span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;... TRIMMED ...&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.0018552189, -0.033824213, 0.000806275, 0.024032 ... TRIMMED ...
+</pre></div>
+</div>
+</div>
+</div>
+<p>同样，聊天历史记录包含<code class="docutils literal notranslate"><span class="pre">glm.Content</span></code>对象列表，您可以将其直接传递给<code class="docutils literal notranslate"><span class="pre">embed_content</span></code>函数：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">chat</span><span class="o">.</span><span class="n">history</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[parts {
+   text: &quot;In one sentence, explain how a computer works to a young child.&quot;
+ }
+ role: &quot;user&quot;,
+ parts {
+   text: &quot;A computer is like a magic box that can store your favorite games, videos, and stories, and it can help you learn new things and make new friends.&quot;
+ }
+ role: &quot;model&quot;,
+ parts {
+   text: &quot;Okay, how about a more detailed explanation to a high schooler?&quot;
+ }
+ role: &quot;user&quot;,
+ parts {
+   text: &quot;A computer is a machine that can be programmed to carry out a set of instructions. It consists of hardware, which are the physical components like the processor, memory, and storage, and software, which are the programs that tell the computer what to do. The processor, or CPU, is the brain of the computer and it executes the instructions in the software. The memory, or RAM, stores the instructions and data that are being processed by the CPU. The storage, or hard drive, stores data permanently so that it can be accessed later. Input devices, such as the keyboard and mouse, allow the user to interact with the computer, and output devices, such as the monitor and printer, allow the computer to communicate with the user. The computer follows a set of instructions called an operating system, which manages the hardware and software resources and provides basic services such as file management, memory management, and task scheduling.\n\nSo, in a nutshell, a computer is a programmable machine that can store, process, and communicate information.&quot;
+ }
+ role: &quot;model&quot;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">embed_content</span><span class="p">(</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;models/embedding-001&#39;</span><span class="p">,</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">chat</span><span class="o">.</span><span class="n">history</span><span class="p">)</span>
+
+<span class="c1"># 1 input &gt; 1 vector output</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;embedding&#39;</span><span class="p">]):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)[:</span><span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;... TRIMMED...&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.014632266, -0.042202696, -0.015757175, 0.01548 ... TRIMMED...
+[-0.04568243, 0.0011376102, -0.016981786, 0.029258 ... TRIMMED...
+[-0.010055617, -0.07208932, -0.00011750793, -0.023 ... TRIMMED...
+[0.0018552189, -0.033824213, 0.000806275, 0.024032 ... TRIMMED...
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id9">
+<h2>高级用例<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h2>
+<p>以下部分讨论 Gemini API 的 Python SDK 的高级用例和底层细节。</p>
+<section id="id10">
+<h3>安全设置<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">safety_settings</span></code>参数允许您配置模型在提示和响应中阻止和允许的内容。默认情况下，安全设置会阻止所有维度上具有中度和/或高概率不安全内容的内容。了解有关<a class="reference internal" href="safety_setting_gemini.html"><span class="doc std std-doc">安全设置</span></a>的更多信息。</p>
+<p>输入有问题的提示并使用默认安全设置运行模型，它不会返回任何候选项：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span><span class="s1">&#39;[Questionable prompt here]&#39;</span><span class="p">)</span>
+<span class="n">response</span><span class="o">.</span><span class="n">candidates</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[index: 0
+content {
+  parts {
+    text: &quot;I\&#39;m sorry, I don\&#39;t feel comfortable answering that question.&quot;
+  }
+  role: &quot;model&quot;
+}
+finish_reason: STOP
+safety_ratings {
+  category: HARM_CATEGORY_SEXUALLY_EXPLICIT
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_HATE_SPEECH
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_HARASSMENT
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_DANGEROUS_CONTENT
+  probability: NEGLIGIBLE
+}
+]
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">prompt_feedback</span></code>会告诉您哪个安全过滤器阻止了提示：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span><span class="o">.</span><span class="n">prompt_feedback</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>safety_ratings {
+  category: HARM_CATEGORY_SEXUALLY_EXPLICIT
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_HATE_SPEECH
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_HARASSMENT
+  probability: NEGLIGIBLE
+}
+safety_ratings {
+  category: HARM_CATEGORY_DANGEROUS_CONTENT
+  probability: NEGLIGIBLE
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>现在，使用新配置的安全设置向模型提供相同的提示，您可能会得到响应。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span><span class="s1">&#39;[Questionable prompt here]&#39;</span><span class="p">,</span>
+                                  <span class="n">safety_settings</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;HARASSMENT&#39;</span><span class="p">:</span><span class="s1">&#39;block_none&#39;</span><span class="p">})</span>
+<span class="n">response</span><span class="o">.</span><span class="n">text</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&quot;I&#39;m sorry, but I cannot answer this question as it is considered inappropriate.&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<p>另请注意，每个候选人都有自己的安全评级，以防提示通过但个别响应未通过安全检查。</p>
+</section>
+<section id="id11">
+<h3>对消息进行编码<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h3>
+<p>前面的部分依靠 SDK 来让您轻松地向 API 发送提示。本节提供了与前面的示例等效的完全类型化，因此您可以更好地了解有关 SDK 如何对消息进行编码的底层详细信息。<br />
+Python SDK 的底层是<code class="docutils literal notranslate"><span class="pre">google.ai.generativelanguage</span></code>客户端库：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">google.ai.generativelanguage</span> <span class="k">as</span> <span class="nn">glm</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>SDK 尝试将您的消息转换为<code class="docutils literal notranslate"><span class="pre">glm.Content</span></code>对象，该对象包含<code class="docutils literal notranslate"><span class="pre">glm.Part</span></code>对象的列表，每个对象包含：</p>
+<ol class="arabic simple">
+<li><p>文本（字符串）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inline_data</span></code>(<code class="docutils literal notranslate"><span class="pre">glm.Blob</span></code>)，其中blob包含<code class="docutils literal notranslate"><span class="pre">二进制数据</span></code>和<code class="docutils literal notranslate"><span class="pre">mime_type</span></code>。</p></li>
+</ol>
+<p>还可以将这些类中的任何一个作为等效字典传递。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意：唯一接受的 mime 类型是某些图像类型，image/*。</p>
+</div>
+<p>因此，与前面的示例等效的完全类型是：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">GenerativeModel</span><span class="p">(</span><span class="s1">&#39;gemini-pro-vision&#39;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span>
+    <span class="n">glm</span><span class="o">.</span><span class="n">Content</span><span class="p">(</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">glm</span><span class="o">.</span><span class="n">Part</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Write a short, engaging blog post based on this picture.&quot;</span><span class="p">),</span>
+            <span class="n">glm</span><span class="o">.</span><span class="n">Part</span><span class="p">(</span>
+                <span class="n">inline_data</span><span class="o">=</span><span class="n">glm</span><span class="o">.</span><span class="n">Blob</span><span class="p">(</span>
+                    <span class="n">mime_type</span><span class="o">=</span><span class="s1">&#39;image/jpeg&#39;</span><span class="p">,</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;image.jpg&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+
+<span class="n">to_markdown</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;... [TRIMMED] ...&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<blockquote>
+<div><p>Meal prepping is a great way to save time and money, and it can also help you to eat healthier. By … [TRIMMED] …</p>
+</div></blockquote>
+</div>
+</div>
+</section>
+<section id="id12">
+<h3>多轮对话<a class="headerlink" href="#id12" title="Permalink to this headline">#</a></h3>
+<p>虽然前面显示的<code class="docutils literal notranslate"><span class="pre">genai.ChatSession</span></code>类可以处理许多用例，但它确实做了一些假设。如果您的用例不适合此聊天实现，最好记住<code class="docutils literal notranslate"><span class="pre">genai.ChatSession</span></code>只是<code class="docutils literal notranslate"><span class="pre">GenerativeModel.generate_content</span></code>的包装。除了单个请求之外，它还可以处理多轮对话。<br />
+各个消息是<code class="docutils literal notranslate"><span class="pre">glm.Content</span></code>对象或兼容的字典，如前面的部分所示。作为字典，消息需要角色键和部件键。对话中的角色可以是提供提示的用户，也可以是提供响应的模型。</p>
+<p>传递<code class="docutils literal notranslate"><span class="pre">glm.Content</span></code>对象列表，它将被视为多轮聊天：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">GenerativeModel</span><span class="p">(</span><span class="s1">&#39;gemini-pro&#39;</span><span class="p">)</span>
+
+<span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span><span class="s1">&#39;user&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;parts&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Briefly explain how a computer works to a young child.&quot;</span><span class="p">]}</span>
+<span class="p">]</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+
+<span class="n">to_markdown</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<blockquote>
+<div><p>Imagine a very smart friend who can do math really fast. This friend lives inside your computer. You can talk to your friend by typing on the keyboard, and it will answer by showing things on the screen.</p>
+<p>Your computer has a special brain called a processor. The processor is like the boss of the computer. It tells the other parts of the computer what to do.</p>
+<p>When you tell your computer to do something, like open a game or play a video, the processor sends signals to other parts of the computer. These parts are like your friend’s helpers. They work together to make things happen on your computer.</p>
+<p>One helper is called the memory. It’s like a big notebook where your friend can store information. When you open a game, the memory loads the game files from the hard drive, which is like a big storage box.</p>
+<p>Another helper is called the graphics card. It’s like an artist who draws pictures on the screen. When you play a game, the graphics card creates the images of the characters and the world you see on the screen.</p>
+<p>So, when you use your computer, you’re really talking to your smart friend inside. Your friend uses the processor to tell the other parts of the computer what to do, and they all work together to make things happen on the screen.</p>
+</div></blockquote>
+</div>
+</div>
+<p>要继续对话，请添加响应和另一条消息。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意：对于多轮对话，您需要随每个请求发送整个对话历史记录。 API 是无状态的。</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;role&#39;</span><span class="p">:</span><span class="s1">&#39;model&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;parts&#39;</span><span class="p">:[</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">]})</span>
+
+<span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;role&#39;</span><span class="p">:</span><span class="s1">&#39;user&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;parts&#39;</span><span class="p">:[</span><span class="s2">&quot;Okay, how about a more detailed explanation to a high school student?&quot;</span><span class="p">]})</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+
+<span class="n">to_markdown</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<blockquote>
+<div><p>At its core, a computer is a machine that can receive, process, and store data. It consists of several key components that work together to perform various tasks.</p>
+<ol class="arabic simple">
+<li><p><strong>Processor (CPU):</strong></p>
+<ul class="simple">
+<li><p>The processor, also known as the central processing unit, is the “brain” of the computer.</p></li>
+<li><p>It receives instructions from software and performs calculations and logical operations.</p></li>
+<li><p>The speed of the processor, measured in gigahertz (GHz), determines how quickly it can execute tasks.</p></li>
+</ul>
+</li>
+<li><p><strong>Memory (RAM):</strong></p>
+<ul class="simple">
+<li><p>Memory, or random access memory, temporarily stores data and instructions that are being processed by the CPU.</p></li>
+<li><p>It allows the CPU to quickly access frequently used data without having to retrieve it from the slower storage devices.</p></li>
+<li><p>The amount of memory installed in a computer affects how many programs and how much data it can handle simultaneously.</p></li>
+</ul>
+</li>
+<li><p><strong>Storage Devices:</strong></p>
+<ul class="simple">
+<li><p>Storage devices, such as hard disk drives (HDDs) and solid state drives (SSDs), permanently store data on the computer.</p></li>
+<li><p>HDDs use spinning disks to store data, while SSDs use flash memory chips.</p></li>
+<li><p>SSDs are faster and more durable than HDDs, but they are also more expensive.</p></li>
+</ul>
+</li>
+<li><p><strong>Input Devices:</strong></p>
+<ul class="simple">
+<li><p>Input devices allow users to interact with the computer and provide input.</p></li>
+<li><p>Common input devices include keyboards, mice, touchscreens, and scanners.</p></li>
+</ul>
+</li>
+<li><p><strong>Output Devices:</strong></p>
+<ul class="simple">
+<li><p>Output devices display or produce the results of the computer’s processing.</p></li>
+<li><p>Common output devices include monitors, printers, and speakers.</p></li>
+</ul>
+</li>
+<li><p><strong>Operating System (OS):</strong></p>
+<ul class="simple">
+<li><p>The operating system (OS) is the software that manages the computer’s hardware and software resources.</p></li>
+<li><p>It provides a user interface, allocates memory, and controls the execution of programs.</p></li>
+<li><p>Common operating systems include Windows, macOS, and Linux.</p></li>
+</ul>
+</li>
+<li><p><strong>Software:</strong></p>
+<ul class="simple">
+<li><p>Software refers to the programs and applications that run on the computer.</p></li>
+<li><p>Software can be classified into two main types: system software and application software.</p></li>
+<li><p>System software includes the operating system and other programs that manage the computer’s resources.</p></li>
+<li><p>Application software includes programs that perform specific tasks, such as word processors, spreadsheets, and games.</p></li>
+</ul>
+</li>
+</ol>
+<p>These components work together to form a complete computer system. When a user enters input through an input device, the computer processes the input using the CPU and memory. The results are then displayed on an output device or stored on a storage device. The operating system manages this entire process and ensures that all the components work together smoothly.</p>
+</div></blockquote>
+</div>
+</div>
+</section>
+<section id="id13">
+<h3>生成配置<a class="headerlink" href="#id13" title="Permalink to this headline">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Generation_config</span></code>参数允许您修改生成参数。您发送到模型的每个提示都包含控制模型如何生成响应的参数值。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span>
+    <span class="s1">&#39;Tell me a story about a magic backpack.&#39;</span><span class="p">,</span>
+    <span class="n">generation_config</span><span class="o">=</span><span class="n">genai</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">GenerationConfig</span><span class="p">(</span>
+        <span class="c1"># Only one candidate for now.</span>
+        <span class="n">candidate_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">stop_sequences</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span>
+        <span class="n">max_output_tokens</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">to_markdown</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<blockquote>
+<div><p>In the heart of a bustling city, a bright red backpack called Sparky e</p>
+</div></blockquote>
+</div>
+</div>
+</section>
+</section>
+<section id="id14">
+<h2>下一步是什么<a class="headerlink" href="#id14" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>提示设计是创建提示的过程，以从语言模型中引发所需的响应。编写结构良好的提示是确保语言模型做出准确、高质量响应的重要组成部分。了解<a class="reference internal" href="prompt_best_practices.html"><span class="doc std std-doc">提示符写作</span></a>的最佳实践。</p></li>
+<li><p>Gemini 提供了多种模型变体来满足不同用例的需求，例如输入类型和复杂性、聊天或其他对话语言任务的实现以及大小限制。了解可用的<a class="reference internal" href="models/gemini.html"><span class="doc std std-doc">Gemini模型</span></a>。</p></li>
+<li><p>Gemini 提供了请求<a class="reference internal" href="increase_quota.html"><span class="doc std std-doc">提高速率限制</span></a>的选项。 Gemini-Pro 型号的速率限制为每分钟 60 个请求 (RPM)。</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "gemini"
+        },
+        kernelOptions: {
+            name: "gemini",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'gemini'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tutorials.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Gemini API 教程</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="rest_quickstart.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">快速入门：使用 REST API 开始使用 Gemini</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">前提条件</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-sdk">安装 Python SDK</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">导入包</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">设置API 密钥</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">列出模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">从文本输入生成文本</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">输入图像和文本, 输出文本</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">聊天对话</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-quickstart-use-embeddings">使用嵌入</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">高级用例</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">安全设置</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">对消息进行编码</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">多轮对话</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">生成配置</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">下一步是什么</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

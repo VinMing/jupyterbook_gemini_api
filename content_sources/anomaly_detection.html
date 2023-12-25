@@ -1,0 +1,1727 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>使用嵌入进行异常检测 &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/anomaly_detection';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="使用 t-SNE 可视化嵌入" href="clustering_with_embeddings.html" />
+    <link rel="prev" title="嵌入指南" href="embeddings_guide.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_quickstart.html">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_quickstart.html">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_quickstart.html">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gemini_api_overview.html">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">LLM 概念指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_intro.html">提示设计简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_best_practices.html">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semantic_retriever.html">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_tuning_guidance.html">模型微调指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_quickstart_python_palm.html">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="available_regions.html">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/anomaly_detection.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/anomaly_detection.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>使用嵌入进行异常检测</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">使用嵌入进行异常检测</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">概述</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">前提条件</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">获取 API 密钥</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">数据集</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">创建嵌入</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#embedding-001-api">使用模型 embedding-001 对嵌入进行 API 更改</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">降维</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">异常值检测</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">下一步</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>使用嵌入进行异常检测<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<section id="id2">
+<h2>概述<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>本教程演示如何使用 Gemini API 中的嵌入来检测数据集中的潜在异常值。您将使用<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html">t-SNE</a>可视化 20 个新闻组数据集的子集，并检测每个分类聚类中心点特定半径之外的异常值。</p>
+<p>有关开始使用 Gemini API 生成的嵌入的更多信息，请查看<a class="reference internal" href="python_quickstart.html#python-quickstart-use-embeddings"><span class="std std-ref">Python 快速入门</span></a>。</p>
+</section>
+<section id="id3">
+<h2>前提条件<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<p>您可以在 Google Colab 中运行此快速入门。</p>
+<p>要在您自己的开发环境中完成本快速入门，请确保您的环境满足以下要求：</p>
+<ul class="simple">
+<li><p>Python 3.9+</p></li>
+<li><p>安装 jupyter 以运行笔记本</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>安装<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<p>首先，下载并安装 Gemini API Python 库。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># !pip install -q google.generativeai</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">tqdm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="kn">import</span> <span class="nn">google.generativeai</span> <span class="k">as</span> <span class="nn">genai</span>
+<span class="kn">import</span> <span class="nn">google.ai.generativelanguage</span> <span class="k">as</span> <span class="nn">glm</span>
+
+<span class="c1"># Used to securely store your API key</span>
+<span class="c1"># from google.colab import userdata</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_20newsgroups</span>
+<span class="kn">from</span> <span class="nn">sklearn.manifold</span> <span class="kn">import</span> <span class="n">TSNE</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/st/miniconda3/envs/gemini/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+</div>
+</div>
+<section id="api">
+<h3>获取 API 密钥<a class="headerlink" href="#api" title="Permalink to this headline">#</a></h3>
+<p>在使用 Gemini API 之前，您必须先获取 API 密钥。如果您还没有密钥，请在 Google AI Studio 中一键创建密钥。</p>
+<p>在 Colab 中，将密钥添加到左侧面板“🔑”下的秘密管理器中。将其命名为 API_KEY。 获得 API 密钥后，将其传递给 SDK。您可以通过两种方式执行此操作：</p>
+<ul class="simple">
+<li><p>将密钥放入 GOOGLE_API_KEY 环境变量中（SDK 将自动从那里获取它）。</p></li>
+<li><p>将密钥传递给 genai.configure(api_key=…)</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Or use `os.getenv(&#39;API_KEY&#39;)` to fetch an environment variable.</span>
+<span class="c1"># API_KEY=userdata.get(&#39;API_KEY&#39;)</span>
+<span class="n">GOOGLE_API_KEY</span> <span class="o">=</span> <span class="s2">&quot;AIzaSyBityeJag9WTYwuZ75VJvqn3I4kzRm1Omo&quot;</span>
+<span class="n">genai</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">GOOGLE_API_KEY</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>要点：接下来，您将选择一个模型。任何嵌入模型都适用于本教程，但对于实际应用程序，选择特定模型并坚持使用非常重要。不同型号的输出互不兼容。</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>注意：目前，Gemini API <a class="reference internal" href="available_regions.html"><span class="doc std std-doc">仅在某些区域可用</span></a>。</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">genai</span><span class="o">.</span><span class="n">list_models</span><span class="p">():</span>
+  <span class="k">if</span> <span class="s1">&#39;embedContent&#39;</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">supported_generation_methods</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>models/embedding-001
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="id5">
+<h1>数据集<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h1>
+<p><a class="reference external" href="https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html">20 个新闻组文本数据集</a>包含 20 个主题的 18,000 个新闻组帖子，分为训练集和测试集。训练和测试数据集之间的划分基于特定日期之前和之后发布的消息。在本教程中，您将使用训练子集。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">newsgroups_train</span> <span class="o">=</span> <span class="n">fetch_20newsgroups</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">)</span>
+
+<span class="c1"># View list of class names for dataset</span>
+<span class="n">newsgroups_train</span><span class="o">.</span><span class="n">target_names</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;alt.atheism&#39;,
+ &#39;comp.graphics&#39;,
+ &#39;comp.os.ms-windows.misc&#39;,
+ &#39;comp.sys.ibm.pc.hardware&#39;,
+ &#39;comp.sys.mac.hardware&#39;,
+ &#39;comp.windows.x&#39;,
+ &#39;misc.forsale&#39;,
+ &#39;rec.autos&#39;,
+ &#39;rec.motorcycles&#39;,
+ &#39;rec.sport.baseball&#39;,
+ &#39;rec.sport.hockey&#39;,
+ &#39;sci.crypt&#39;,
+ &#39;sci.electronics&#39;,
+ &#39;sci.med&#39;,
+ &#39;sci.space&#39;,
+ &#39;soc.religion.christian&#39;,
+ &#39;talk.politics.guns&#39;,
+ &#39;talk.politics.mideast&#39;,
+ &#39;talk.politics.misc&#39;,
+ &#39;talk.religion.misc&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>这是训练集中的第一个示例。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idx</span> <span class="o">=</span> <span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;Lines&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">idx</span><span class="p">:])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Lines: 15
+
+ I was wondering if anyone out there could enlighten me on this car I saw
+the other day. It was a 2-door sports car, looked to be from the late 60s/
+early 70s. It was called a Bricklin. The doors were really small. In addition,
+the front bumper was separate from the rest of the body. This is 
+all I know. If anyone can tellme a model name, engine specs, years
+of production, where this car is made, history, or whatever info you
+have on this funky looking car, please e-mail.
+
+Thanks,
+- IL
+   ---- brought to you by your neighborhood Lerxst ----
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply functions to remove names, emails, and extraneous words from data points in newsgroups.data</span>
+<span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\w\.-]+@[\w\.-]+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span><span class="p">]</span> <span class="c1"># Remove email</span>
+<span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\([^()]*\)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span><span class="p">]</span> <span class="c1"># Remove names</span>
+<span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;From: &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span><span class="p">]</span> <span class="c1"># Remove &quot;From: &quot;</span>
+<span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Subject: &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span><span class="p">]</span> <span class="c1"># Remove &quot;\nSubject: &quot;</span>
+
+<span class="c1"># Cut off each text entry after 5,000 characters</span>
+<span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5000</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5000</span> <span class="k">else</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Put training points into a dataframe</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">newsgroups_train</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Text&#39;</span><span class="p">])</span>
+<span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newsgroups_train</span><span class="o">.</span><span class="n">target</span>
+<span class="c1"># Match label to target name index</span>
+<span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Class Name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">newsgroups_train</span><span class="o">.</span><span class="n">target_names</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">)</span>
+
+<span class="n">df_train</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Text</th>
+      <th>Label</th>
+      <th>Class Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>WHAT car is this!?\nNntp-Posting-Host: rac3.w...</td>
+      <td>7</td>
+      <td>rec.autos</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>SI Clock Poll - Final Call\nSummary: Final ca...</td>
+      <td>4</td>
+      <td>comp.sys.mac.hardware</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>PB questions...\nOrganization: Purdue Univers...</td>
+      <td>4</td>
+      <td>comp.sys.mac.hardware</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Re: Weitek P9000 ?\nOrganization: Harris Comp...</td>
+      <td>1</td>
+      <td>comp.graphics</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Re: Shuttle Launch Question\nOrganization: Sm...</td>
+      <td>14</td>
+      <td>sci.space</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>11309</th>
+      <td>Re: Migraines and scans\nDistribution: world...</td>
+      <td>13</td>
+      <td>sci.med</td>
+    </tr>
+    <tr>
+      <th>11310</th>
+      <td>Screen Death: Mac Plus/512\nLines: 22\nOrganiz...</td>
+      <td>4</td>
+      <td>comp.sys.mac.hardware</td>
+    </tr>
+    <tr>
+      <th>11311</th>
+      <td>Mounting CPU Cooler in vertical case\nOrganiz...</td>
+      <td>3</td>
+      <td>comp.sys.ibm.pc.hardware</td>
+    </tr>
+    <tr>
+      <th>11312</th>
+      <td>Re: Sphere from 4 points?\nOrganization: Cent...</td>
+      <td>1</td>
+      <td>comp.graphics</td>
+    </tr>
+    <tr>
+      <th>11313</th>
+      <td>stolen CBR900RR\nOrganization: California Ins...</td>
+      <td>8</td>
+      <td>rec.motorcycles</td>
+    </tr>
+  </tbody>
+</table>
+<p>11314 rows × 3 columns</p>
+</div></div></div>
+</div>
+<p>接下来，通过在训练数据集中获取 150 个数据点并选择一些类别来对一些数据进行采样。本教程使用科学类别。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Take a sample of each label category from df_train</span>
+<span class="n">SAMPLE_SIZE</span> <span class="o">=</span> <span class="mi">150</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_train</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Label&#39;</span><span class="p">,</span> <span class="n">as_index</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">SAMPLE_SIZE</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+<span class="c1"># Choose categories about science</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Class Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;sci&#39;</span><span class="p">)]</span>
+
+<span class="c1"># Reset the index</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">df_train</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>index</th>
+      <th>Text</th>
+      <th>Label</th>
+      <th>Class Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1650</td>
+      <td>List of large integer arithmetic packages\nOr...</td>
+      <td>11</td>
+      <td>sci.crypt</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1651</td>
+      <td>Re: Once tapped, your code is no good any mor...</td>
+      <td>11</td>
+      <td>sci.crypt</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1652</td>
+      <td>Re: Identifying / Securing Files\nOrganizatio...</td>
+      <td>11</td>
+      <td>sci.crypt</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1653</td>
+      <td>Re: Off the shelf cheap DES keyseach machine ...</td>
+      <td>11</td>
+      <td>sci.crypt</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1654</td>
+      <td>Re: disk safety measure?\nOrganization: Massa...</td>
+      <td>11</td>
+      <td>sci.crypt</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>595</th>
+      <td>2245</td>
+      <td>Re: What if the USSR had reached the Moon fir...</td>
+      <td>14</td>
+      <td>sci.space</td>
+    </tr>
+    <tr>
+      <th>596</th>
+      <td>2246</td>
+      <td>Re: space news from Feb 15 AW&amp;ST\nNntp-Postin...</td>
+      <td>14</td>
+      <td>sci.space</td>
+    </tr>
+    <tr>
+      <th>597</th>
+      <td>2247</td>
+      <td>Re: Sunrise/ sunset times\nOrganization: Univ...</td>
+      <td>14</td>
+      <td>sci.space</td>
+    </tr>
+    <tr>
+      <th>598</th>
+      <td>2248</td>
+      <td>Re: First Spacewalk\nOrganization: Motorola\n...</td>
+      <td>14</td>
+      <td>sci.space</td>
+    </tr>
+    <tr>
+      <th>599</th>
+      <td>2249</td>
+      <td>Re: Why not give $1 billion to first year-lon...</td>
+      <td>14</td>
+      <td>sci.space</td>
+    </tr>
+  </tbody>
+</table>
+<p>600 rows × 4 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Class Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Class Name
+sci.crypt          150
+sci.electronics    150
+sci.med            150
+sci.space          150
+Name: count, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id6">
+<h2>创建嵌入<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h2>
+<p>在本节中，您将了解如何使用 Gemini API 中的嵌入为数据框中的不同文本生成嵌入。</p>
+<section id="embedding-001-api">
+<h3>使用模型 embedding-001 对嵌入进行 API 更改<a class="headerlink" href="#embedding-001-api" title="Permalink to this headline">#</a></h3>
+<p>对于新的嵌入模型 embedding-001，有一个新的任务类型参数和可选标题（仅在 task_type=RETRIEVAL_DOCUMENT 时有效）。<br />
+这些新参数仅适用于最新的嵌入模型。任务类型为：</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>任务类型</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RETRIEVAL_QUERY</p></td>
+<td><p>指定给定文本是搜索/检索设置中的查询。</p></td>
+</tr>
+<tr class="row-odd"><td><p>RETRIEVAL_DOCUMENT</p></td>
+<td><p>指定给定文本是搜索/检索设置中的文档。</p></td>
+</tr>
+<tr class="row-even"><td><p>SEMANTIC_SIMILARITY</p></td>
+<td><p>指定给定文本将用于语义文本相似性 (STS)。</p></td>
+</tr>
+<tr class="row-odd"><td><p>CLASSIFICATION</p></td>
+<td><p>指定嵌入将用于分类。</p></td>
+</tr>
+<tr class="row-even"><td><p>CLUSTERING</p></td>
+<td><p>指定嵌入将用于聚类。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="n">tqdm</span><span class="o">.</span><span class="n">pandas</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">google.api_core</span> <span class="kn">import</span> <span class="n">retry</span>
+
+<span class="k">def</span> <span class="nf">make_embed_text_fn</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+
+  <span class="nd">@retry</span><span class="o">.</span><span class="n">Retry</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">300.0</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">embed_fn</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="c1"># Set the task_type to CLUSTERING.</span>
+    <span class="n">embedding</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">embed_content</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                                    <span class="n">content</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                                    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;clustering&quot;</span><span class="p">)[</span><span class="s1">&#39;embedding&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">embedding</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">embed_fn</span>
+
+<span class="k">def</span> <span class="nf">create_embeddings</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+  <span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;models/embedding-001&#39;</span>
+  <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Embeddings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">progress_apply</span><span class="p">(</span><span class="n">make_embed_text_fn</span><span class="p">(</span><span class="n">model</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">df</span>
+
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">create_embeddings</span><span class="p">(</span><span class="n">df_train</span><span class="p">)</span>
+<span class="n">df_train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 600/600 [03:44&lt;00:00,  2.68it/s]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id7">
+<h2>降维<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
+<p>文档嵌入向量的长度为 768。为了可视化嵌入文档如何分组在一起，您将需要应用降维，因为您只能可视化 2D 或 3D 空间中的嵌入。上下文相似的文档在空间上应该更接近，而不是不相似的文档。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Embeddings&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>768
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert df_train[&#39;Embeddings&#39;] Pandas series to a np.array of float32</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Embeddings&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(600, 768)
+</pre></div>
+</div>
+</div>
+</div>
+<p>您将应用 t 分布式随机邻域嵌入 (t-SNE) 方法来执行降维。该技术减少了维数，同时保留了簇（靠近的点保持靠近）。对于原始数据，模型尝试构建一个分布，其中其他数据点是“邻居”（例如，它们具有相似的含义）。然后，它优化目标函数以在可视化中保持类似的分布。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tsne</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">tsne_results</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_tsne</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tsne_results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;TSNE1&#39;</span><span class="p">,</span> <span class="s1">&#39;TSNE2&#39;</span><span class="p">])</span>
+<span class="n">df_tsne</span><span class="p">[</span><span class="s1">&#39;Class Name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Class Name&#39;</span><span class="p">]</span> <span class="c1"># Add labels column from df_train to df_tsne</span>
+<span class="n">df_tsne</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TSNE1</th>
+      <th>TSNE2</th>
+      <th>Class Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>30.495018</td>
+      <td>5.358889</td>
+      <td>sci.crypt</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>43.887630</td>
+      <td>-8.861169</td>
+      <td>sci.crypt</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>30.483883</td>
+      <td>-5.904439</td>
+      <td>sci.crypt</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>41.567837</td>
+      <td>2.472937</td>
+      <td>sci.crypt</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>32.781998</td>
+      <td>-1.607547</td>
+      <td>sci.crypt</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>595</th>
+      <td>-12.525240</td>
+      <td>25.403387</td>
+      <td>sci.space</td>
+    </tr>
+    <tr>
+      <th>596</th>
+      <td>-15.025298</td>
+      <td>10.273179</td>
+      <td>sci.space</td>
+    </tr>
+    <tr>
+      <th>597</th>
+      <td>7.069860</td>
+      <td>13.220440</td>
+      <td>sci.space</td>
+    </tr>
+    <tr>
+      <th>598</th>
+      <td>-11.374259</td>
+      <td>18.656891</td>
+      <td>sci.space</td>
+    </tr>
+    <tr>
+      <th>599</th>
+      <td>-13.644522</td>
+      <td>27.029219</td>
+      <td>sci.space</td>
+    </tr>
+  </tbody>
+</table>
+<p>600 rows × 3 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span> <span class="c1"># Set figsize</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s1">&#39;darkgrid&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;grid.color&quot;</span><span class="p">:</span> <span class="s2">&quot;.6&quot;</span><span class="p">,</span> <span class="s2">&quot;grid.linestyle&quot;</span><span class="p">:</span> <span class="s2">&quot;:&quot;</span><span class="p">})</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df_tsne</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;TSNE1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;TSNE2&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Class Name&#39;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Set2&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">move_legend</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="s2">&quot;upper left&quot;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Scatter plot of news using t-SNE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;TSNE1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;TSNE2&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/9ea428437d233930c7ec6553072074eb64e4af0c661cd7688c18456bed59d054.png" src="../_images/9ea428437d233930c7ec6553072074eb64e4af0c661cd7688c18456bed59d054.png" />
+</div>
+</div>
+</section>
+<section id="id8">
+<h2>异常值检测<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+<p>要确定哪些点异常，您将确定哪些点是异常值和异常值。首先找到质心或代表簇中心的位置，然后使用距离来确定异常点。</p>
+<p>首先获取每个类别的质心。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_centroids</span><span class="p">(</span><span class="n">df_tsne</span><span class="p">):</span>
+  <span class="c1"># Get the centroid of each cluster</span>
+  <span class="n">centroids</span> <span class="o">=</span> <span class="n">df_tsne</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Class Name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+  <span class="k">return</span> <span class="n">centroids</span>
+
+<span class="n">centroids</span> <span class="o">=</span> <span class="n">get_centroids</span><span class="p">(</span><span class="n">df_tsne</span><span class="p">)</span>
+<span class="n">centroids</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TSNE1</th>
+      <th>TSNE2</th>
+    </tr>
+    <tr>
+      <th>Class Name</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>sci.crypt</th>
+      <td>42.562511</td>
+      <td>-8.157657</td>
+    </tr>
+    <tr>
+      <th>sci.electronics</th>
+      <td>8.264927</td>
+      <td>-4.836580</td>
+    </tr>
+    <tr>
+      <th>sci.med</th>
+      <td>-38.439342</td>
+      <td>-0.223306</td>
+    </tr>
+    <tr>
+      <th>sci.space</th>
+      <td>-8.939692</td>
+      <td>20.018568</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_embedding_centroids</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+  <span class="n">emb_centroids</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+  <span class="n">grouped</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Class Name&#39;</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">grouped</span><span class="o">.</span><span class="n">groups</span><span class="p">:</span>
+    <span class="n">sub_df</span> <span class="o">=</span> <span class="n">grouped</span><span class="o">.</span><span class="n">get_group</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="c1"># Get the centroid value of dimension 768</span>
+    <span class="n">emb_centroids</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sub_df</span><span class="p">[</span><span class="s1">&#39;Embeddings&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">emb_centroids</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">emb_c</span> <span class="o">=</span> <span class="n">get_embedding_centroids</span><span class="p">(</span><span class="n">df_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>对照其余点绘制您找到的每个质心。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the centroids against the cluster</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span> <span class="c1"># Set figsize</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s1">&#39;darkgrid&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;grid.color&quot;</span><span class="p">:</span> <span class="s2">&quot;.6&quot;</span><span class="p">,</span> <span class="s2">&quot;grid.linestyle&quot;</span><span class="p">:</span> <span class="s2">&quot;:&quot;</span><span class="p">})</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df_tsne</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;TSNE1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;TSNE2&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Class Name&#39;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Set2&#39;</span><span class="p">);</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">centroids</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;TSNE1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;TSNE2&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Centroids&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">move_legend</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="s2">&quot;upper left&quot;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Scatter plot of news using t-SNE with centroids&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;TSNE1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;TSNE2&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/451701412034117e710a92964b5b8c2464697ecba913fb526fcc464f5f26f70b.png" src="../_images/451701412034117e710a92964b5b8c2464697ecba913fb526fcc464f5f26f70b.png" />
+</div>
+</div>
+<p>选择一个半径。任何超出该类别质心界限的值都被视为异常值。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calculate_euclidean_distance</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p2</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">detect_outlier</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">emb_centroids</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">class_name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;Class Name&#39;</span><span class="p">]</span> <span class="c1"># Get class name of row</span>
+    <span class="c1"># Compare centroid distances</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">calculate_euclidean_distance</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Embeddings&#39;</span><span class="p">],</span>
+                                        <span class="n">emb_centroids</span><span class="p">[</span><span class="n">class_name</span><span class="p">])</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;Outlier&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="n">radius</span>
+
+  <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Outlier&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">range_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">num_outliers</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">range_</span><span class="p">:</span>
+  <span class="n">num_outliers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">detect_outlier</span><span class="p">(</span><span class="n">df_train</span><span class="p">,</span> <span class="n">emb_c</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_372222/4116937739.py:10: FutureWarning: Setting an item of incompatible dtype is deprecated and will raise in a future error of pandas. Value &#39;True&#39; has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  df.at[idx, &#39;Outlier&#39;] = dist &gt; radius
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot range_ and num_outliers</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">range_</span><span class="p">)),</span> <span class="n">num_outliers</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Number of outliers vs. distance of points from centroid&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Number of outliers&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">range_</span><span class="p">)):</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">num_outliers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">num_outliers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ha</span> <span class="o">=</span> <span class="s1">&#39;center&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d6ad237f56d02e9de1f3b143fb10911336d7d9e99ce99464d699087c832ac62a.png" src="../_images/d6ad237f56d02e9de1f3b143fb10911336d7d9e99ce99464d699087c832ac62a.png" />
+</div>
+</div>
+<p>根据您希望异常检测器的灵敏度，您可以选择要使用的半径。目前使用的是 0.62，但您可以更改该值。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># View the points that are outliers</span>
+<span class="n">RADIUS</span> <span class="o">=</span> <span class="mf">0.62</span>
+<span class="n">detect_outlier</span><span class="p">(</span><span class="n">df_train</span><span class="p">,</span> <span class="n">emb_c</span><span class="p">,</span> <span class="n">RADIUS</span><span class="p">)</span>
+<span class="n">df_outliers</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Outlier&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
+<span class="n">df_outliers</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Text</th>
+      <th>Label</th>
+      <th>Class Name</th>
+      <th>Embeddings</th>
+      <th>Outlier</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>List of large integer arithmetic packages\nOr...</td>
+      <td>11</td>
+      <td>sci.crypt</td>
+      <td>[0.015404858, -0.021492945, -0.09030825, -0.02...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>Pseudo-Random Character Generators \nOrganiza...</td>
+      <td>11</td>
+      <td>sci.crypt</td>
+      <td>[0.003974339, -0.07057476, -0.07918037, -0.025...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>LGA ncrypt source\nOrganization: Massachusett...</td>
+      <td>11</td>
+      <td>sci.crypt</td>
+      <td>[0.02029423, -0.011940984, -0.0636546, -0.0247...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>58</th>
+      <td>* REPORT ON PRIVACY-PROTECTING OFF-LINE CASH ...</td>
+      <td>11</td>
+      <td>sci.crypt</td>
+      <td>[0.0060990495, 0.01995056, -0.08278795, -0.050...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>62</th>
+      <td>Marc VanHeyningen &lt;&gt;RIPEM Frequently Asked Que...</td>
+      <td>11</td>
+      <td>sci.crypt</td>
+      <td>[0.016936606, -0.03775989, -0.031252615, -0.02...</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use the index to map the outlier points back to the projected TSNE points</span>
+<span class="n">outliers_projected</span> <span class="o">=</span> <span class="n">df_tsne</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_outliers</span><span class="p">[</span><span class="s1">&#39;Outlier&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>绘制异常值并使用透明红色表示它们。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span> <span class="c1"># Set figsize</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">})</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s1">&#39;darkgrid&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;grid.color&quot;</span><span class="p">:</span> <span class="s2">&quot;.6&quot;</span><span class="p">,</span> <span class="s2">&quot;grid.linestyle&quot;</span><span class="p">:</span> <span class="s2">&quot;:&quot;</span><span class="p">})</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df_tsne</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;TSNE1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;TSNE2&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Class Name&#39;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Set2&#39;</span><span class="p">);</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">centroids</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;TSNE1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;TSNE2&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Centroids&#39;</span><span class="p">)</span>
+<span class="c1"># Draw a red circle around the outliers</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">outliers_projected</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;TSNE1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;TSNE2&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Outliers&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">move_legend</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="s2">&quot;upper left&quot;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Scatter plot of news with outliers projected with t-SNE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;TSNE1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;TSNE2&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8dde21f2d76f42f9030df972329c2bf16637840359885e8aa5ecaf39c1a57904.png" src="../_images/8dde21f2d76f42f9030df972329c2bf16637840359885e8aa5ecaf39c1a57904.png" />
+</div>
+</div>
+<p>使用数据名的索引值打印一些异常值在每个类别中的示例。此处，打印出每个类别的第一个数据点。探索每个类别中的其他点以查看被视为异常值或异常的数据。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sci_crypt_outliers</span> <span class="o">=</span> <span class="n">df_outliers</span><span class="p">[</span><span class="n">df_outliers</span><span class="p">[</span><span class="s1">&#39;Class Name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;sci.crypt&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sci_crypt_outliers</span><span class="p">[</span><span class="s1">&#39;Text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> List of large integer arithmetic packages
+Organization: Michigan State University
+Lines: 285
+NNTP-Posting-Host: scss3.cl.msu.edu
+Summary: C functions to do arbitrary-precision arith
+X-Newsreader: TIN [version 1.1 PL8]
+
+This is the file BIGNUMS.TXT from ripem.msu.edu, last updated April 1993.
+
+In response to Email requests, I have assembled this list of
+large-integer arithmetic packages of which I have heard.
+Most of these are C function libraries, available in source form.
+
+For your convenience, I have placed copies of
+some of these on ripem.msu.edu .  They are
+available for anonymous FTP in the directory &quot;pub/bignum&quot;.
+However, what I have may not be the most current version in all cases.
+
+Here they are, in no particular order:
+
+mp
+    Multiple Precision package that comes with some Unixes
+    
+    Multiple precision package accessed via -lmp flag on your
+    compiler.  Provides +, -, *, /, gcd, exponentiation,
+    sqrt.  Comes with SunOS, NeXT Mach, BBN Mach 1000, 
+    and probably a few others.  See &quot;man mp&quot;.  
+    Object code only, of course.
+
+PARI
+    Henri Cohen, et al., Universite Bordeaux I, Paris, FRANCE
+    
+    Multiple precision desk calculator and library routines.
+    Contains optimized assembly code for Motorola 68020, 
+    semi-optimized code for SPARC, and apparently rather slow
+    generic C version.  Does both integers and reals.
+    Does vectors and matrices as well as scalars.
+    Contains a number of advanced functions, some of which I&#39;ve
+    never heard of.  
+    Has a factorization function, primality test, &amp; other related stuff.
+    Plenty of TEX documentation.
+    Public domain, but you can&#39;t distribute modified versions.
+    Available via anonymous FTP from math.ucla.edu.  There seem to
+    be Mac- and NeXT-specific versions there in addition to:
+    Filename:  pari-1.35a.tar.Z
+    
+Arithmetic in Global Fields  
+    Kevin R. Coombes, David R. Grant
+    
+    Package of routines for arbitrary precision integers or
+    polynomials over finite fields.  Includes basic +, -, *, /
+    and a few others like gcd.  Source code in C.
+    Distributed under the terms of the GNU public license.
+    Includes man pages and TEX documentation.
+    Filename:  arith.tar.Z
+
+Arbitrary Precision Math Library
+    Lloyd Zusman   Los Gatos, CA
+    
+    C package which supports basic +, -, *, /.  Provides for radix
+    points .  Not as polished as the others here.
+    Posted to comp.sources.misc in October 1988.
+    Filename:  apml.tar.Z
+    
+BigNum
+    J. Vuillemin, INRIA, FRANCE, and others.
+    Distributed by Digital Equipment Paris Research Lab 
+    
+    A &quot;portable and efficient arbitrary-precision integer&quot; package.
+    C code, with generic C &quot;kernel&quot;, plus assembly &quot;kernels&quot; for
+    MC680x0, Intel i960, MIPS, NS32032, Pyramid, and of course VAX.
+    This is probably one of the better-known packages of this type.
+    Implements +, -, *, /, mod, plus logical operations OR, AND, XOR.
+    Both signed and unsigned arithmetic available.
+    Available via email from 
+    You will receive 5 shell archives.  Give your postal address
+    and you will also receive printed documentation from France.
+    Package includes TEX documentation.
+    Publicly available for non-commercial use.
+    I removed this from my archive when I heard a rumor that PRL
+    doesn&#39;t like others to distribute it.  However, BIGNUM *is*
+    distributed as part of ecpp .
+
+Lenstra&#39;s package
+    Arjen Lenstra   Bellcore
+    
+    Portable unsigned integer package written entirely in C.
+    Includes +, -, *, /, exponentiation, mod, primality testing,
+    sqrt, random number generator, and a few others.  The package
+    was uncommented and undocumented; I have tried to add enough
+    comments to get by.  This is the only of these packages that I
+    have actually used.  It works well and is very portable.  
+    I haven&#39;t done any benchmarks against the others, but the code 
+    looks clever &amp; Lenstra is an accomplished number theorist.
+    Unlike the other packages here, this one requires you to allocate
+    storage statically--only a problem if your numbers are really huge.
+    Arjen has placed the code in the public domain.  
+    Filename:  lenstra.tar.Z
+
+lenstra_3.1
+    Arjen Lenstra,  Bellcore
+
+    An improved version of Arjen&#39;s package above.  This one
+    does signed arithmetic and dynamic allocation . Has a few new routines, too.  &quot;lenstra_3.1&quot; contains
+    minor bugfixes to the previously-available &quot;lenstra_2&quot; and &quot;lenstra_3&quot;.
+    Filename:  lenstra_3.1.c
+
+bmp  
+    R. P. Brent
+
+    1981 vintage FORTRAN code to do extended precision floating &amp;
+    fixed point arithmetic.  Includes most of the mathematical
+    functions you&#39;d find in a FORTRAN run-time library.
+    This code is an ACM algorithm, number 524.
+    To obtain, send a mail message to  
+    containing the line &quot;send mp.f from bmp&quot; or better yet, perhaps
+    just start with &quot;help&quot;.
+
+SPX
+    Kannan Alagappan &amp; Joseph Tardo, DEC
+    
+    This is a huge prototype public key authent
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sci_elec_outliers</span> <span class="o">=</span> <span class="n">df_outliers</span><span class="p">[</span><span class="n">df_outliers</span><span class="p">[</span><span class="s1">&#39;Class Name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;sci.electronics&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sci_elec_outliers</span><span class="p">[</span><span class="s1">&#39;Text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Motorola XC68882RC33 and RC50
+Organization: University of Houston
+Lines: 17
+Distribution: world
+NNTP-Posting-Host: rosie.uh.edu
+Keywords: Motorola, FPU, 68882, 68030, 33/50 MHz, problems 
+News-Software: VAX/VMS VNEWS 1.41    
+
+I just installed a Motorola XC68882RC50 FPU in an Amiga A2630 board .  Previously
+a MC68882RC25 was installed and everything was working perfectly.  Now the
+systems displays a yellow screen  when it check for
+the presence/type of FPU.  When I reinstall an MC68882RC25 the system works
+fine, but with the XC68882 even at 25 MHz it does not work.  The designer
+of the board mentioned that putting a pullup resistor on data_strobe 
+might help, but that didn&#39;t change anything.  Does anybody have some
+suggestions what I could do?  Does this look like a CPU-FPU communications
+problem or is the particular chip dead ?
+Moreover, the place I bought it from is sending me an XC68882RC33.  I thought
+that the 68882RC33 were labeled MC not XC . 
+Are there any MC68882RC33?
+
+Thanks
+	Christian 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sci_space_outliers</span> <span class="o">=</span> <span class="n">df_outliers</span><span class="p">[</span><span class="n">df_outliers</span><span class="p">[</span><span class="s1">&#39;Class Name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;sci.space&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sci_space_outliers</span><span class="p">[</span><span class="s1">&#39;Text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Re: New planet/Kuiper object found?
+Organization: University of Western Ontario, London
+Distribution: sci
+Nntp-Posting-Host: prism.engrg.uwo.ca
+Lines: 5
+
+	If the  new  Kuiper belt object *is*  called &#39;Karla&#39;, the next
+one  should be called &#39;Smiley&#39;.
+
+							James Nicoll
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id9">
+<h2>下一步<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h2>
+<p>您现在已经使用嵌入创建了一个异常检测器！尝试使用您自己的文本数据将它们可视化为嵌入，并选择一些边界以便您可以检测异常值。您可以执行降维以完成可视化步骤。请注意，t-SNE 擅长对输入进行聚类，但可能需要较长时间才能收敛，或者可能会陷入局部最小值。如果您遇到此问题，您可以考虑的另一种技术是<a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">主成分分析 (PCA)</a>。</p>
+<p>要了解如何使用 Gemini API 中的其他服务，请访问<a class="reference internal" href="python_quickstart.html"><span class="doc std std-doc">Python 快速入门</span></a>。</p>
+<p>要了解有关如何使用嵌入的更多信息，请查看可用的<a class="reference external" href="https://ai.google.dev/examples?keywords=embed">示例</a>。要了解如何从头开始创建它们，请参阅 TensorFlow 的<a class="reference external" href="https://www.tensorflow.org/text/guide/word_embeddings">词嵌入</a>教程。</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "gemini"
+        },
+        kernelOptions: {
+            name: "gemini",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'gemini'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="embeddings_guide.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">嵌入指南</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="clustering_with_embeddings.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">使用 t-SNE 可视化嵌入</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">使用嵌入进行异常检测</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">概述</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">前提条件</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">获取 API 密钥</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">数据集</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">创建嵌入</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#embedding-001-api">使用模型 embedding-001 对嵌入进行 API 更改</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">降维</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">异常值检测</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">下一步</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

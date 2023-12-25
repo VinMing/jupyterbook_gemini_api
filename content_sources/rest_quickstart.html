@@ -1,0 +1,1144 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>快速入门：使用 REST API 开始使用 Gemini &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/rest_quickstart';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Gemini API 概览" href="gemini_api_overview.html" />
+    <link rel="prev" title="Gemini API: Python 快速入门" href="python_quickstart.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_quickstart.html">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_quickstart.html">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gemini_api_overview.html">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">LLM 概念指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_intro.html">提示设计简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_best_practices.html">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semantic_retriever.html">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_tuning_guidance.html">模型微调指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_quickstart_python_palm.html">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="available_regions.html">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/rest_quickstart.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/rest_quickstart.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>快速入门：使用 REST API 开始使用 Gemini</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">设置您的 API 密钥</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-api">Gemini 和基于内容的 API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">纯文本输入</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">文本和图像输入</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">多轮对话（聊天）</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">模型配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">流式生成内容</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">计数代币</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">嵌入</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">模型信息</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">获取模型信息</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">罗列模型</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="rest-api-gemini">
+<h1>快速入门：使用 REST API 开始使用 Gemini<a class="headerlink" href="#rest-api-gemini" title="Permalink to this headline">#</a></h1>
+<p>如果您想快速试用Gemini API，可以使用curl命令调用REST API中的方法。本教程中的示例显示了对每个 API 方法的调用。</p>
+<p>Colab 使用 Python 代码设置环境变量并显示图像，但您不需要 Colab 来使用 REST API。只要您按照下一节中所述设置了 API_KEY，您就应该能够在 Colab 之外运行所有curl 示例，而无需进行修改。</p>
+<section id="api">
+<h2>设置您的 API 密钥<a class="headerlink" href="#api" title="Permalink to this headline">#</a></h2>
+<p>要使用 Gemini API，您需要一个 API 密钥。如果您还没有密钥，请在 Google AI Studio 中创建密钥。</p>
+<p>在 Colab 中，将密钥添加到左侧面板“🔑”下的秘密管理器中。将其命名为 API_KEY。然后，您可以将其添加为环境变量以在curl 调用中传递密钥。<br />
+在终端中，您只需运行 API_KEY=”Your API Key” 即可。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="c1"># from google.colab import userdata</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;API_KEY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;AIzaSyBityeJag9WTYwuZ75VJvqn3I4kzRm1Omo&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gemini-api">
+<h2>Gemini 和基于内容的 API<a class="headerlink" href="#gemini-api" title="Permalink to this headline">#</a></h2>
+<section id="id1">
+<h3>纯文本输入<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<p>使用<code class="docutils literal notranslate"><span class="pre">generateContent</span></code>方法根据给定的输入消息从模型生成响应。如果输入仅包含文本，请使用<code class="docutils literal notranslate"><span class="pre">gemini-pro</span></code>模型。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! curl https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyBityeJag9WTYwuZ75VJvqn3I4kzRm1Omo \
+    -H &#39;Content-Type: application/json&#39; \
+    -X POST \
+    -d &#39;{&quot;contents&quot;: [{&quot;parts&quot;:[{&quot;text&quot;: &quot;Write a story about a magic backpack.&quot;}]}]}&#39; 2&gt; /dev/null
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{
+  &quot;candidates&quot;: [
+    {
+      &quot;content&quot;: {
+        &quot;parts&quot;: [
+          {
+            &quot;text&quot;: &quot;Once upon a time, in a vibrant town nestled amidst rolling hills, a young girl named Lily stumbled upon a magical backpack in a quaint antique shop. Intrigued by its intricate carvings and vibrant colors, she couldn&#39;t resist bringing it home.\n\nAs Lily eagerly explored her new treasure, she discovered it was no ordinary backpack. Its interior was a vast and ever-changing realm, filled with secrets waiting to be unveiled. Each time she reached inside, she encountered different landscapes and extraordinary beings.\n\nOne day, Lily found herself in a lush forest where she encountered a talking squirrel who revealed the backpack&#39;s true powers. He explained that the backpack was a portal to different dimensions and that Lily had the ability to harness its magic and travel to different worlds.\n\nWith a mix of excitement and trepidation, Lily embarked on her first interdimensional journey. She found herself floating through a starry sky, surrounded by shimmering constellations. As she glided through the cosmos, she witnessed a meteor shower dance across the celestial tapestry.\n\nIn another realm, Lily encountered a majestic dragon breathing fire while she watched in awe and fascination. She discovered a lost city hidden beneath the jungle canopy, its ruins teeming with ancient wisdom. Each adventure was more thrilling than the last, expanding her horizons and teaching her valuable lessons about herself and the universe.\n\nAs time passed, Lily realized that the backpack wasn&#39;t just a magical object; it was a symbol of her boundless imagination and the limitless possibilities that lay within her. It reminded her that even the ordinary can become extraordinary when viewed through the lens of curiosity and wonder.\n\nYears later, Lily became a renowned explorer, renowned for her discoveries in diverse realms and her unwavering belief in the power of imagination. She penned books and gave lectures, inspiring countless individuals to embark on quests of their own.\n\nThe magic backpack remained her constant companion, a testament to the transformative power of embracing the unknown and fostering a childlike sense of wonder. It became a symbol of her indomitable spirit and her unwavering pursuit of adventure.&quot;
+          }
+        ],
+        &quot;role&quot;: &quot;model&quot;
+      },
+      &quot;finishReason&quot;: &quot;STOP&quot;,
+      &quot;index&quot;: 0,
+      &quot;safetyRatings&quot;: [
+        {
+          &quot;category&quot;: &quot;HARM_CATEGORY_SEXUALLY_EXPLICIT&quot;,
+          &quot;probability&quot;: &quot;LOW&quot;
+        },
+        {
+          &quot;category&quot;: &quot;HARM_CATEGORY_HATE_SPEECH&quot;,
+          &quot;probability&quot;: &quot;NEGLIGIBLE&quot;
+        },
+        {
+          &quot;category&quot;: &quot;HARM_CATEGORY_HARASSMENT&quot;,
+          &quot;probability&quot;: &quot;NEGLIGIBLE&quot;
+        },
+        {
+          &quot;category&quot;: &quot;HARM_CATEGORY_DANGEROUS_CONTENT&quot;,
+          &quot;probability&quot;: &quot;NEGLIGIBLE&quot;
+        }
+      ]
+    }
+  ],
+  &quot;promptFeedback&quot;: {
+    &quot;safetyRatings&quot;: [
+      {
+        &quot;category&quot;: &quot;HARM_CATEGORY_SEXUALLY_EXPLICIT&quot;,
+        &quot;probability&quot;: &quot;NEGLIGIBLE&quot;
+      },
+      {
+        &quot;category&quot;: &quot;HARM_CATEGORY_HATE_SPEECH&quot;,
+        &quot;probability&quot;: &quot;NEGLIGIBLE&quot;
+      },
+      {
+        &quot;category&quot;: &quot;HARM_CATEGORY_HARASSMENT&quot;,
+        &quot;probability&quot;: &quot;NEGLIGIBLE&quot;
+      },
+      {
+        &quot;category&quot;: &quot;HARM_CATEGORY_DANGEROUS_CONTENT&quot;,
+        &quot;probability&quot;: &quot;NEGLIGIBLE&quot;
+      }
+    ]
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id2">
+<h2>文本和图像输入<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>如果输入同时包含文本和图像，请使用gemini-pro-vision 模型。以下代码片段可帮助您构建请求并将其发送到 REST API。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>curl<span class="w"> </span>-o<span class="w"> </span>image_scones.jpg<span class="w"> </span>https://storage.googleapis.com/generativeai-downloads/images/scones.jpg
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  385k  100  385k    0     0   158k      0  0:00:02  0:00:02 --:--:--  158k
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">PIL.Image</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;image_scones.jpg&quot;</span><span class="p">)</span>
+<span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">512</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">height</span><span class="o">*</span><span class="mi">512</span><span class="o">/</span><span class="n">img</span><span class="o">.</span><span class="n">width</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/382939d8aa8ac952cf5dce830e11e6c29846f3a432071501cf0f041a60b82d4a.png" src="../_images/382939d8aa8ac952cf5dce830e11e6c29846f3a432071501cf0f041a60b82d4a.png" />
+</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">  &quot;contents&quot;:[</span>
+<span class="s1">    {</span>
+<span class="s1">      &quot;parts&quot;:[</span>
+<span class="s1">        {&quot;text&quot;: &quot;What is this picture?&quot;},</span>
+<span class="s1">        {</span>
+<span class="s1">          &quot;inline_data&quot;: {</span>
+<span class="s1">            &quot;mime_type&quot;:&quot;image/jpeg&quot;,</span>
+<span class="s1">            &quot;data&quot;: &quot;&#39;</span><span class="k">$(</span>base64<span class="w"> </span>-w0<span class="w"> </span>image_scones.jpg<span class="k">)</span><span class="s1">&#39;&quot;</span>
+<span class="s1">          }</span>
+<span class="s1">        }</span>
+<span class="s1">      ]</span>
+<span class="s1">    }</span>
+<span class="s1">  ]</span>
+<span class="s1">}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>request.json
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+echo &#39;{
+  &quot;contents&quot;:[
+    {
+      &quot;parts&quot;:[
+        {&quot;text&quot;: &quot;What is this picture?&quot;},
+        {
+          &quot;inline_data&quot;: {
+            &quot;mime_type&quot;:&quot;image/jpeg&quot;,
+            &quot;data&quot;: &quot;&#39;$(base64 -w0 image.jpg)&#39;&quot;
+          }
+        }
+      ]
+    }
+  ]
+}&#39; &gt; request.json
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+curl https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=${API_KEY} \
+        -H &#39;Content-Type: application/json&#39; \
+        -d @request.json 2&gt; /dev/null | grep &quot;text&quot;
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            &quot;text&quot;: &quot; This is a picture of two glass containers with food. Each container has white rice, orange bell peppers, broccoli, and chicken. The chicken appears to be covered in some type of sauce.&quot;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id3">
+<h2>多轮对话（聊天）<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<p>使用 Gemini，您可以跨多个回合建立自由形式的对话。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+curl https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$API_KEY \
+    -H &#39;Content-Type: application/json&#39; \
+    -X POST \
+    -d &#39;{
+      &quot;contents&quot;: [
+        {&quot;role&quot;:&quot;user&quot;,
+         &quot;parts&quot;:[{
+           &quot;text&quot;: &quot;Write the first line of a story about a magic backpack.&quot;}]},
+        {&quot;role&quot;: &quot;model&quot;,
+         &quot;parts&quot;:[{
+           &quot;text&quot;: &quot;In the bustling city of Meadow brook, lived a young girl named Sophie. She was a bright and curious soul with an imaginative mind.&quot;}]},
+        {&quot;role&quot;: &quot;user&quot;,
+         &quot;parts&quot;:[{
+           &quot;text&quot;: &quot;Can you set it in a quiet village in 1600s France?&quot;}]},
+      ]
+    }&#39; 2&gt; /dev/null | grep &quot;text&quot;
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            &quot;text&quot;: &quot;In the quaint village of Verdigny, nestled amidst the rolling hills of 17th-century France, lived a young girl named Estelle. With her rosy cheeks and sparkling eyes, she was known for her insatiable curiosity and adventurous spirit.&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意：gemini-pro-vision 模型（用于文本和图像输入）尚未针对多轮对话进行优化。确保在聊天用例中使用 Gemini-pro 和纯文本输入。</p>
+</div>
+</section>
+<section id="id4">
+<h2>模型配置<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<p>您发送到模型的每个提示都包含控制模型如何生成响应的参数值。该模型可以针对不同的参数值生成不同的结果。了解有关<a class="reference internal" href="concepts.html#model-parameters"><span class="std std-ref">模型参数</span></a>的更多信息。</p>
+<p>此外，您还可以使用安全设置来调整获得可能被认为有害的响应的可能性。默认情况下，安全设置会阻止所有维度上具有中度和/或高概率不安全内容的内容。了解有关<a class="reference internal" href="safety_setting_gemini.html"><span class="doc std std-doc">安全设置</span></a>的更多信息。</p>
+<p>以下示例指定<code class="docutils literal notranslate"><span class="pre">generateContent</span></code>方法的所有参数的值。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+curl https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$API_KEY \
+    -H &#39;Content-Type: application/json&#39; \
+    -X POST \
+    -d &#39;{
+        &quot;contents&quot;: [{
+            &quot;parts&quot;:[
+                {&quot;text&quot;: &quot;Write a story about a magic backpack.&quot;}
+            ]
+        }],
+        &quot;safetySettings&quot;: [
+            {
+                &quot;category&quot;: &quot;HARM_CATEGORY_DANGEROUS_CONTENT&quot;,
+                &quot;threshold&quot;: &quot;BLOCK_ONLY_HIGH&quot;
+            }
+        ],
+        &quot;generationConfig&quot;: {
+            &quot;stopSequences&quot;: [
+                &quot;Title&quot;
+            ],
+            &quot;temperature&quot;: 1.0,
+            &quot;maxOutputTokens&quot;: 800,
+            &quot;topP&quot;: 0.8,
+            &quot;topK&quot;: 10
+        }
+    }&#39;  2&gt; /dev/null | grep &quot;text&quot;
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            &quot;text&quot;: &quot;In a bustling city where skyscrapers pierced the sky, a young boy named Ethan stumbled upon a secret that would change his life forever. As he walked home from school one day, he noticed a worn-out backpack lying forgotten on a park bench. Curiosity sparked within him, so he cautiously picked it up and peered inside. To his astonishment, it was filled with an assortment of peculiar items that seemed to possess an extraordinary aura.\n\nEthan&#39;s eyes widened as he pulled out a glowing orb that shimmered like a distant star. A gentle warmth emanated from it, enveloping his hand in a comforting embrace. As he turned it over, he discovered intricate symbols etched into its surface, pulsating with a mysterious energy.\n\nNext, he found a silver locket that whispered forgotten tales when opened. Each delicate page held images of faraway lands, mythical creatures, and forgotten civilizations. The locket seemed to possess a memory of its own, transporting Ethan to realms beyond his imagination.\n\nIntrigued, Ethan reached for a weathered journal filled with cryptic notes and diagrams. As he flipped through its pages, he noticed strange equations and intricate sketches that seemed to hold the secrets of ancient civilizations. The more he read, the more he felt drawn into a world of forgotten knowledge and hidden mysteries.\n\nBut the most captivating discovery was a small, unassuming key that emitted a faint hum. Ethan couldn&#39;t shake the feeling that it held immense power, but its purpose remained unknown. As he slipped it into his pocket, he felt a surge of excitement and anticipation.\n\nFrom that day forward, Ethan&#39;s life was forever transformed. The magic backpack became his trusted companion, accompanying him on countless adventures. With the glowing orb, he illuminated dark corners and discovered hidden treasures. The locket transported him to distant realms, where he met fantastical creatures and learned forgotten wisdom. The journal unlocked secrets of the past, guiding him through ancient ruins and revealing hidden pathways.\n\nAs Ethan grew older, he used the magic backpack to make a difference in the world. He shared its secrets with those in need, bringing light to dark places and spreading joy wherever he went. The backpack became a symbol of hope and wonder, inspiring others to believe in the extraordinary and embrace the unknown.\n\nAnd so, the story of Ethan and his magic backpack became a legend passed down through generations. It reminded people that magic exists in the most unexpected places and that sometimes, all it takes is a curious heart and an open mind to discover it.&quot;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id5">
+<h2>流式生成内容<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
+<p>默认情况下，模型在完成整个生成过程后返回响应。您可以通过不等待整个结果，而是使用流处理部分结果来实现更快的交互。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+curl https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:streamGenerateContent?key=${API_KEY} \
+        -H &#39;Content-Type: application/json&#39; \
+        --no-buffer \
+        -d &#39;{ &quot;contents&quot;:[{&quot;parts&quot;:[{&quot;text&quot;: &quot;Write long a story about a magic backpack.&quot;}]}]}&#39; \
+        2&gt; /dev/null | grep &quot;text&quot;
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            &quot;text&quot;: &quot;Once upon a time, in a world where magic was hidden within the folds of&quot;
+            &quot;text&quot;: &quot; reality, there lived a young and imaginative girl named Luna. Her eyes sparkled with dreams and her mind raced with stories, always searching for adventure.\n\nOne&quot;
+            &quot;text&quot;: &quot; day, as Luna set off on her daily journey to school, she stumbled upon a hidden antique shop tucked away in the corner of a bustling street. Its windows were filled with an array of forgotten treasures, and Luna couldn&#39;t resist stepping inside.\n\nAmong the shelves lined with curious artifacts and trinkets, Luna&#39;&quot;
+            &quot;text&quot;: &quot;s eyes caught sight of an old, worn-out backpack resting in a dusty corner. Its leather was cracked and weathered, and its straps hung loose and limp. Yet, there was something about the backpack that drew Luna in.\n\nAs she reached out to touch it, the air around Luna seemed to shimmer. To her astonishment, the backpack suddenly came to life, its faded color bursting into vibrant hues and its worn-out fabric mending itself before her eyes. It was as if the backpack had been waiting for Luna to find it.\n\nLuna carefully picked up the backpack and slipped it on her shoulders. Immediately, she felt a surge&quot;
+            &quot;text&quot;: &quot; of energy coursing through her. The backpack felt lighter than air, and she discovered that it possessed remarkable powers.\n\nWithin the confines of the backpack, Luna found an endless realm of wonders. It contained a vast library of books, each page filled with tales of distant lands and forgotten histories. It held an art studio, where she could create beautiful paintings and sculptures with just a thought. And beneath its flap, there was a portal that could transport Luna to faraway places, all with a mere wish.\n\nAt first, Luna kept her newfound treasure a secret, exploring its wonders in the privacy of her room. But as days turned into weeks, she realized that she couldn&#39;t contain her joy any longer. She began taking the backpack with her everywhere she went, its presence enhancing every aspect of her life.\n\nLuna&#39;s ordinary school days transformed into extraordinary adventures. She traveled through time, visiting ancient civilizations and meeting historical figures. She explored hidden worlds, where she encountered mythical creatures and discovered long-lost treasures. And with her trusty backpack by her side, she always found a way to help those in need.\n\nHowever, as Luna&#39;s fame grew, so did the envy and suspicion of others. Some believed that she was using dark magic, while others&quot;
+            &quot;text&quot;: &quot; thought she was simply a charlatan. But Luna refused to let these accusations stop her from sharing the wonders of the backpack with the world.\n\nOne day, Luna decided to organize a grand event in the town square, inviting everyone to witness the magic of her backpack. As she stepped onto the stage, backpack in tow, she felt a surge of both excitement and trepidation.\n\nWith a deep breath, Luna opened the backpack, revealing its myriad wonders to the astonished crowd. Books floated through the air, paintings came to life, and music filled the atmosphere. Luna transported people to faraway lands and brought back souvenirs from her travels.\n\nAt first, the crowd was skeptical, but as they witnessed the undeniable magic before their eyes, their doubts turned to amazement. Luna&#39;s backpack had the power to ignite wonder in even the most jaded hearts, reminding them of the boundless possibilities that lie within the world of imagination.\n\nFrom that day forward, Luna became known as the \&quot;Guardian of Wonders.\&quot; People came from far and wide to witness the magic of her backpack, and to share their own stories and dreams with Luna. And as the years passed, the backpack continued to be a source of joy and inspiration for generations to come.\n\nIn the end, Luna realized that the true magic of the backpack lay not in its ability to transport her to distant lands or to fulfill her every desire. It was the power to connect people, to spark curiosity, and to remind them that the world is a vast and wondrous place, filled with infinite possibilities. And so, Luna continued to share the backpack&#39;s magic with the world, leaving behind a legacy of wonder and imagination that would last forever.&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意：您将需要一个流式 json 解析器来处理此问题，而无需先读取整个流。</p>
+</div>
+</section>
+<section id="id6">
+<h2>计数代币<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h2>
+<p>使用长提示时，在将任何内容发送到模型之前计算令牌可能会很有用。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+curl https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:countTokens?key=$API_KEY \
+    -H &#39;Content-Type: application/json&#39; \
+    -X POST \
+    -d &#39;{
+      &quot;contents&quot;: [{
+        &quot;parts&quot;:[{
+          &quot;text&quot;: &quot;Write a story about a magic backpack.&quot;}]}]}&#39; 2&gt; /dev/null
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{
+  &quot;totalTokens&quot;: 8
+}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id7">
+<h2>嵌入<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
+<p>嵌入是一种用于将信息表示为数组中的浮点数列表的技术。使用 Gemini，您可以以矢量化形式表示文本（单词、句子和文本块），从而更轻松地比较和对比嵌入。例如，共享相似主题或情感的两个文本应该具有相似的嵌入，这可以通过余弦相似度等数学比较技术来识别。</p>
+<p>将<code class="docutils literal notranslate"><span class="pre">embedding-001</span></code>模型与<code class="docutils literal notranslate"><span class="pre">embedContents</span></code>或<code class="docutils literal notranslate"><span class="pre">batchEmbedContents</span></code>结合使用：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+curl https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent?key=$API_KEY \
+    -H &#39;Content-Type: application/json&#39; \
+    -X POST \
+    -d &#39;{
+        &quot;model&quot;: &quot;models/embedding-001&quot;,
+        &quot;content&quot;: {
+        &quot;parts&quot;:[{
+          &quot;text&quot;: &quot;Write a story about a magic backpack.&quot;}]} }&#39; 2&gt; /dev/null | head
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{
+  &quot;embedding&quot;: {
+    &quot;values&quot;: [
+      0.008624583,
+      -0.030451821,
+      -0.042496547,
+      -0.029230341,
+      0.05486475,
+      0.006694871,
+      0.004025645,
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+curl https://generativelanguage.googleapis.com/v1beta/models/embedding-001:batchEmbedContents?key=$API_KEY \
+    -H &#39;Content-Type: application/json&#39; \
+    -X POST \
+    -d &#39;{
+      &quot;requests&quot;: [{
+        &quot;model&quot;: &quot;models/embedding-001&quot;,
+        &quot;content&quot;: {
+        &quot;parts&quot;:[{
+          &quot;text&quot;: &quot;Write a story about a magic backpack.&quot;}]} }]}&#39; 2&gt; /dev/null | head
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{
+  &quot;embeddings&quot;: [
+    {
+      &quot;values&quot;: [
+        0.008624583,
+        -0.030451821,
+        -0.042496547,
+        -0.029230341,
+        0.05486475,
+        0.006694871,
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id8">
+<h2>模型信息<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+<section id="id9">
+<h3>获取模型信息<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h3>
+<p>如果您获取模型的 URL，API 将使用 get 方法返回有关该模型的信息，例如版本、显示名称、输入令牌限制等。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+curl https://generativelanguage.googleapis.com/v1beta/models/gemini-pro?key=$API_KEY
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   345    0   345    0     0    406      0 --:--:-- --:--:-- --:--:--   405
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{
+  &quot;name&quot;: &quot;models/gemini-pro&quot;,
+  &quot;version&quot;: &quot;001&quot;,
+  &quot;displayName&quot;: &quot;Gemini Pro&quot;,
+  &quot;description&quot;: &quot;The best model for scaling across a wide range of tasks&quot;,
+  &quot;inputTokenLimit&quot;: 30720,
+  &quot;outputTokenLimit&quot;: 2048,
+  &quot;supportedGenerationMethods&quot;: [
+    &quot;generateContent&quot;,
+    &quot;countTokens&quot;
+  ],
+  &quot;temperature&quot;: 0.9,
+  &quot;topP&quot;: 1,
+  &quot;topK&quot;: 1
+}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id10">
+<h2>罗列模型<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h2>
+<p>如果您获取模型目录，它将使用 list 方法列出通过 API 可用的所有模型，包括 Gemini 和 PaLM 系列模型。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+curl https://generativelanguage.googleapis.com/v1beta/models?key=$API_KEY &gt; response_list_models.json
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  2938    0  2938    0     0   4087      0 --:--:-- --:--:-- --:--:--  4086
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+cat response_list_models.json
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{
+  &quot;models&quot;: [
+    {
+      &quot;name&quot;: &quot;models/chat-bison-001&quot;,
+      &quot;version&quot;: &quot;001&quot;,
+      &quot;displayName&quot;: &quot;PaLM 2 Chat (Legacy)&quot;,
+      &quot;description&quot;: &quot;A legacy text-only model optimized for chat conversations&quot;,
+      &quot;inputTokenLimit&quot;: 4096,
+      &quot;outputTokenLimit&quot;: 1024,
+      &quot;supportedGenerationMethods&quot;: [
+        &quot;generateMessage&quot;,
+        &quot;countMessageTokens&quot;
+      ],
+      &quot;temperature&quot;: 0.25,
+      &quot;topP&quot;: 0.95,
+      &quot;topK&quot;: 40
+    },
+    {
+      &quot;name&quot;: &quot;models/text-bison-001&quot;,
+      &quot;version&quot;: &quot;001&quot;,
+      &quot;displayName&quot;: &quot;PaLM 2 (Legacy)&quot;,
+      &quot;description&quot;: &quot;A legacy model that understands text and generates text as an output&quot;,
+      &quot;inputTokenLimit&quot;: 8196,
+      &quot;outputTokenLimit&quot;: 1024,
+      &quot;supportedGenerationMethods&quot;: [
+        &quot;generateText&quot;,
+        &quot;countTextTokens&quot;,
+        &quot;createTunedTextModel&quot;
+      ],
+      &quot;temperature&quot;: 0.7,
+      &quot;topP&quot;: 0.95,
+      &quot;topK&quot;: 40
+    },
+    {
+      &quot;name&quot;: &quot;models/embedding-gecko-001&quot;,
+      &quot;version&quot;: &quot;001&quot;,
+      &quot;displayName&quot;: &quot;Embedding Gecko&quot;,
+      &quot;description&quot;: &quot;Obtain a distributed representation of a text.&quot;,
+      &quot;inputTokenLimit&quot;: 1024,
+      &quot;outputTokenLimit&quot;: 1,
+      &quot;supportedGenerationMethods&quot;: [
+        &quot;embedText&quot;,
+        &quot;countTextTokens&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;models/gemini-pro&quot;,
+      &quot;version&quot;: &quot;001&quot;,
+      &quot;displayName&quot;: &quot;Gemini Pro&quot;,
+      &quot;description&quot;: &quot;The best model for scaling across a wide range of tasks&quot;,
+      &quot;inputTokenLimit&quot;: 30720,
+      &quot;outputTokenLimit&quot;: 2048,
+      &quot;supportedGenerationMethods&quot;: [
+        &quot;generateContent&quot;,
+        &quot;countTokens&quot;
+      ],
+      &quot;temperature&quot;: 0.9,
+      &quot;topP&quot;: 1,
+      &quot;topK&quot;: 1
+    },
+    {
+      &quot;name&quot;: &quot;models/gemini-pro-vision&quot;,
+      &quot;version&quot;: &quot;001&quot;,
+      &quot;displayName&quot;: &quot;Gemini Pro Vision&quot;,
+      &quot;description&quot;: &quot;The best image understanding model to handle a broad range of applications&quot;,
+      &quot;inputTokenLimit&quot;: 12288,
+      &quot;outputTokenLimit&quot;: 4096,
+      &quot;supportedGenerationMethods&quot;: [
+        &quot;generateContent&quot;,
+        &quot;countTokens&quot;
+      ],
+      &quot;temperature&quot;: 0.4,
+      &quot;topP&quot;: 1,
+      &quot;topK&quot;: 32
+    },
+    {
+      &quot;name&quot;: &quot;models/embedding-001&quot;,
+      &quot;version&quot;: &quot;001&quot;,
+      &quot;displayName&quot;: &quot;Embedding 001&quot;,
+      &quot;description&quot;: &quot;Obtain a distributed representation of a text.&quot;,
+      &quot;inputTokenLimit&quot;: 2048,
+      &quot;outputTokenLimit&quot;: 1,
+      &quot;supportedGenerationMethods&quot;: [
+        &quot;embedContent&quot;,
+        &quot;countTextTokens&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;models/aqa&quot;,
+      &quot;version&quot;: &quot;001&quot;,
+      &quot;displayName&quot;: &quot;Model that performs Attributed Question Answering.&quot;,
+      &quot;description&quot;: &quot;Model trained to return answers to questions that are grounded in provided sources, along with estimating answerable probability.&quot;,
+      &quot;inputTokenLimit&quot;: 7168,
+      &quot;outputTokenLimit&quot;: 1024,
+      &quot;supportedGenerationMethods&quot;: [
+        &quot;generateAnswer&quot;
+      ],
+      &quot;temperature&quot;: 0.2,
+      &quot;topP&quot;: 1,
+      &quot;topK&quot;: 40
+    }
+  ]
+}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "gemini"
+        },
+        kernelOptions: {
+            name: "gemini",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'gemini'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="python_quickstart.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Gemini API: Python 快速入门</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="gemini_api_overview.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Gemini API 概览</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">设置您的 API 密钥</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-api">Gemini 和基于内容的 API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">纯文本输入</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">文本和图像输入</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">多轮对话（聊天）</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">模型配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">流式生成内容</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">计数代币</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">嵌入</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">模型信息</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">获取模型信息</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">罗列模型</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

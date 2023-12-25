@@ -1,0 +1,940 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Gemini API 概览 &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/gemini_api_overview';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="获取 API 密钥" href="tutorials_setup.html" />
+    <link rel="prev" title="快速入门：使用 REST API 开始使用 Gemini" href="rest_quickstart.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_quickstart.html">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_quickstart.html">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_quickstart.html">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">LLM 概念指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_intro.html">提示设计简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_best_practices.html">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semantic_retriever.html">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_tuning_guidance.html">模型微调指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_quickstart_python_palm.html">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="available_regions.html">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/gemini_api_overview.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/gemini_api_overview.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Gemini API 概览</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">提示数据和设计</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">提示的图片要求</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">提示设计和文本输入</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">生成内容</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">文本和图片输入</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">纯文字输入</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">多轮对话（聊天）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">流式响应</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#embeddings">Embeddings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">后续步骤</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="gemini-api">
+<h1>Gemini API 概览<a class="headerlink" href="#gemini-api" title="Permalink to this headline">#</a></h1>
+<p>借助 Gemini API，您可以使用 Google 提供的最新生成模型。熟悉了该 API 提供的一般功能后，请尝试根据所选语言快速入门，开始进行开发。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意 ：如果您刚开始接触生成式 AI 模型，请访问<a class="reference internal" href="concepts.html"><span class="doc std std-doc">概念指南</span></a>，或开始在 <a class="reference external" href="https://makersuite.google.com/?hl=zh-cn">Google AI Studio</a>中对提示进行原型设计。</p>
+</div>
+<section id="id1">
+<h2>模型<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<p>Gemini 是 Google 开发的一系列多模态生成式 AI 模型。Gemini 模型可以接受提示中的文本和图片（具体取决于您选择的模型变体），并输出文本响应。旧版 PaLM 模型接受纯文本和输出文本响应。</p>
+<p>如需获取更详细的模型信息，请参阅<a class="reference internal" href="models/models.html"><span class="doc std std-doc">模型</span></a>页面。您还可以使用<a class="reference external" href="https://ai.google.dev/api/python/google/generativeai/list_models?hl=zh-cn">list_models</a>方法列出所有可用的模型，然后使用<a class="reference external" href="https://ai.google.dev/api/python/google/generativeai/get_model?hl=zh-cn">get_model</a>方法获取特定模型的元数据。</p>
+</section>
+<section id="id2">
+<h2>提示数据和设计<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>特定的 Gemini 模型同时接受图片和文本数据作为输入。此功能为生成内容、分析数据和解决问题提供了许多其他的可能性。您需要考虑一些限制和要求，包括您所用模型的一般输入令牌限制。如需了解特定模型的令牌限制，请参阅<a class="reference internal" href="models/gemini.html"><span class="doc std std-doc">Gemini 模型</span></a>。</p>
+<section id="id3">
+<h3>提示的图片要求<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+<p>使用图片数据的提示受到以下限制和要求的约束：</p>
+<ul class="simple">
+<li><p>图片必须采用以下任一图片数据 MIME 类型：</p>
+<ul>
+<li><p>PNG - 图片/png</p></li>
+<li><p>JPEG - image/jpeg</p></li>
+<li><p>WEBP - image/webp</p></li>
+<li><p>HEIC - 图片/heic</p></li>
+<li><p>HEIF - image/heif</p></li>
+</ul>
+</li>
+<li><p>最多 16 张图片</p></li>
+<li><p>整个提示（包括图片和文本）不得超过 4MB</p></li>
+<li><p>对图像中的像素数没有具体限制；但是，较大的图像会缩小以适应最大分辨率 (3072 x 3072)，同时保持其原始宽高比。</p></li>
+</ul>
+<p>在提示中使用图片时，请遵循以下建议以获得最佳效果：</p>
+<ul class="simple">
+<li><p>包含一张图片的提示往往能产生更好的结果。</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>提示设计和文本输入<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h3>
+<p>创建有效的提示（即提示工程）是艺术与科学的结合。如需了解有关如何提示的指导，请参阅<a class="reference internal" href="prompt_best_practices.html"><span class="doc std std-doc">提示指南</span></a>；如需了解不同的提示方法，请参阅<a class="reference internal" href="concepts.html#prompt-design-101"><span class="std std-ref">提示 101 </span></a>指南。</p>
+</section>
+</section>
+<section id="id5">
+<h2>生成内容<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
+<p>借助 Gemini API，您可以使用文本和图片数据进行提示，具体取决于您使用的模型变体。例如，您可以通过<code class="docutils literal notranslate"><span class="pre">gemini-pro</span></code>模型使用文本提示生成文本，并使用文本和图片数据向 <code class="docutils literal notranslate"><span class="pre">gemini-pro-vision</span></code>模型发出提示。本部分给出了每种方法的简单代码示例。 如需查看涵盖所有参数的详细示例，请参阅<a class="reference external" href="https://ai.google.dev/api/rest/v1beta/models/generateContent?hl=zh-cn">generateGenerate</a> API 参考文档。</p>
+<section id="id6">
+<h3>文本和图片输入<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
+<p>可以向<code class="docutils literal notranslate"><span class="pre">gemini-pro-vision</span></code>模型发送包含图片的文本提示，以执行与视觉相关的任务。例如，为图片添加说明或识别图片中的内容。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>不能向 gemini-pro-vision 模型发送纯文本提示。请为纯文本提示使用 gemini-pro 模型。</p>
+</div>
+<p>以下代码示例展示了针对每种受支持语言的文本和图片提示的简单实现：</p>
+<div class="tabbed-set docutils">
+<input checked="checked" id="21f4cea2-c5e2-4eb6-9a3f-93d1f6e1fc63" name="056bda43-c329-4515-bfce-933362a54d31" type="radio">
+</input><label class="tabbed-label" for="21f4cea2-c5e2-4eb6-9a3f-93d1f6e1fc63">
+Python</label><div class="tabbed-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">GenerativeModel</span><span class="p">(</span><span class="s1">&#39;gemini-pro-vision&#39;</span><span class="p">)</span>
+
+<span class="n">cookie_picture</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="s1">&#39;mime_type&#39;</span><span class="p">:</span> <span class="s1">&#39;image/png&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;cookie.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+<span class="p">}]</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;Do these look store-bought or homemade?&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gemini-pro-vision&quot;</span><span class="p">,</span>
+    <span class="n">content</span><span class="o">=</span><span class="p">[</span><span class="n">prompt</span><span class="p">,</span> <span class="n">cookie_picture</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>如需查看完整的代码段，请参阅 <a class="reference internal" href="python_quickstart.html"><span class="doc std std-doc">Python 快速入门</span></a>。</p>
+</div>
+<input id="8b8a0af1-401c-421c-8e6a-dfc246f84ebf" name="056bda43-c329-4515-bfce-933362a54d31" type="radio">
+</input><label class="tabbed-label" for="8b8a0af1-401c-421c-8e6a-dfc246f84ebf">
+Go</label><div class="tabbed-content docutils">
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">vmodel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">GenerativeModel</span><span class="p">(</span><span class="s">&quot;gemini-pro-vision&quot;</span><span class="p">)</span>
+
+<span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Join</span><span class="p">(</span><span class="s">&quot;path-to-image&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">imageFile</span><span class="p">))</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">vmodel</span><span class="p">.</span><span class="nx">GenerateContent</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">genai</span><span class="p">.</span><span class="nx">Text</span><span class="p">(</span><span class="s">&quot;Do these look store-bought or homemade?&quot;</span><span class="p">),</span><span class="w"> </span><span class="nx">genai</span><span class="p">.</span><span class="nx">ImageData</span><span class="p">(</span><span class="s">&quot;jpeg&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">))</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅 Go 快速入门。</p>
+</div>
+<input id="0c61c68f-66a4-4a73-9e07-e01c60b49d34" name="056bda43-c329-4515-bfce-933362a54d31" type="radio">
+</input><label class="tabbed-label" for="0c61c68f-66a4-4a73-9e07-e01c60b49d34">
+Node.js</label><div class="tabbed-content docutils">
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">genAI</span><span class="p">.</span><span class="nx">getGenerativeModel</span><span class="p">({</span><span class="w"> </span><span class="nx">model</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;gemini-pro-vision&quot;</span><span class="w"> </span><span class="p">});</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">prompt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Do these look store-bought or homemade?&quot;</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">inlineData</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="nx">Buffer</span><span class="p">.</span><span class="kr">from</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s2">&quot;cookie.png&quot;</span><span class="p">)).</span><span class="nx">toString</span><span class="p">(</span><span class="s2">&quot;base64&quot;</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">mimeType</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;image/png&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">};</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">model</span><span class="p">.</span><span class="nx">generateContent</span><span class="p">([</span><span class="nx">prompt</span><span class="p">,</span><span class="w"> </span><span class="nx">image</span><span class="p">]);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">());</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅 Node.js 快速入门。</p>
+</div>
+<input id="ca8a82bb-b99b-4b3b-916f-03ffd6ea48f4" name="056bda43-c329-4515-bfce-933362a54d31" type="radio">
+</input><label class="tabbed-label" for="ca8a82bb-b99b-4b3b-916f-03ffd6ea48f4">
+Web</label><div class="tabbed-content docutils">
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">genAI</span><span class="p">.</span><span class="nx">getGenerativeModel</span><span class="p">({</span><span class="w"> </span><span class="nx">model</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;gemini-pro-vision&quot;</span><span class="w"> </span><span class="p">});</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">prompt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Do these look store-bought or homemade?&quot;</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">inlineData</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="nx">base64EncodedImage</span><span class="w"> </span><span class="cm">/* see JavaScript quickstart for details */</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">mimeType</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;image/png&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">};</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">model</span><span class="p">.</span><span class="nx">generateContent</span><span class="p">([</span><span class="nx">prompt</span><span class="p">,</span><span class="w"> </span><span class="nx">image</span><span class="p">]);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">());</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅 JavaScript 快速入门。</p>
+</div>
+<input id="98130c4a-2d0f-480e-b46b-833f159016ab" name="056bda43-c329-4515-bfce-933362a54d31" type="radio">
+</input><label class="tabbed-label" for="98130c4a-2d0f-480e-b46b-833f159016ab">
+Swift</label><div class="tabbed-content docutils">
+<div class="highlight-swift notranslate"><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">model</span> <span class="p">=</span> <span class="n">GenerativeModel</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="s">&quot;gemini-pro-vision&quot;</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">:</span> <span class="s">&quot;API_KEY&quot;</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">cookieImage</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(...)</span>
+<span class="kd">let</span> <span class="nv">prompt</span> <span class="p">=</span> <span class="s">&quot;Do these look store-bought or homemade?&quot;</span>
+
+<span class="kd">let</span> <span class="nv">response</span> <span class="p">=</span> <span class="k">try</span> <span class="k">await</span> <span class="n">model</span><span class="p">.</span><span class="n">generateContent</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">cookieImage</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅 Swift 快速入门。</p>
+</div>
+<input id="7218f3f2-4b42-4584-a525-cdc032c50905" name="056bda43-c329-4515-bfce-933362a54d31" type="radio">
+</input><label class="tabbed-label" for="7218f3f2-4b42-4584-a525-cdc032c50905">
+Android</label><div class="tabbed-content docutils">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">val</span><span class="w"> </span><span class="n">generativeModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerativeModel</span><span class="p">(</span>
+<span class="w">    </span><span class="n">modelName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;gemini-pro-vision&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">apiKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BuildConfig</span><span class="p">.</span><span class="n">apiKey</span>
+<span class="p">)</span>
+
+<span class="n">val</span><span class="w"> </span><span class="n">cookieImage</span><span class="o">:</span><span class="w"> </span><span class="n">Bitmap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="c1">// ...</span>
+<span class="n">val</span><span class="w"> </span><span class="n">inputContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">content</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">image</span><span class="p">(</span><span class="n">cookieImage</span><span class="p">)</span>
+<span class="w">  </span><span class="n">text</span><span class="p">(</span><span class="s">&quot;Do these look store-bought or homemade?&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">val</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">generativeModel</span><span class="p">.</span><span class="n">generateContent</span><span class="p">(</span><span class="n">inputContent</span><span class="p">)</span>
+<span class="n">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅Android 快速入门。</p>
+</div>
+<input id="88cdf679-dbaa-418f-a161-943876b657a8" name="056bda43-c329-4515-bfce-933362a54d31" type="radio">
+</input><label class="tabbed-label" for="88cdf679-dbaa-418f-a161-943876b657a8">
+cURL</label><div class="tabbed-content docutils">
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>https://generativelanguage.googleapis.com/v1/models/gemini-pro-vision:GenerateContent?key<span class="o">=</span><span class="si">${</span><span class="nv">API_KEY</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-d<span class="w"> </span>@&lt;<span class="o">(</span>echo<span class="s1">&#39;{</span>
+<span class="s1">          &quot;contents&quot;:[</span>
+<span class="s1">            { &quot;parts&quot;:[</span>
+<span class="s1">                {&quot;text&quot;: &quot;Do these look store-bought or homemade?&quot;},</span>
+<span class="s1">                { &quot;inlineData&quot;: {</span>
+<span class="s1">                    &quot;mimeType&quot;: &quot;image/png&quot;,</span>
+<span class="s1">                    &quot;data&quot;: &quot;&#39;</span><span class="k">$(</span>base64<span class="w"> </span>-w0<span class="w"> </span>cookie.png<span class="k">)</span><span class="s1">&#39;&quot;</span>
+<span class="s1">                  }</span>
+<span class="s1">                }</span>
+<span class="s1">              ]</span>
+<span class="s1">            }</span>
+<span class="s1">          ]</span>
+<span class="s1">         }&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅 REST API 快速入门。</p>
+</div>
+</div>
+</section>
+<section id="id7">
+<h3>纯文字输入<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h3>
+<p>Gemini API 还可处理纯文字输入。借助此功能，您可以执行自然语言处理 (NLP) 任务，例如文本补全和摘要。</p>
+<p>以下代码示例针对每种受支持的语言展示了一种纯文本提示的简单实现方法：</p>
+<div class="tabbed-set docutils">
+<input checked="checked" id="2ac910ea-1e0e-491a-8b3d-f6e95a739033" name="fb796dd0-1602-43aa-baf8-147fcce9cf44" type="radio">
+</input><label class="tabbed-label" for="2ac910ea-1e0e-491a-8b3d-f6e95a739033">
+Python</label><div class="tabbed-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;Write a story about a magic backpack.&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">generate_content</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gemini-pro&quot;</span><span class="p">,</span>
+    <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>如需查看完整的代码段，请参阅 <a class="reference internal" href="python_quickstart.html"><span class="doc std std-doc">Python 快速入门</span></a>。</p>
+</div>
+<input id="698e3b37-e3dc-4ded-a9dd-e1be7e6f37c9" name="fb796dd0-1602-43aa-baf8-147fcce9cf44" type="radio">
+</input><label class="tabbed-label" for="698e3b37-e3dc-4ded-a9dd-e1be7e6f37c9">
+Go</label><div class="tabbed-content docutils">
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">ctx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">()</span>
+<span class="nx">client</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">genai</span><span class="p">.</span><span class="nx">NewClient</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">option</span><span class="p">.</span><span class="nx">WithAPIKey</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;API_KEY&quot;</span><span class="p">)))</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="k">defer</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+
+<span class="nx">model</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">GenerativeModel</span><span class="p">(</span><span class="s">&quot;gemini-pro&quot;</span><span class="p">)</span>
+<span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">model</span><span class="p">.</span><span class="nx">GenerateContent</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">genai</span><span class="p">.</span><span class="nx">Text</span><span class="p">(</span><span class="s">&quot;Write a story about a magic backpack.&quot;</span><span class="p">))</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅 Go 快速入门。</p>
+</div>
+<input id="c0eb2a0c-a311-4e27-a07f-5f1711cf5346" name="fb796dd0-1602-43aa-baf8-147fcce9cf44" type="radio">
+</input><label class="tabbed-label" for="c0eb2a0c-a311-4e27-a07f-5f1711cf5346">
+Node.js</label><div class="tabbed-content docutils">
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">genAI</span><span class="p">.</span><span class="nx">getGenerativeModel</span><span class="p">({</span><span class="w"> </span><span class="nx">model</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;gemini-pro&quot;</span><span class="w"> </span><span class="p">});</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">prompt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Write a story about a magic backpack.&quot;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">model</span><span class="p">.</span><span class="nx">generateContent</span><span class="p">(</span><span class="nx">prompt</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">());</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅 Node.js 快速入门。</p>
+</div>
+<input id="58178a3b-a1f7-4717-8966-ab69c1ebf970" name="fb796dd0-1602-43aa-baf8-147fcce9cf44" type="radio">
+</input><label class="tabbed-label" for="58178a3b-a1f7-4717-8966-ab69c1ebf970">
+Web</label><div class="tabbed-content docutils">
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">genAI</span><span class="p">.</span><span class="nx">getGenerativeModel</span><span class="p">({</span><span class="w"> </span><span class="nx">model</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;gemini-pro&quot;</span><span class="w"> </span><span class="p">});</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">prompt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Write a story about a magic backpack.&quot;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">model</span><span class="p">.</span><span class="nx">generateContent</span><span class="p">(</span><span class="nx">prompt</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">());</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅 JavaScript 快速入门。</p>
+</div>
+<input id="ab437f6e-3a8f-4361-ac0e-5ee4ea9822f8" name="fb796dd0-1602-43aa-baf8-147fcce9cf44" type="radio">
+</input><label class="tabbed-label" for="ab437f6e-3a8f-4361-ac0e-5ee4ea9822f8">
+Swift</label><div class="tabbed-content docutils">
+<div class="highlight-swift notranslate"><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">model</span> <span class="p">=</span> <span class="n">GenerativeModel</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="s">&quot;gemini-pro&quot;</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">:</span> <span class="s">&quot;API_KEY&quot;</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">prompt</span> <span class="p">=</span> <span class="s">&quot;Write a story about a magic backpack.&quot;</span>
+
+<span class="kd">let</span> <span class="nv">response</span> <span class="p">=</span> <span class="k">try</span> <span class="k">await</span> <span class="n">model</span><span class="p">.</span><span class="n">generateContent</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅 Swift 快速入门。</p>
+</div>
+<input id="d405751c-41d3-4a70-8f49-b0585e2f2931" name="fb796dd0-1602-43aa-baf8-147fcce9cf44" type="radio">
+</input><label class="tabbed-label" for="d405751c-41d3-4a70-8f49-b0585e2f2931">
+Android</label><div class="tabbed-content docutils">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">val</span><span class="w"> </span><span class="n">generativeModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerativeModel</span><span class="p">(</span>
+<span class="w">    </span><span class="n">modelName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;gemini-pro&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">apiKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BuildConfig</span><span class="p">.</span><span class="n">apiKey</span>
+<span class="p">)</span>
+
+<span class="n">val</span><span class="w"> </span><span class="n">prompt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Write a story about a magic backpack.&quot;</span>
+<span class="n">val</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">generativeModel</span><span class="p">.</span><span class="n">generateContent</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+<span class="n">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅Android 快速入门。</p>
+</div>
+<input id="8a610bb9-b1e7-4e83-adda-46a85dbf3d77" name="fb796dd0-1602-43aa-baf8-147fcce9cf44" type="radio">
+</input><label class="tabbed-label" for="8a610bb9-b1e7-4e83-adda-46a85dbf3d77">
+cURL</label><div class="tabbed-content docutils">
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key<span class="o">=</span><span class="nv">$API_KEY</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-d<span class="w"> </span><span class="s1">&#39;{ &quot;contents&quot;:[</span>
+<span class="s1">      { &quot;parts&quot;:[{&quot;text&quot;: &quot;Write a story about a magic backpack&quot;}]}</span>
+<span class="s1">    ]</span>
+<span class="s1">}&#39;</span>
+</pre></div>
+</div>
+<p>如需查看完整示例，请参阅 REST API 快速入门。</p>
+</div>
+</div>
+<p>因为主要是Python语言，以下示例只展示Python代码的示例，更多的coding语言请移步到，<a class="reference external" href="https://ai.google.dev/docs/gemini_api_overview">官方文档Gemini api</a>查看</p>
+</section>
+<section id="id8">
+<h3>多轮对话（聊天）<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h3>
+<p>可以使用 Gemini API 为您的用户打造互动式聊天体验。 借助此 API 的聊天功能，您可以收集多轮问题和回复，从而支持用户逐步寻找答案，或获得有关多部分问题的帮助。此功能非常适合需要持续通信的应用，例如聊天机器人、互动式导师或客户服务助理。<br />
+以下代码示例展示了针对每种受支持的语言聊天互动的简单实现：</p>
+<div class="tabbed-set docutils">
+<input checked="checked" id="93e63b92-c339-4afa-94ac-9e120b17f9fa" name="c83b9cc5-618b-492c-9a79-4a4cabcc3b1b" type="radio">
+</input><label class="tabbed-label" for="93e63b92-c339-4afa-94ac-9e120b17f9fa">
+Python</label><div class="tabbed-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">GenerativeModel</span><span class="p">(</span><span class="s1">&#39;gemini-pro&#39;</span><span class="p">)</span>
+<span class="n">chat</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">start_chat</span><span class="p">(</span><span class="n">history</span><span class="o">=</span><span class="p">[])</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span>
+    <span class="s2">&quot;Pretend you</span><span class="se">\&#39;</span><span class="s2">re a snowman and stay in character for each response.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span>
+    <span class="s2">&quot;What</span><span class="se">\&#39;</span><span class="s2">s your favorite season of the year?&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>如需查看完整的代码段，请参阅 <a class="reference internal" href="python_quickstart.html"><span class="doc std std-doc">Python 快速入门</span></a>。</p>
+</div>
+</div>
+</section>
+<section id="id9">
+<h3>流式响应<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h3>
+<p>Gemini API 提供了另一种从生成式 AI 模型接收响应的方式：以数据流的形式接收。流式响应在模型生成增量数据时，会将这些数据发送回您的应用。借助此功能，您可以快速响应用户请求以显示进度，并打造更具互动性的体验。</p>
+<p>使用 Gemini 模型进行自由形式提示和聊天时可以使用流式响应。以下代码示例展示了如何针对每种受支持的语言请求针对提示的流式响应：</p>
+<div class="tabbed-set docutils">
+<input checked="checked" id="6935589e-021e-45ee-a005-f84fd65ffba9" name="ff7ca1c4-a4f1-491e-b44d-a31f9896d429" type="radio">
+</input><label class="tabbed-label" for="6935589e-021e-45ee-a005-f84fd65ffba9">
+Python</label><div class="tabbed-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;Write a story about a magic backpack.&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">stream_generate_content</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;models/gemini-pro&quot;</span><span class="p">,</span>
+    <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span>
+<span class="p">)</span>
+
+</pre></div>
+</div>
+<p>如需查看完整的代码段，请参阅 <a class="reference internal" href="python_quickstart.html"><span class="doc std std-doc">Python 快速入门</span></a>。</p>
+</div>
+</div>
+</section>
+</section>
+<section id="embeddings">
+<h2>Embeddings<a class="headerlink" href="#embeddings" title="Permalink to this headline">#</a></h2>
+<p>Gemini API 中的嵌入服务可为字词、短语和句子生成先进的嵌入。生成的嵌入随后可用于 NLP 任务，例如语义搜索、文本分类和聚类等等。请参阅<a class="reference internal" href="embeddings_guide.html"><span class="doc std std-doc">嵌入指南</span></a>，了解什么是嵌入以及嵌入服务的一些关键用例，以帮助您入门。</p>
+</section>
+<section id="id10">
+<h2>后续步骤<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>参阅 <a class="reference internal" href="ai_studio_quickstart.html"><span class="doc std std-doc">Google AI Studio 快速入门</span></a>，开始使用 Google AI Studio 界面。</p></li>
+<li><p>查看 <a class="reference internal" href="python_quickstart.html"><span class="doc std std-doc">Python</span></a>、Go 或 Node.js 快速入门，试用 Gemini API 的服务器端访问- 方式。</p></li>
+<li><p>参考 <span class="xref myst">Web 快速入门</span>，开始构建 Web 应用。</p></li>
+<li><p>按照 <span class="xref myst">Swift 快速入门</span>或 <span class="xref myst">Android 快速入门d</span>开始构建移动应用。</p></li>
+<li><p>如果您已是Google Cloud用户（或者希望在 Vertex 上使用 Gemini 以利用强大的Google Cloud 生态系统），请参阅 <a class="reference external" href="https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview?hl=zh-cn">Google Cloud 上的 Genmini</a>了解详情。</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="rest_quickstart.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">快速入门：使用 REST API 开始使用 Gemini</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tutorials_setup.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">获取 API 密钥</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">提示数据和设计</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">提示的图片要求</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">提示设计和文本输入</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">生成内容</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">文本和图片输入</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">纯文字输入</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">多轮对话（聊天）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">流式响应</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#embeddings">Embeddings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">后续步骤</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

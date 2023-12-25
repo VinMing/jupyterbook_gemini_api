@@ -1,0 +1,881 @@
+
+
+<!DOCTYPE html>
+
+
+<html data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Google AI Studio 快速入门 &#8212; Gemini API Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content_sources/ai_studio_quickstart';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Gemini API 教程" href="tutorials.html" />
+    <link rel="prev" title="Gemini API 使用入门" href="welcome.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-light" alt="Gemini API Tutorial - Home"/>
+    <script>document.write(`<img src="../_static/google_ai_developers_logo.jpg" class="logo__image only-dark" alt="Gemini API Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    欢迎来到 Gemini api 教程文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">开始</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Gemini API 使用入门</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Google AI Studio 快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">快速入门</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Gemini API 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_quickstart.html">Gemini API: Python 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_quickstart.html">快速入门：使用 REST API 开始使用 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gemini API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gemini_api_overview.html">Gemini API 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_setup.html">获取 API 密钥</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_versions.html">API 版本说明</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="models/models_index.html">模型</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/models.html">适用于 Gemini API 的 AI 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/gemini.html">Gemini 模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/palm.html">PaLM 2 模型(旧版)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="safety_setting_gemini.html">安全设置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety_guidance.html">安全指导</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloads.html">下载或安装库以访问 Gemini</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">LLM 概念指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_intro.html">提示设计简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_best_practices.html">提示设计策略</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multimodal_concepts.html">多模态概念</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semantic_retriever.html">语义检索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oauth_quickstart.html">OAuth 身份验证</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">嵌入</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="embeddings_guide.html">嵌入指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">使用嵌入进行异常检测</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clustering_with_embeddings.html">使用 t-SNE 可视化嵌入</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="doc_search_emb.html">使用嵌入进行文档搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_text_classifier_embeddings.html">使用嵌入训练文本分类器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectordb_with_chroma.html">使用 ChromaDB 记录问答</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">调试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace_auth_quickstart.html">Workspace 访问Google AI Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">问题排查指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_studio_faqs.html">Google AI Studio 常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="increase_quota.html">申请增加配额</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">社区</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="discord.html">Discord</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">微调</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_tuning_guidance.html">模型微调指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_quickstart_python_palm.html">PaLM API：使用 Python 微调快速入门</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">法律法规</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="available_regions.html">可用地区</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/VinMing/tutorial_gemini_api/issues/new?title=Issue%20on%20page%20%2Fcontent_sources/ai_studio_quickstart.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content_sources/ai_studio_quickstart.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Google AI Studio 快速入门</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">提示和模型调整</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#freeform-example">自由格式提示示例：详细了解建筑物</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">第1步：使用文本和图片创建提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">第2步：在提示符中添加可替换的变量</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">第3步：用模型参数进行实验</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">第4步：后续步骤</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structured-example">结构化提示示例：构建商品文案生成器</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">第1步：构建结构化提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">第2步：添加示例</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">第3步：测试提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">第4步：后续步骤</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chat-example">聊天提示示例：构建自定义聊天应用</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">第1步：创建聊天提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">第2步：训练聊天机器人更好地聊天</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">第3步：用模型参数进行实验</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">第4步：后续步骤</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">深入阅读</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="google-ai-studio">
+<h1>Google AI Studio 快速入门<a class="headerlink" href="#google-ai-studio" title="Permalink to this headline">#</a></h1>
+<p><a class="reference external" href="https://makersuite.google.com/?hl=zh-cn">Google AI Studio</a> 是一款基于浏览器的 IDE，用于使用生成模型进行原型设计。通过 Google AI Studio，您可以快速试用模型并试验不同的提示。构建好满意的功能后，您可以将其导出为您偏好的编程语言（由 <a class="reference internal" href="python_quickstart.html"><span class="doc std std-doc">Gemini API</span></a> 提供支持）编写代码。</p>
+<!-- ![image](https://ai.google.dev/static/tutorials/images/ais-app.png?hl=zh-cn) -->
+<figure class="align-default" id="id18">
+<img alt="../_images/ais-app.png" src="../_images/ais-app.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">主界面</span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<section id="id1">
+<h2>提示和模型调整<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<p>Google AI Studio 提供了多种针对不同使用场景设计的提示界面：</p>
+<ul class="simple">
+<li><p><strong>自由格式提示</strong> - 这些提示提供开放式提示体验，可用于生成内容以及对说明的响应。您可以同时使用图片和文本数据来提交提示。<a class="reference internal" href="#freeform-example"><span class="std std-ref">了解详情-自由格式提示示例：详细了解建筑物</span></a></p></li>
+<li><p><strong>结构化提示</strong> - 这种提示方法可以通过提供一组示例请求和回复来指导模型输出。当您需要更好地控制模型输出的结构时，请使用此方法。<a class="reference internal" href="#structured-example"><span class="std std-ref">了解详情-结构化提示示例：构建商品文案生成器</span></a></p></li>
+<li><p><strong>聊天提示</strong> - 使用聊天提示打造对话体验。 这种提示方法允许多次输入和响应轮流来生成输出。<a class="reference internal" href="#chat-example"><span class="std std-ref">了解详情-聊天提示示例：构建自定义聊天应用</span></a></p></li>
+</ul>
+<p>通过 Google AI Studio，您还可以使用一种称为“调整”的技术来更改模型的行为：</p>
+<ul class="simple">
+<li><p><strong>经调整的模型</strong> - 使用此高级技术提供更多示例，从而改进模型针对特定任务的响应。请注意，调整仅适用于旧版 PaLM 模型。在<strong>设置</strong>中开启<strong>显示旧版模型</strong>选项以启用此提示。 了解详情</p></li>
+</ul>
+</section>
+<section id="freeform-example">
+<span id="id2"></span><h2>自由格式提示示例：详细了解建筑物<a class="headerlink" href="#freeform-example" title="Permalink to this headline">#</a></h2>
+<p>Gemini 的多模态功能可让您结合使用图像和文本来提示模型。例如，您可以使用此功能详细了解图片中显示的建筑物。</p>
+<section id="id3">
+<h3>第1步：使用文本和图片创建提示<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+<p>如需创建多模态提示，请执行以下操作：</p>
+<ol class="arabic simple">
+<li><p>进入 <a class="reference external" href="https://makersuite.google.com/?hl=zh-cn">Google AI Studio</a>。</p></li>
+<li><p>在左侧面板中，依次选择<strong>新建</strong> &gt; <strong>自由格式提示</strong>。</p></li>
+<li><p>在右侧列的<strong>模型</strong>字段中，选择支持图像的模型，例如 <strong>Gemini Pro Vision</strong> 模型。</p></li>
+<li><p>在提示文本区域中，输入以下文本：</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">look</span> <span class="n">at</span> <span class="n">the</span> <span class="n">following</span> <span class="n">picture</span> <span class="ow">and</span> <span class="n">tell</span> <span class="n">me</span> <span class="n">who</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">architect</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>从提示区域上方的<strong>插入</strong>栏中，选择<strong>图片</strong>，然后选择某个建筑物的示例图片。</p></li>
+<li><p>在应用窗口的底部，选择 <strong>Run</strong> 以生成此请求的回复。</p></li>
+</ol>
+<!-- ![image](../statics/freeform_example.jpg) -->
+<figure class="align-default" id="freeform-example-ref">
+<img alt="../_images/freeform_example.jpg" src="../_images/freeform_example.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">自由格式提示 样例效果图</span><a class="headerlink" href="#freeform-example-ref" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="id4">
+<h3>第2步：在提示符中添加可替换的变量<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h3>
+<p>在第 1 步中，您使用固定的文本字符串和图像提示模型。但有时，您希望能够动态更改提示的某些部分。例如，如果您要构建交互式应用，可能需要使用不同的用户输入来修改提示。为此，您可以使用变量将提示参数化。</p>
+<!-- ![image](https://ai.google.dev/static/tutorials/images/add_variable.png?hl=zh-cn) -->
+<figure class="align-default" id="id19">
+<img alt="../_images/add_variable.png" src="../_images/add_variable.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">添加变量</span><a class="headerlink" href="#id19" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>如需向提示添加变量，请执行以下操作：</p>
+<ol class="arabic simple">
+<li><p>选择要在问题中替换的字词或短语。在本例中，请选择文本：<code class="docutils literal notranslate"><span class="pre">who</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">architect</span></code>。</p></li>
+<li><p>从提示上方的 <strong>Insert:</strong> 标头中，选择 <strong><code class="docutils literal notranslate"><span class="pre">&amp;lcub;&amp;lcub;</span> <span class="pre">&amp;rcub;&amp;rcub;</span> <span class="pre">Test</span> <span class="pre">input</span></code></strong>。</p></li>
+<li><p>在提示下方的 <strong>Test your Prompt</strong> 表格中，为您的提示添加一个额外的值，方法是选择 <strong>Add test example</strong> 并输入额外的提示值。您可以随意添加几个新的输入值。</p></li>
+<li><p>在应用窗口的底部，选择 <strong>Run</strong> 以为每个不同的请求生成回复。</p></li>
+</ol>
+</section>
+<section id="id5">
+<h3>第3步：用模型参数进行实验<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h3>
+<p>在对提示进行原型设计时，您还可以在应用右侧试用模型运行设置。以下是需要了解的关键设置：</p>
+<ul class="simple">
+<li><p><strong>模型</strong> - 选择您要回答问题的模型。 如需详细了解可用的模型和功能，请参阅<a class="reference internal" href="models/models_index.html"><span class="doc std std-doc">模型</span></a>。</p></li>
+<li><p><strong>温度</strong> - 控制模型响应可以允许多大程度的随机性。提高此值可让模型生成更意外且更- 创造性的响应。</p></li>
+<li><p><strong>最大输出</strong> - 增加模型为每个请求返回的响应数。此选项能够针对单个提示生成多个- 应，有助于快速测试提示。</p></li>
+<li><p><strong>Safety settings</strong> - 调整用于管理模型响应的安全设置。如需详细了解这些控制措施- 请参阅<a class="reference internal" href="safety_setting_gemini.html"><span class="doc std std-doc">安全设置</span></a>。</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>第4步：后续步骤<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
+<p>现在，您已经为生成式 AI 应用设计了原型，接下来可以保存您的工作或生成代码，以便在您自己的开发环境中使用此提示。</p>
+<p>如需保存您创建的提示，请执行以下操作：</p>
+<ol class="arabic simple">
+<li><p>在 Google AI Studio 应用的右上角，选择<strong>保存</strong>。</p></li>
+<li><p>如果您尚未将应用关联到您的 Google 云端硬盘帐号，请执行此操作。</p></li>
+<li><p>在<strong>保存提示</strong>对话框中，输入<strong>提示名称</strong>和可选的<strong>说明</strong>，然后选择<strong>保存</strong>。</p></li>
+</ol>
+<p>如需将您创建的提示以代码的形式导出，请执行以下操作：</p>
+<ol class="arabic simple">
+<li><p>在 Google AI Studio 应用的右上角，选择<strong>获取代码</strong>。</p></li>
+<li><p>选择一个编程语言标签页。</p></li>
+<li><p>选择<strong>复制</strong>以将此代码复制到剪贴板。</p></li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>注意：您需要使用 API 密钥才能在 Google AI Studio 之外运行提示代码，因此请务必创建一个密钥，并将其包含在提示代码中。<br />
+注意：请将 API 密钥视为密码并妥善保护。请勿将您的密钥嵌入到公开发布的代码中。</p>
+</div>
+</section>
+</section>
+<section id="structured-example">
+<span id="id7"></span><h2>结构化提示示例：构建商品文案生成器<a class="headerlink" href="#structured-example" title="Permalink to this headline">#</a></h2>
+<p>到目前为止，您已经了解了如何使用指令（“看图片，告诉我架构师是谁”）来提示模型。但是，有时，您可以通过结合说明和示例来向模型发出提示，从而获得更好的结果。Google AI Studio 中的结构化提示可帮助您做到这一点 - 将指令与示例相结合，向模型显示您想要的输出类型，而不是仅仅指示模型要执行什么操作。如果您希望模型保持一致的输出格式（即结构化 json）或难以描述模型的具体风格，这种提示非常有用。在本部分中，您将了解如何在 Google AI Studio 中创建结构化提示。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意 ：您可以直接在 Google AI Studio 中从<a class="reference external" href="https://ai.google.dev/examples?keywords=prompt&amp;hl=zh-cn">示例库</a>中尝试此示例。</p>
+</div>
+<section id="id8">
+<h3>第1步：构建结构化提示<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h3>
+<p>在此示例中，您将创建一个结构化提示，用于为产品生成广告文案。首先，您需要创建两列（Product 输入列和 Product copy 输出列）来定义提示的结构。</p>
+<!-- ![image](https://ai.google.dev/static/tutorials/images/structured_prompt.png?hl=zh-cn) -->
+<figure class="align-default" id="id20">
+<img alt="../_images/structured_prompt.png" src="../_images/structured_prompt.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">添加结构化提示</span><a class="headerlink" href="#id20" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>如需创建结构化提示，请执行以下操作：</p>
+<ol class="arabic simple">
+<li><p>在 <a class="reference external" href="https://makersuite.google.com/?hl=zh-cn">Google AI Studio</a> Web 应用的左上角，依次选择<strong>新建</strong> &gt; <strong>结构化提示</strong>。</p></li>
+<li><p>在 <strong>Insert:</strong> 标头下方，添加结构化提示的说明：</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>You are a product marketer targeting a Gen Z audience. Create exciting and
+fresh advertising copy for products and their simple description. Keep copy
+under a few sentences long.
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>通过将默认的 <code class="docutils literal notranslate"><span class="pre">input</span></code>: 文本说明替换为 <code class="docutils literal notranslate"><span class="pre">Product:</span></code>，为 <strong>INPUT</strong> 添加描述性标题。</p></li>
+<li><p>通过将默认的 <code class="docutils literal notranslate"><span class="pre">output</span></code>: 文本说明替换为 <code class="docutils literal notranslate"><span class="pre">Product</span> <span class="pre">copy:</span></code>，为 <strong>OUTPUT</strong> 添加描述性标题。</p></li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>提示 ：在列名称末尾添加英文冒号，以便模型更轻松地解析结构。</p>
+</div>
+</section>
+<section id="id9">
+<h3>第2步：添加示例<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h3>
+<p>提供一些示例行。这些行应包含示例输入（本例中的产品名称）和示例输出（对应的产品说明）。通过为模型提供几个示例产品说明，可以指导模型在生成自己的输出时复制类似的风格。可以手动输入示例，也可以使用“导入数据”菜单从文件导入。</p>
+<p>要手动输入<strong>示例</strong>，请执行以下操作：</p>
+<ol class="arabic simple">
+<li><p>在顶部的<strong>示例</strong>数据表中，选择 <strong>Product:</strong> 标题下方的字段，然后输入产品说明。</p></li>
+<li><p>选择 <strong>Product copy:</strong> 标题并输入该产品的营销文案。
+以下示例展示了此提示的输入和输出值：</p></li>
+</ol>
+<p>| 产品：|  	产品文案：|
+| Old-school sneaker | Let’s lace up! These kicks bring an iconic look and a one of a kind color palette, while supporting you in style and function like no other shoe before. |
+| Supersoft hoodie | Stay cozy and stylish in our new unisex hoodie! Made from 100% cotton, this hoodie is soft and comfortable to wear all day long. The semi-brushed inside will keep you warm on even the coldest days.|</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>提示 ：如果您让作者屏蔽或者没有示例产品文案示例，则可以使用自由格式提示让文本模型为您生成一些示例。</p>
+</div>
+<p>如需从文件导入示例，请执行以下操作：</p>
+<ol class="arabic simple">
+<li><p>在<strong>示例</strong>表的右上角，依次选择<strong>操作 &gt; 导入示例</strong>。</p></li>
+<li><p>在对话框中，选择 Google 云端硬盘中的 CSV 或 Google 表格文件，或者从计算机上传。</p></li>
+<li><p>在“导入示例”对话框中，选择要导入的列，要排除哪些列。通过该对话框，您还可以在结构化提示中指定将哪个数据列导入哪个表列。</p></li>
+</ol>
+</section>
+<section id="id10">
+<h3>第3步：测试提示<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h3>
+<p>准备好向模型显示所需内容的示例后，在底部的<strong>测试您的提示</strong>表中使用新输入来测试提示。与文本提示类型一样，您可以调整模型参数，以测试这些参数是否有助于为您的使用场景生成更好的结果。
+查看如何将样本发送到模型</p>
+<p>从本质上讲，Google AI Studio 会将指令与您提供的示例相结合来构建提示。随着您添加更多样本，这些样本会添加到发送给模型的文本中。根据样本的长度，您可能会开始达到模型的词元限制。所有生成式 AI 模型都有令牌限制，即它们可以接受作为输入的文本的最大长度。</p>
+<p>如需查看提示的完整内容，请执行以下操作：</p>
+<ul class="simple">
+<li><p>选择 Google AI Studio Web 应用底部的<strong>文本预览</strong>。</p></li>
+</ul>
+<figure class="align-default" id="id21">
+<img alt="../_images/structured_prompt_result.jpg" src="../_images/structured_prompt_result.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">结构化提示示例 效果图</span><a class="headerlink" href="#id21" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>注意 ：模型令牌限制显示在预览窗格底部。</p>
+</div>
+</section>
+<section id="id11">
+<h3>第4步：后续步骤<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h3>
+<p>如果对提示感到满意，可以点击<strong>获取代码</strong>按钮将其<strong>保存</strong>或导出到代码中。</p>
+<p>您还可以将各个少样本样本导出到 CSV 文件或 Google 表格中。选择<strong>操作</strong>菜单下的<strong>导出示例</strong>选项以导出您的示例。</p>
+</section>
+</section>
+<section id="chat-example">
+<span id="id12"></span><h2>聊天提示示例：构建自定义聊天应用<a class="headerlink" href="#chat-example" title="Permalink to this headline">#</a></h2>
+<p>如果您使用过 <a class="reference external" href="https://blog.google/technology/ai/bard-google-ai-search-updates/?hl=zh-cn">Bard</a> 等通用聊天机器人，就能亲身体验生成式 AI 模型在开放式对话方面的强大之处。虽然这些通用聊天机器人非常有用，但它们通常需要针对特定使用场景进行定制。例如，您可能希望构建一个客户服务聊天机器人，它仅支持有关公司产品的对话的对话。您可能需要构建一个使用特定语气或风格的聊天机器人：一个可以讲大量笑话、像诗人押韵的机器人，或在回答中使用大量表情符号。</p>
+<!-- ![image](https://ai.google.dev/static/tutorials/images/chat_prompt.png?hl=zh-cn) -->
+<figure class="align-default" id="id22">
+<img alt="../_images/chat_prompt.png" src="../_images/chat_prompt.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">构建聊天提示</span><a class="headerlink" href="#id22" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>此示例展示了如何使用 Google AI Studio 构建一个友好的聊天机器人，它就像是居住在木星的一颗卫星“欧罗巴”上的外星人一样进行沟通。</p>
+<section id="id13">
+<h3>第1步：创建聊天提示<a class="headerlink" href="#id13" title="Permalink to this headline">#</a></h3>
+<p>在上一部分中，您设计了使用输入和输出示例组合的结构化提示。同样，如需构建聊天机器人，您需要提供用户和聊天机器人之间的互动示例，以指导模型提供您需要的响应。</p>
+<p>如需创建聊天提示，请执行以下操作：</p>
+<ol class="arabic simple">
+<li><p>在 Google AI Studio Web 应用的左上角，依次选择<strong>新建 &gt; Chat 提示</strong>。</p></li>
+<li><p>在提示界面的<strong>编写提示示例</strong>列中，您可以开始提供互动示例。您还可以在第一个示例中提供其他上下文，例如：</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User:  You are Tim, a friendly alien that lives on Europa, one of
+Jupiter&#39;s moons.
+Model: Ok
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>User</strong> 和 <strong>Model</strong> 字段中提供了用户和聊天机器人之间的互动示例：</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: Hi!
+Model: Hi! My name is Tim and I live on Europa, one of Jupiter&#39;s moons. Brr!
+It&#39;s cold down here!
+</pre></div>
+</div>
+<p>填写完示例后，通过在聊天提示界面的右侧窗格中与模型聊天来开始测试您的应用。</p>
+<p>如需测试聊天机器人的行为，请执行以下操作：</p>
+<ol class="arabic simple">
+<li><p>在<strong>测试提示面板</strong>中，选择底部的输入字段。</p></li>
+<li><p>输入用户可能提出的问题或观察结果，例如：</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">What</span><span class="s1">&#39;s the weather like?</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>选择输入字段右侧的菱形按钮，以获取聊天机器人的响应，响应可能如下所示：</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Model</span><span class="p">:</span> <span class="n">The</span> <span class="n">weather</span> <span class="n">on</span> <span class="n">Europa</span> <span class="ow">is</span> <span class="n">very</span> <span class="n">cold</span> <span class="ow">and</span> <span class="n">icy</span><span class="o">.</span> <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="id14">
+<h3>第2步：训练聊天机器人更好地聊天<a class="headerlink" href="#id14" title="Permalink to this headline">#</a></h3>
+<p>通过提供一个语句和响应示例，您可以构建一个基本的欧罗巴外星聊天机器人。但是，单个样本通常不足以确保模型响应的一致性和质量。如果没有进一步输入，模型对天气相关问题的回答往往会很长，听起来像是教科书里的回答，而不是友好的外星人给出的回答。</p>
+<p>使用模型响应并对其进行修改，以匹配外星聊天机器人所需的语气和风格，从而自定义聊天机器人的语气。</p>
+<!-- ![image](https://ai.google.dev/static/tutorials/images/add_example.png?hl=zh-cn) -->
+<figure class="align-default" id="id23">
+<img alt="../_images/add_example.png" src="../_images/add_example.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">添加样例</span><a class="headerlink" href="#id23" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>如需添加和修改聊天机器人定义的示例，请执行以下操作：</p>
+<ol class="arabic simple">
+<li><p>在 <strong>Test yourPrompt</strong> 面板中，将光标悬停在 <strong>User</strong> 标题的左侧，然后选择 <strong>Add to examples</strong> 按钮。</p></li>
+<li><p>在<strong>编写提示示例</strong>列中，修改复制的输入和响应，以匹配聊天机器人的预期风格和语气。</p></li>
+</ol>
+<p>您可以使用此方法添加更多示例。提出更多问题、修改答案，并提高聊天机器人的质量。继续添加示例，并测试这些示例会如何修改聊天机器人的行为。通常，示例越多，聊天机器人响应的质量越高。</p>
+<p>在后台，Google AI Studio 会通过组合以下各项来构建提示：</p>
+<ul class="simple">
+<li><p>对话框示例</p></li>
+<li><p>对话记录</p></li>
+</ul>
+<p>文本块传递给模型。如需查看完整的提示是什么样子，请点击屏幕底部的 <strong>Preview</strong>，以调出预览窗格。</p>
+<p>请注意，由于模型与用户之间的每条消息都包含在提示中（这就是“对话记录”），因此对话提示可能会随着对话的进行而增长。最终，您可能会达到模型的词元限制，即模型可以接受的文本长度上限。您可以在<strong>预览</strong>标签页中查看完整的对话和令牌数量。</p>
+</section>
+<section id="id15">
+<h3>第3步：用模型参数进行实验<a class="headerlink" href="#id15" title="Permalink to this headline">#</a></h3>
+<p>还可以尝试调整模型参数，以查看它们是否为您的使用场景生成了更合适的结果。</p>
+</section>
+<section id="id16">
+<h3>第4步：后续步骤<a class="headerlink" href="#id16" title="Permalink to this headline">#</a></h3>
+<p>与其他提示类型类似，一旦对提示的原型设计符合您的要求，您就可以使用<strong>获取代码</strong>按钮开始编写代码，或保存提示，以便稍后处理并与他人分享。</p>
+</section>
+</section>
+<section id="id17">
+<h2>深入阅读<a class="headerlink" href="#id17" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>如果您已准备好继续编写代码，请参阅 <a class="reference internal" href="python_quickstart.html"><span class="doc std std-doc">API 快速入门</span></a>。</p></li>
+<li><p>如需了解如何撰写更好的提示，请参阅<a class="reference internal" href="prompt_best_practices.html"><span class="doc std std-doc">提示设计准则</span></a>。</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content_sources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="welcome.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Gemini API 使用入门</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tutorials.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Gemini API 教程</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">提示和模型调整</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#freeform-example">自由格式提示示例：详细了解建筑物</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">第1步：使用文本和图片创建提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">第2步：在提示符中添加可替换的变量</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">第3步：用模型参数进行实验</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">第4步：后续步骤</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structured-example">结构化提示示例：构建商品文案生成器</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">第1步：构建结构化提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">第2步：添加示例</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">第3步：测试提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">第4步：后续步骤</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chat-example">聊天提示示例：构建自定义聊天应用</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">第1步：创建聊天提示</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">第2步：训练聊天机器人更好地聊天</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">第3步：用模型参数进行实验</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">第4步：后续步骤</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">深入阅读</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p class="w3-card w3-pale-blue w3-padding">
+  Copyright © 2023
+  <a href="https://github.com/VinMing">Stephen</a> | 
+  Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
