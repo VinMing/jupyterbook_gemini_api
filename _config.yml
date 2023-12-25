@@ -1,0 +1,82 @@
+# Book settings
+# Learn more at https://jupyterbook.org/customize/config.html
+
+title: Gemini API Tutorial
+# author: Stephen ST
+logo: ./statics/google_ai_developers_logo.jpg
+author: ""
+email: https://github.com/VinMing
+copyright: ""
+
+# Force re-execution of notebooks on each build.
+# See https://jupyterbook.org/content/execute.html
+execute:
+  execute_notebooks: off # 是否在构建时执行笔记本。必须是 ("auto", "force", "cache", "off") 之一
+  cache: "" # jupyter 的缓存路径，该路径将用于存储执行工件。 `_build/.jupyter_cache/`
+  exclude_patterns: [] # 在执行中要“跳过”的模式列表（例如，需要很长时间的笔记本）
+  timeout: -1 # 每个笔记本单元允许运行的最长时间（以秒为单位）。
+  # 如果为 `true`，则将创建一个临时目录并将其用作命令工作目录（cwd），否则，笔记本的父目录将是 cwd。
+  run_in_temp: false
+  allow_errors: true # 如果为 `False`，则当代码单元引发错误时，执行将停止，否则所有单元将始终运行。
+  stderr_output: show # 'show', 'remove', 'remove-warn', 'warn', 'error', 'severe' 之一
+
+# # Define the name of the latex output file for PDF builds
+# latex:
+#   latex_documents:
+#     targetname: book.tex
+
+# Add a bibtex file so that we can create citations
+bibtex_bibfiles:
+  - references.bib
+
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/VinMing/tutorial_gemini_api  # Online location of your book
+  path_to_book: docs  # Optional path to your book, relative to the repository root
+  branch: main  # Which branch of the repository should be used when creating links (optional)
+
+# Add GitHub buttons to your book
+# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
+html:
+  use_issues_button: true
+  use_repository_button: true
+  extra_navbar: 'Powered by <a href="https://jupyterbook.org">Jupyter Book</a>'
+  extra_footer: |
+    <p class="w3-card w3-pale-blue w3-padding">
+      Copyright © 2023
+      <a href="https://github.com/VinMing">Stephen</a> | 
+      Powered by <a href="https://github.com/executablebooks/jupyter-book">Jupyter Book</a>.
+    </p>
+
+
+# parse:
+#   myst_substitutions:
+#     sub3: My _global_ value!
+#   myst_enable_extensions: # 在 myst 解析器中启用的默认扩展。参考 https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html
+#     - amsmath # 启用解析 LaTeX 样式的数学块
+#     - colon_fence # 启用 ::: 防护栅栏，以便使其更易于在不支持 MyST 的界面中呈现
+#     - deflist # 启用定义清单
+#     - dollarmath # 为数学块支持 $$ 和 $ 语法
+#     - html_admonition  # 启用纯定义的 HTML 的提示
+#     - html_image # 启用解析原始 HTML 图像
+#     - linkify # 自动检测 Markdown 中类似 HTML 的链接并将其转换为超链接
+#     - replacements
+#     - smartquotes
+#     - substitution # 为了允许您定义 Markdown “变量”并在使用它们时置换文本
+#   myst_url_schemes: [mailto, http, https] # 在 Markdown 链接中将被识别为外部 URL 的 URI 方案
+
+#######################################################################################
+# LaTeX-specific settings
+latex:
+  latex_engine: xelatex # one of 'pdflatex', 'xelatex' (recommended for unicode), 'luatex', 'platex', 'uplatex'
+  use_jupyterbook_latex: true # use jupyterbook-latex for pdf builds as default
+  latex_documents:
+    targetname: book.tex
+
+
+
+#######################################################################################
+# Advanced and power-user settings
+sphinx:
+  extra_extensions:
+    - sphinx_panels

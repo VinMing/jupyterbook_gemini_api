@@ -1,0 +1,62 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+- caption: 开始
+  chapters:
+  - file: content_sources/welcome
+  - file: content_sources/ai_studio_quickstart
+- caption: 快速入门
+  chapters:
+  - file: content_sources/tutorials
+  - file: content_sources/python_quickstart
+  - file: content_sources/rest_quickstart
+- caption: Gemini API
+  chapters:
+  - file: content_sources/gemini_api_overview
+  - file: content_sources/tutorials_setup
+  - file: content_sources/api_versions
+  - file: content_sources/models/models_index
+    sections:
+      - file: content_sources/models/models
+      - file: content_sources/models/gemini
+      - file: content_sources/models/palm
+  - file: content_sources/safety_setting_gemini
+  - file: content_sources/safety_guidance
+  - file: content_sources/downloads
+  
+- caption: 指南
+  chapters:
+  - file: content_sources/concepts
+  - file: content_sources/prompt_intro
+  - file: content_sources/prompt_best_practices
+  - file: content_sources/multimodal_concepts
+  - file: content_sources/semantic_retriever
+  - file: content_sources/oauth_quickstart
+- caption: 嵌入
+  chapters:
+  - file: content_sources/embeddings_guide
+  - file: content_sources/anomaly_detection
+  - file: content_sources/clustering_with_embeddings
+  - file: content_sources/doc_search_emb
+  - file: content_sources/train_text_classifier_embeddings
+  - file: content_sources/vectordb_with_chroma
+- caption: 调试
+  chapters:
+  - file: content_sources/workspace_auth_quickstart
+  - file: content_sources/troubleshooting
+  - file: content_sources/ai_studio_faqs
+  - file: content_sources/increase_quota
+- caption: 社区
+  chapters:
+  - file: content_sources/discord
+- caption: 微调
+  chapters:
+  - file: content_sources/model_tuning_guidance
+  - file: content_sources/tuning_quickstart_python_palm
+- caption: 法律法规
+  chapters:
+  - file: content_sources/available_regions
+
